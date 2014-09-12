@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using CommitParser.Helpers;
 using StudentInformationColumnParser.Domain;
-using StudentInformationColumnParser.Helpers;
 
-namespace StudentInformationColumnParser
+namespace CommitParser
 {
     class Program
     {
@@ -28,7 +26,7 @@ namespace StudentInformationColumnParser
             //for each row in the file (each campus)
             var a = new Stopwatch();
             a.Start();
-            for (var x = 1; x < 100; x++)
+            for (var x = 1; x < rows.Count; x++)
             {
                 var cells = rows[x].Split(',').ToArray();
                 Campus campus;
@@ -64,8 +62,8 @@ namespace StudentInformationColumnParser
                         
                     }
                     staar.Value = cells[i];
-                    staar.Year = 2013;
-                    staar.Grade = Grade.G3;
+                    staar.Year = int.Parse(cells[1]); //1
+                    staar.Grade = (Grade)cells[6].Parse(); //6
                     campus.StaarStats.Add(staar);
                 }
                 Console.WriteLine("Finished {1}\t of {2} - {0}", campus.Name, x, rows.Count);
