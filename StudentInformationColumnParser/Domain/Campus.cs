@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using CommitParser.Helpers;
 
-namespace StudentInformationColumnParser.Domain
+namespace CommitParser.Domain
 {
-    public class Campus
+    public class Campus : EntityBase<long>
     {
-        public long CampusId { get; set; }
+        public long CampusNumber { get; set; }
         public string Name { get; set; }
         public bool IsCharterSchool { get; set; }
         public string CountyName { get; set; }
@@ -20,7 +17,7 @@ namespace StudentInformationColumnParser.Domain
         public Grade StartGrade { get; set; }
         public Grade EndGrade { get; set; }
         public GradeType GradeType { get; set; }
-        public Campus PairedCampus { get; set; }
+        public virtual Campus PairedCampus { get; set; }
         public long RegionNumber { get; set; }
         public CackDtl CackDtl { get; set; }
 
@@ -29,7 +26,7 @@ namespace StudentInformationColumnParser.Domain
         public bool CadProgress { get; set; }
         public bool IsRatedUnderAEAProcedures { get; set; }
 
-        public List<YearStat> YearStats { get; set; }
-        public List<StaarStat> StaarStats { get; set; }
+        //public List<YearStat> YearStats { get; set; }
+        public virtual List<StaarStat> StaarStats { get; set; }
     }
 }

@@ -1,32 +1,62 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AutoMapper.Internal;
+using CommitParser.Domain;
 using CommitParser.Helpers;
-using StudentInformationColumnParser.Domain;
+using EntityFramework.BulkInsert.Extensions;
 
 namespace CommitParser
 {
     class Program
     {
-        private const string BaseUrl = "C:/Users/kcummings/Google Drive/Work/Commit/";
         static void Main(string[] args)
         {
-            var x = ReadCampuses();
-            ReadStaarData(x);
+            var ctx = new OperationalDataContext();
+            var x = ctx.Campuses.First();
+            var y = new StaarStat
+            {
+                Campus = x
+            };
+            x.StaarStats = new List<StaarStat> { y };
+            ctx.StaarStats.Add(y);
+            ctx.Campuses.AddOrUpdate(x);
+            ctx.SaveChanges();
+
+            //ReadCampuses();
+            //foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv"))
+            //{
+            //    var a = new Stopwatch();
+            //    a.Start();
+            //    ReadStaarDataBySubject(file);
+            //    a.Stop();
+            //    Console.WriteLine("Time ellapsed: {0} secs", a.ElapsedMilliseconds / 1000.0);
+            //}
+            ////ReadStaarDataBySubject();
         }
 
-        private static void ReadStaarData(IReadOnlyDictionary<long, Campus> campuses)
+        private static void ReadStaarDataByGrade(IReadOnlyDictionary<long, Campus> campuses, string filePath, bool firstTwoRowsAsHeaders = false)
         {
-            var rows = System.IO.File.ReadLines(
-                    string.Format(BaseUrl + "2012-2013/Campus/3rd Grade STAAR Test Results.csv")).ToList();
-            var headers = rows[0].Split(',');
+            var rows = File.ReadLines(filePath).ToList();
+            var headers = rows[0].Split(',').ToList();
+            var startingRow = 1;
+
+            if (firstTwoRowsAsHeaders)
+            {
+                headers.AddRange(rows[1].Split(','));
+                startingRow++;
+            }
 
             //for each row in the file (each campus)
             var a = new Stopwatch();
             a.Start();
-            for (var x = 1; x < rows.Count; x++)
+            for (var x = startingRow; x < rows.Count; x++)
             {
                 var cells = rows[x].Split(',').ToArray();
                 Campus campus;
@@ -58,8 +88,8 @@ namespace CommitParser
                     }
                     catch (Exception)
                     {
-                        
-                        
+
+
                     }
                     staar.Value = cells[i];
                     staar.Year = int.Parse(cells[1]); //1
@@ -72,125 +102,319 @@ namespace CommitParser
             Console.WriteLine(a.ElapsedMilliseconds);
         }
 
-        public static Dictionary<long, Campus> ReadCampuses()
+        private static void ReadStaarDataBySubject(string file)
         {
-            var campuses = new Dictionary<long, Campus>();
+            Console.WriteLine("Starting Staar data by subject for {0}... ", file);
 
-            var lines = System.IO.File.ReadLines(
-                    string.Format(BaseUrl + "2012-2013/Campus/2013 Campus Reference.csv")).ToList();
-            var headers = lines[0].Split(',');
 
-            for (var x = 1; x < lines.Count; x++)
+            //Check if this file has been processed
+
+            var ctx = new OperationalDataContext();
+            ctx.Configuration.ValidateOnSaveEnabled = false;
+            if (ctx.CompletedFiles.SingleOrDefault(s => s.FileName == file && s.IsCompleted) != null)
             {
-                var line = lines[x].Replace("'", "").Split(',');
-                var campus = new Campus();
-                for (var y = 0; y < headers.Count(); y++)
+                return;
+            }
+
+
+            //get the rows from the file, and split the headers off
+
+            var campusRows = File.ReadLines(file).ToList();
+            var headers = campusRows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            headers.AddRange(campusRows[1].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)); //headers span two rows for some reason
+            campusRows.RemoveRange(0, 2);
+
+
+            //for each row in the file
+
+            var bag = new ConcurrentBag<StaarStat>();
+            var campusCount = 0;
+            foreach (var campusRow in campusRows)
+            {
+                campusCount++;
+                var staarStats = campusRow.Split(',').ToArray();
+                var campusNumber = int.Parse(staarStats[0]);
+
+
+                //make sure we have a matching campus
+
+                var campus = ctx.Campuses.SingleOrDefault(c => c.CampusNumber == campusNumber);
+                if (campus == null)
                 {
-                    var column = headers[y];
-                    switch (column.ToLower())
+                    var writer = File.AppendText(@"C:\Users\kcummings\Google Drive\Work\Commit\Missing School Numbers.txt");
+                    writer.WriteLine(campusNumber);
+                    writer.Close();
+                    //Console.WriteLine("\tNo school for ID {0}", staarStats[0]);
+                    continue;
+                }
+
+
+                //iterate through each column and collect the staarStats
+
+                var containers = new List<Container>(staarStats.Length);
+                for (var i = 11; i < staarStats.Length; i++)
+                {
+                    containers.Add(new Container { Stat = staarStats[i], Header = headers[i] });
+                }
+
+                var closureBag = bag;
+                Parallel.ForEach(containers,
+                    new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                    container =>
                     {
-                        case "campus":
-                            campus.CampusId = int.Parse(line[y]);
-                            break;
-                        case "cad_math":
-                            campus.CadMath = line[y].ParseBool();
-                            break;
-                        case "cad_read":
-                            campus.CadRead = line[y].ParseBool();
-                            break;
-                        case "cad_progress":
-                            campus.CadProgress = line[y].ParseBool();
-                            break;
-                        case "campname":
-                            campus.Name = line[y];
-                            break;
-                        case "cflalted":
-                            campus.IsRatedUnderAEAProcedures = line[y].ParseBool();
-                            break;
-                        case "cflchart":
-                            campus.IsCharterSchool = line[y].ParseBool();
-                            break;
-                        case "cntyname":
-                            campus.CountyName = line[y];
-                            break;
-                        case "county":
-                            campus.CountyId = int.Parse(line[y]);
-                            break;
-                        case "c_rating":
-                            campus.AccountabilityRating = (AccountabilityRating)line[y].Parse();
-                            break;
-                        case "distname":
-                            campus.DistrictName = line[y];
-                            break;
-                        case "district":
-                            campus.DistrictNumber = int.Parse(line[y]);
-                            break;
-                        case "grdspan":
-                            var grades = line[y].Split(new[] { " - " }, StringSplitOptions.None);
-                            campus.StartGrade = (Grade)grades[0].Parse();
-                            campus.EndGrade = (Grade)grades[1].Parse();
-                            break;
-                        case "grdtype":
-                            campus.GradeType = (GradeType)line[y].Parse();
-                            break;
-                        case "region":
-                            campus.RegionNumber = int.Parse(line[y]);
-                            break;
-                        case "cackdtl":
-                            foreach (var character in line[y])
+                        //split the column header
+                        var staarStatValues = container.Header.Split(new[] { "_" }, 3, StringSplitOptions.None);
+                        var staar = new StaarStat
+                        {
+                            Language = Language.English,
+                            Value = container.Stat,
+                            Year = int.Parse(staarStats[1]),
+                            Campus = campus,
+                            Subject = Converter.GetSubject(staarStatValues[0]),
+                            Field = Converter.GetField(staarStatValues[1]),
+                            Category = Converter.GetCategory(staarStatValues[2])
+                        };
+
+                        staar.Grade = FindGradeBySubject(staar.Subject); //(Grade)staarStats[6].Parse(); //6
+                        closureBag.Add(staar);
+                    });
+
+
+                //bulk insert when greater than 10,000
+
+                //if (bag.Count > 100000) //100 = 169
+                //{
+                //    Console.Write("\tWriting ~100,000 more stats... {0} campuses so far... ", campusCount);
+                //    ctx.BulkInsert(bag);
+                //    bag = new ConcurrentBag<StaarStat>();
+                //    Console.WriteLine("Done.");
+                //}
+                if (campusCount % 200 == 0)
+                {
+                    Console.WriteLine("\tCompleted {0} schools", campusCount);
+                }
+            }
+
+
+            //finish up the remaining, and update completed files
+
+            Console.Write("\tFinishing up for this file... ");
+            ctx.BulkInsert(bag);
+            Console.Write("Done.");
+            UpdateFile(file, ctx);
+        }
+
+        private static Grade FindGradeBySubject(StaarSubjectName subject)
+        {
+            switch (subject)
+            {
+                case StaarSubjectName.a1:
+                    return Grade.G12;
+                case StaarSubjectName.a2:
+                    return Grade.G12;
+                case StaarSubjectName.w:
+                    return Grade.G12;
+                case StaarSubjectName.w1:
+                    return Grade.G12;
+                case StaarSubjectName.w2:
+                    return Grade.G12;
+                case StaarSubjectName.r:
+                    return Grade.G12;
+                case StaarSubjectName.e1:
+                    return Grade.G12;
+                case StaarSubjectName.e2:
+                    return Grade.G12;
+                case StaarSubjectName.us:
+                    return Grade.G12;
+                case StaarSubjectName.bi:
+                    return Grade.G12;
+                case StaarSubjectName.wg:
+                    return Grade.G12;
+                case StaarSubjectName.ch:
+                    return Grade.G12;
+                case StaarSubjectName.m:
+                    return Grade.G12;
+                case StaarSubjectName.s:
+                    return Grade.G12;
+                case StaarSubjectName.h:
+                    return Grade.G12;
+                default:
+                    throw new ArgumentOutOfRangeException("No subject match");
+            }
+        }
+
+
+        public static void ReadCampuses()
+        {
+            Console.Write("Starting Campuses... ");
+            var ctx = new OperationalDataContext();
+            ctx.Configuration.ValidateOnSaveEnabled = false;
+            foreach (var file in Directory.EnumerateFiles(@"Resources\Campuses", "*.csv"))
+            {
+                if (ctx.CompletedFiles.SingleOrDefault(s => s.FileName == file && s.IsCompleted) != null)
+                {
+                    continue;
+                }
+
+                var campusRow = File.ReadLines(file).ToList();
+                var existingCampusNumbers = ctx.Campuses.Select(c => c.CampusNumber).ToList();
+                var headers = campusRow[0].Split(',').ToList();
+                campusRow.RemoveRange(0, 1);
+
+                Parallel.ForEach(campusRow, new ParallelOptions { MaxDegreeOfParallelism = 4 }, (row) =>
+                {
+                    using (var parallelCtx = new OperationalDataContext())
+                    {
+                        var line = row.Replace("'", "").Split(',');
+                        var campus = new Campus();
+
+                        for (var y = 0; y < headers.Count(); y++)
+                        {
+                            var column = headers[y];
+                            switch (column.ToLower())
                             {
-                                campus.CackDtl |= character.Parse();
+                                case "campus":
+                                    campus.CampusNumber = int.Parse(line[y]);
+                                    if (existingCampusNumbers.Any(c => c == campus.CampusNumber)) goto skipCampus;
+                                    break;
+                                case "cad_math":
+                                    campus.CadMath = line[y].ParseBool();
+                                    break;
+                                case "cad_read":
+                                    campus.CadRead = line[y].ParseBool();
+                                    break;
+                                case "cad_progress":
+                                    campus.CadProgress = line[y].ParseBool();
+                                    break;
+                                case "campname":
+                                    campus.Name = line[y];
+                                    break;
+                                case "cflalted":
+                                    campus.IsRatedUnderAEAProcedures = line[y].ParseBool();
+                                    break;
+                                case "cflchart":
+                                    campus.IsCharterSchool = line[y].ParseBool();
+                                    break;
+                                case "cntyname":
+                                    campus.CountyName = line[y];
+                                    break;
+                                case "county":
+                                    campus.CountyId = int.Parse(line[y]);
+                                    break;
+                                case "c_rating":
+                                    campus.AccountabilityRating = (AccountabilityRating)line[y].Parse();
+                                    break;
+                                case "distname":
+                                    campus.DistrictName = line[y];
+                                    break;
+                                case "district":
+                                    campus.DistrictNumber = int.Parse(line[y]);
+                                    break;
+                                case "grdspan":
+                                    var grades = line[y].Split(new[] { " - " }, StringSplitOptions.None);
+                                    campus.StartGrade = (Grade)grades[0].Parse();
+                                    campus.EndGrade = (Grade)grades[1].Parse();
+                                    break;
+                                case "grdtype":
+                                    campus.GradeType = (GradeType)line[y].Parse();
+                                    break;
+                                case "region":
+                                    campus.RegionNumber = int.Parse(line[y]);
+                                    break;
+                                case "cackdtl":
+                                    foreach (var character in line[y])
+                                    {
+                                        campus.CackDtl |= character.Parse();
+                                    }
+                                    break;
+
+                                default:
+                                    //Console.WriteLine(column);
+                                    break;
                             }
-                            break;
-
-                        default:
-                            Console.WriteLine(column);
-                            break;
+                        }
+                        parallelCtx.Campuses.Add(campus);
+                        parallelCtx.SaveChanges();
+                    skipCampus:
+                        ;
                     }
-                }
-                campuses.Add(campus.CampusId, campus);
+                });
+                UpdateFile(file, ctx);
             }
-            return campuses;
+            Console.WriteLine("Done.");
         }
 
-        public void ColumnUniqueness()
+        private static void UpdateFile(string file, OperationalDataContext ctx)
         {
-            var dict = new Dictionary<string, List<int>>();
-            var years = new[] { 2011, 2013 };
-            foreach (var year in years)
+            var completedFile = ctx.CompletedFiles.SingleOrDefault(s => s.FileName == file);
+            if (completedFile != null)
             {
-                var text = System.IO.File.ReadAllText(string.Format("C:/Users/kcummings/Google Drive/Work/Commit/StudentInformation/{0} Columns.txt", year));
-                var textsplit = text.Split('\n');
-                foreach (var regexed in from bit in textsplit.Select(s => s.Substring(0, s.IndexOf('-') - 1)) let pattern = "[1][0-3]" let replacement = "**" let rgx = new Regex(pattern) select rgx.Replace(bit, replacement))
-                {
-                    if (dict.ContainsKey(regexed))
-                    {
-                        dict[regexed].Add(year);
-                    }
-                    else
-                    {
-                        dict.Add(regexed, new List<int> { year });
-                    }
-                }
+                completedFile.IsCompleted = true;
             }
-            var a = dict.Where(d => d.Value.Count > 1).ToList();
-            var b = dict.Where(d => d.Value.Contains(2011)).ToList();
-            var b2 = b.Where(d => d.Value.Count == 1).ToList();
-            var c = dict.Where(d => d.Value.Contains(2013)).ToList();
-            var c2 = c.Where(d => d.Value.Count == 1).ToList();
-            var e = 1;
+            else
+            {
+                ctx.CompletedFiles.Add(new CompletedFile
+                {
+                    IsCompleted = true,
+                    TimeCompleted = DateTime.Now,
+                    FileName = file
+                });
+            }
+            ctx.SaveChangesAsync();
         }
 
-        public void StaarParser()
-        {
-            //var dict = new Dictionary<long, StaarStat>();
+        //private static OperationalDataContext Refresh(OperationalDataContext ctx)
+        //{
+        //    ctx.Dispose();
+        //    ctx = new OperationalDataContext();
+        //    ctx.Configuration.AutoDetectChangesEnabled = true;
+        //    return ctx;
+        //}
 
-            //var text = System.IO.File.ReadLines(
-            //        string.Format("C:/Users/kcummings/Google Drive/Work/Commit/StudentInformation/ Columns.txt"));
-            //foreach (var year in years)
-            //{
-            //}
-        }
+        //public void ColumnUniqueness()
+        //{
+        //    var dict = new Dictionary<string, List<int>>();
+        //    var years = new[] { 2011, 2013 };
+        //    foreach (var year in years)
+        //    {
+        //        var text = File.ReadAllText(string.Format("C:/Users/kcummings/Google Drive/Work/Commit/StudentInformation/{0} Columns.txt", year));
+        //        var textsplit = text.Split('\n');
+        //        foreach (var regexed in from bit in textsplit.Select(s => s.Substring(0, s.IndexOf('-') - 1)) let pattern = "[1][0-3]" let replacement = "**" let rgx = new Regex(pattern) select rgx.Replace(bit, replacement))
+        //        {
+        //            if (dict.ContainsKey(regexed))
+        //            {
+        //                dict[regexed].Add(year);
+        //            }
+        //            else
+        //            {
+        //                dict.Add(regexed, new List<int> { year });
+        //            }
+        //        }
+        //    }
+        //    var a = dict.Where(d => d.Value.Count > 1).ToList();
+        //    var b = dict.Where(d => d.Value.Contains(2011)).ToList();
+        //    var b2 = b.Where(d => d.Value.Count == 1).ToList();
+        //    var c = dict.Where(d => d.Value.Contains(2013)).ToList();
+        //    var c2 = c.Where(d => d.Value.Count == 1).ToList();
+        //    var e = 1;
+        //}
+
+        //public void StaarParser()
+        //{
+        //    //var dict = new Dictionary<long, StaarStat>();
+
+        //    //var text = System.IO.File.ReadLines(
+        //    //        string.Format("C:/Users/kcummings/Google Drive/Work/Commit/StudentInformation/ Columns.txt"));
+        //    //foreach (var year in years)
+        //    //{
+        //    //}
+        //}
+    }
+
+    public class Container
+    {
+        public string Stat;
+        public string Header;
     }
 }
 

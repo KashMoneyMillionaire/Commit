@@ -14,6 +14,12 @@ namespace CommitParser.Helpers
         Undefined
     }
 
+    public enum Language : long
+    {
+        English, Spanish
+    }
+
+    [Flags]
     public enum Grade : long
     {
         EE,
@@ -73,6 +79,7 @@ namespace CommitParser.Helpers
 
     public enum StaarFieldName : long
     {
+        Unknown = 0,
         [Description("All Students")]
         all,
         [Description("Male Students")]
@@ -205,6 +212,7 @@ namespace CommitParser.Helpers
 
     public enum StaarSubjectName : long
     {
+        Unknown = 0,
         [Description("Algebra I")]
         a1,
         [Description("Algebra II")]
@@ -218,9 +226,9 @@ namespace CommitParser.Helpers
         [Description("Reading")]
         r,
         [Description("English I-Reading")]
-        r1,
+        e1,
         [Description("English II-Reading")]
-        r2,
+        e2,
         [Description("U.S. History")]
         us,
         [Description("Biology")]
@@ -240,6 +248,7 @@ namespace CommitParser.Helpers
 
     public enum StaarCategoryName : long
     {
+        Unknown = 0,
         [Description("# Tested")]
         d,
         [Description("# Achieved Level II Satisfactory--Phase-in 1")]

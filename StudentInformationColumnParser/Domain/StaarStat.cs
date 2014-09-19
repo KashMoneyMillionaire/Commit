@@ -1,28 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommitParser.Helpers;
+﻿using CommitParser.Helpers;
 
-namespace StudentInformationColumnParser.Domain
+namespace CommitParser.Domain
 {
-    public class StaarStat
+    public class StaarStat : EntityBase<long>
     {
+        public virtual Campus Campus { get; set; }
         public long Year { get; set; }
         public Grade Grade { get; set; }
+        public Language Language { get; set; }
         public StaarSubjectName Subject { get; set; }
         public StaarFieldName Field { get; set; }
         public StaarCategoryName Category { get; set; }
         public string Value { get; set; }
-
-        //campus
-        //year
-        //region
-        //district
-        //dname
-        //cname
-        //grade
-
     }
 }

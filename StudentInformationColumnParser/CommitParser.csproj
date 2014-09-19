@@ -41,6 +41,12 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework.BulkInsert">
+      <HintPath>..\packages\EntityFramework.BulkInsert-ef6.6.0.2.8\lib\Net45\EntityFramework.BulkInsert.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.MappingAPI">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.0.0.7\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
@@ -55,12 +61,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\Campus.cs" />
+    <Compile Include="Domain\EntityBase.cs" />
+    <Compile Include="Domain\CompletedFile.cs" />
     <Compile Include="Domain\StaarStat.cs" />
     <Compile Include="Domain\YearStat.cs" />
     <Compile Include="DTOs\CampusStudent1011.cs" />
+    <Compile Include="EntityMapping\CompletedFileMapping.cs" />
+    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.cs" />
+    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.Designer.cs">
+      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EntityMapping\StaarStatMapping.cs" />
+    <Compile Include="EntityMapping\CampusMapping.cs" />
     <Compile Include="Helpers\Converter.cs" />
     <Compile Include="Helpers\Enumerations.cs" />
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="EntityMapping\Migrations\Configuration.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="OperationalDataContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +84,35 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Resources\Campuses\2011 Campus Reference.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Campuses\2013 Campus Reference.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\StaarData\Grade\3rd Grade STAAR Test Results.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\StaarData\Subject\2014 Algebra 1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\StaarData\Subject\2014 Biology.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\StaarData\Subject\2014 English 1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\StaarData\Subject\2014 English 2.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\StaarData\Subject\2014 US History.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EntityMapping\Migrations\201409182249419_Initial.resx">
+      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
