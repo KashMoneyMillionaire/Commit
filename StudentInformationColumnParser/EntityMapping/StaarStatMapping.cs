@@ -24,13 +24,11 @@ namespace CommitParser.EntityMapping
 
             Property(c => c.Language);
 
-            Property(c => c.Field);
-
-            Property(c => c.Category);
-
-            Property(c => c.Subject);
-
             Property(c => c.Value);
+
+            HasRequired(c => c.SubCatField)
+                .WithMany()
+                .HasForeignKey(c => c.SubCatField_Id);
 
             HasRequired(c => c.Campus)
                 .WithMany(c => c.StaarStats)

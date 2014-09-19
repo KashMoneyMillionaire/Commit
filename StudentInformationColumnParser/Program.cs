@@ -18,90 +18,118 @@ namespace CommitParser
     {
         static void Main(string[] args)
         {
-            //var ctx = new OperationalDataContext();
-            //var x = ctx.Campuses.First();
-            //var y = new StaarStat
-            //{
-            //    Campus_Id = x.Id
-            //};
-            ////x.StaarStats = new List<StaarStat> { y };
-            //ctx.BulkInsert(new List<StaarStat> {y});
-            ////ctx.Campuses.AddOrUpdate(x);
-            //ctx.SaveChangesAsync();
-
             ReadCampuses();
-            foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv"))
+            CreateSubCatFields();
+            var ctx = new OperationalDataContext();
+            var x = ctx.Campuses.First();
+            var y = new StaarStat
             {
-                var a = new Stopwatch();
-                a.Start();
-                ReadStaarDataBySubject(file);
-                a.Stop();
-                Console.WriteLine("Time ellapsed: {0} secs", a.ElapsedMilliseconds / 1000.0);
-            }
-            //ReadStaarDataBySubject();
-            DeduplicateFile();
+                Campus_Id = x.Id,
+                SubCatField_Id = ctx.SubCatFields.First().Id
+            };
+            //x.StaarStats = new List<StaarStat> { y };
+            ctx.BulkInsert(new List<StaarStat> { y });
+            //ctx.Campuses.AddOrUpdate(x);
+            ctx.SaveChangesAsync();
+
+            //foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv"))
+            //{
+            //    var a = new Stopwatch();
+            //    a.Start();
+            //    ReadStaarDataBySubject(file);
+            //    a.Stop();
+            //    Console.WriteLine("Time ellapsed: {0} secs", a.ElapsedMilliseconds / 1000.0);
+            //}
+            ////ReadStaarDataBySubject();
+            //DeduplicateFile();
         }
 
-        private static void ReadStaarDataByGrade(IReadOnlyDictionary<long, Campus> campuses, string filePath, bool firstTwoRowsAsHeaders = false)
+        private static void CreateSubCatFields()
         {
-            var rows = File.ReadLines(filePath).ToList();
-            var headers = rows[0].Split(',').ToList();
-            var startingRow = 1;
-
-            if (firstTwoRowsAsHeaders)
+            var ctx = new OperationalDataContext();
+            if (!ctx.SubCatFields.Any())
             {
-                headers.AddRange(rows[1].Split(','));
-                startingRow++;
-            }
-
-            //for each row in the file (each campus)
-            var a = new Stopwatch();
-            a.Start();
-            for (var x = startingRow; x < rows.Count; x++)
-            {
-                var cells = rows[x].Split(',').ToArray();
-                Campus campus;
-                try
+                var subCatField = new List<SubCatField>();
+                foreach (var cat in Enum.GetValues(typeof(StaarCategoryName)).Cast<StaarCategoryName>())
                 {
-                    campus = campuses[int.Parse(cells[0])];
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("No school for ID {0}", cells[0]);
-                    continue;
-                }
-
-                campus.StaarStats = new List<StaarStat>();
-
-                //for each cell in the row (each StaarStat)
-                for (var i = 13; i < cells.Length; i++)
-                {
-                    //split the column header
-                    var columnBits = headers[i].Split(new[] { "_" }, 3, StringSplitOptions.None);
-                    var staar = new StaarStat();
-
-                    try
+                    foreach (var field in Enum.GetValues(typeof(StaarFieldName)).Cast<StaarFieldName>())
                     {
-
-                        staar.Subject = (StaarSubjectName)Enum.Parse(typeof(StaarSubjectName), columnBits[0]);
-                        staar.Field = (StaarFieldName)Enum.Parse(typeof(StaarFieldName), columnBits[1]);
-                        staar.Category = (StaarCategoryName)Enum.Parse(typeof(StaarCategoryName), columnBits[2]);
+                        foreach (var sub in Enum.GetValues(typeof(StaarSubjectName)).Cast<StaarSubjectName>())
+                        {
+                            subCatField.Add(new SubCatField
+                            {
+                                Field = field,
+                                Category = cat,
+                                Subject = sub
+                            });
+                        }
                     }
-                    catch (Exception)
-                    {
-
-
-                    }
-                    staar.Value = cells[i];
-                    staar.Year = int.Parse(cells[1]); //1
-                    staar.Grade = (Grade)cells[6].Parse(); //6
-                    campus.StaarStats.Add(staar);
                 }
-                Console.WriteLine("Finished {1}\t of {2} - {0}", campus.Name, x, rows.Count);
+                ctx.BulkInsert(subCatField);
+                ctx.SaveChanges();
             }
-            a.Stop();
-            Console.WriteLine(a.ElapsedMilliseconds);
         }
+
+        //private static void ReadStaarDataByGrade(IReadOnlyDictionary<long, Campus> campuses, string filePath, bool firstTwoRowsAsHeaders = false)
+        //{
+        //    var rows = File.ReadLines(filePath).ToList();
+        //    var headers = rows[0].Split(',').ToList();
+        //    var startingRow = 1;
+
+        //    if (firstTwoRowsAsHeaders)
+        //    {
+        //        headers.AddRange(rows[1].Split(','));
+        //        startingRow++;
+        //    }
+
+        //    //for each row in the file (each campus)
+        //    var a = new Stopwatch();
+        //    a.Start();
+        //    for (var x = startingRow; x < rows.Count; x++)
+        //    {
+        //        var cells = rows[x].Split(',').ToArray();
+        //        Campus campus;
+        //        try
+        //        {
+        //            campus = campuses[int.Parse(cells[0])];
+        //        }
+        //        catch (Exception)
+        //        {
+        //            Console.WriteLine("No school for ID {0}", cells[0]);
+        //            continue;
+        //        }
+
+        //        campus.StaarStats = new List<StaarStat>();
+
+        //        //for each cell in the row (each StaarStat)
+        //        for (var i = 13; i < cells.Length; i++)
+        //        {
+        //            //split the column header
+        //            var columnBits = headers[i].Split(new[] { "_" }, 3, StringSplitOptions.None);
+        //            var staar = new StaarStat();
+
+        //            try
+        //            {
+
+        //                staar.Subject = (StaarSubjectName)Enum.Parse(typeof(StaarSubjectName), columnBits[0]);
+        //                staar.Field = (StaarFieldName)Enum.Parse(typeof(StaarFieldName), columnBits[1]);
+        //                staar.Category = (StaarCategoryName)Enum.Parse(typeof(StaarCategoryName), columnBits[2]);
+        //            }
+        //            catch (Exception)
+        //            {
+
+
+        //            }
+        //            staar.Value = cells[i];
+        //            staar.Year = int.Parse(cells[1]); //1
+        //            staar.Grade = (Grade)cells[6].Parse(); //6
+        //            campus.StaarStats.Add(staar);
+        //        }
+        //        Console.WriteLine("Finished {1}\t of {2} - {0}", campus.Name, x, rows.Count);
+        //    }
+        //    a.Stop();
+        //    Console.WriteLine(a.ElapsedMilliseconds);
+        //}
 
         private static void ReadStaarDataBySubject(string file)
         {
@@ -171,12 +199,15 @@ namespace CommitParser
                             Value = container.Stat,
                             Year = int.Parse(staarStats[1]),
                             Campus_Id = campus.Id,
-                            Subject = Converter.GetSubject(staarStatValues[0]),
-                            Field = Converter.GetField(staarStatValues[1]),
-                            Category = Converter.GetCategory(staarStatValues[2])
+                            SubCatField = new SubCatField
+                            {
+                                Subject = Converter.GetSubject(staarStatValues[0]),
+                                Field = Converter.GetField(staarStatValues[1]),
+                                Category = Converter.GetCategory(staarStatValues[2])
+                            }
                         };
 
-                        staar.Grade = FindGradeBySubject(staar.Subject); //(Grade)staarStats[6].Parse(); //6
+                        staar.Grade = FindGradeBySubject(staar.SubCatField.Subject); //(Grade)staarStats[6].Parse(); //6
                         closureBag.Add(staar);
                     });
 

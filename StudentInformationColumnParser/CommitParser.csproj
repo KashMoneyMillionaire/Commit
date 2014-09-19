@@ -63,9 +63,15 @@
     <Compile Include="Domain\Campus.cs" />
     <Compile Include="Domain\EntityBase.cs" />
     <Compile Include="Domain\CompletedFile.cs" />
+    <Compile Include="Domain\SubCatField.cs" />
     <Compile Include="Domain\StaarStat.cs" />
     <Compile Include="Domain\YearStat.cs" />
     <Compile Include="DTOs\CampusStudent1011.cs" />
+    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.cs" />
+    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.Designer.cs">
+      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EntityMapping\SubCatFieldMapping.cs" />
     <Compile Include="EntityMapping\CompletedFileMapping.cs" />
     <Compile Include="EntityMapping\Migrations\201409182249419_Initial.cs" />
     <Compile Include="EntityMapping\Migrations\201409182249419_Initial.Designer.cs">
@@ -115,6 +121,9 @@
   <ItemGroup>
     <EmbeddedResource Include="EntityMapping\Migrations\201409182249419_Initial.resx">
       <DependentUpon>201409182249419_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EntityMapping\Migrations\201409190634214_SubCatField.resx">
+      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
