@@ -87,6 +87,9 @@
     <None Include="Resources\Campuses\2011 Campus Reference.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\Campuses\2012 Campus.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Campuses\2013 Campus Reference.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

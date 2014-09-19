@@ -18,27 +18,28 @@ namespace CommitParser
     {
         static void Main(string[] args)
         {
-            var ctx = new OperationalDataContext();
-            var x = ctx.Campuses.First();
-            var y = new StaarStat
-            {
-                Campus = x
-            };
-            x.StaarStats = new List<StaarStat> { y };
-            ctx.StaarStats.Add(y);
-            ctx.Campuses.AddOrUpdate(x);
-            ctx.SaveChanges();
-
-            //ReadCampuses();
-            //foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv"))
+            //var ctx = new OperationalDataContext();
+            //var x = ctx.Campuses.First();
+            //var y = new StaarStat
             //{
-            //    var a = new Stopwatch();
-            //    a.Start();
-            //    ReadStaarDataBySubject(file);
-            //    a.Stop();
-            //    Console.WriteLine("Time ellapsed: {0} secs", a.ElapsedMilliseconds / 1000.0);
-            //}
-            ////ReadStaarDataBySubject();
+            //    Campus_Id = x.Id
+            //};
+            ////x.StaarStats = new List<StaarStat> { y };
+            //ctx.BulkInsert(new List<StaarStat> {y});
+            ////ctx.Campuses.AddOrUpdate(x);
+            //ctx.SaveChangesAsync();
+
+            ReadCampuses();
+            foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv"))
+            {
+                var a = new Stopwatch();
+                a.Start();
+                ReadStaarDataBySubject(file);
+                a.Stop();
+                Console.WriteLine("Time ellapsed: {0} secs", a.ElapsedMilliseconds / 1000.0);
+            }
+            //ReadStaarDataBySubject();
+            DeduplicateFile();
         }
 
         private static void ReadStaarDataByGrade(IReadOnlyDictionary<long, Campus> campuses, string filePath, bool firstTwoRowsAsHeaders = false)
@@ -169,7 +170,7 @@ namespace CommitParser
                             Language = Language.English,
                             Value = container.Stat,
                             Year = int.Parse(staarStats[1]),
-                            Campus = campus,
+                            Campus_Id = campus.Id,
                             Subject = Converter.GetSubject(staarStatValues[0]),
                             Field = Converter.GetField(staarStatValues[1]),
                             Category = Converter.GetCategory(staarStatValues[2])
@@ -199,7 +200,12 @@ namespace CommitParser
             //finish up the remaining, and update completed files
 
             Console.Write("\tFinishing up for this file... ");
-            ctx.BulkInsert(bag);
+            for (var i = 0; i <= bag.Count / 100000; i++)
+            {
+                ctx.BulkInsert(bag.Skip(i * 100000).Take(100000));
+                ctx.SaveChangesAsync();
+            }
+            //ctx.BulkInsert(bag);
             Console.Write("Done.");
             UpdateFile(file, ctx);
         }
@@ -361,6 +367,13 @@ namespace CommitParser
                 });
             }
             ctx.SaveChangesAsync();
+        }
+
+        public static void DeduplicateFile()
+        {
+            var nums = File.ReadAllLines(@"C:\Users\kcummings\Google Drive\Work\Commit\Missing School Numbers.txt").ToList();
+            File.WriteAllLines(@"C:\Users\kcummings\Google Drive\Work\Commit\Missing School Numbers.txt",
+                nums.Distinct().ToArray());
         }
 
         //private static OperationalDataContext Refresh(OperationalDataContext ctx)

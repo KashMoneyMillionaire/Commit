@@ -33,7 +33,8 @@ namespace CommitParser.EntityMapping
             Property(c => c.Value);
 
             HasRequired(c => c.Campus)
-                .WithMany(c => c.StaarStats);
+                .WithMany(c => c.StaarStats)
+                .HasForeignKey(c => c.Campus_Id);
         }
     }
 }

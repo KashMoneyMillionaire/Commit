@@ -1,9 +1,12 @@
-﻿using CommitParser.Helpers;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using CommitParser.Helpers;
 
 namespace CommitParser.Domain
 {
     public class StaarStat : EntityBase<long>
     {
+        public long Campus_Id { get; set; }
+        [ForeignKey("Campus_Id")]
         public virtual Campus Campus { get; set; }
         public long Year { get; set; }
         public Grade Grade { get; set; }
