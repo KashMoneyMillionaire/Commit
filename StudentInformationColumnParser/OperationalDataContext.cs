@@ -22,6 +22,7 @@ namespace CommitParser
         public DbSet<StaarStat> StaarStats { get; set; }
         public DbSet<CompletedFile> CompletedFiles { get; set; }
         public DbSet<SubCatField> SubCatFields { get; set; }
+        public DbSet<YearGradeLang> YearGradeLangs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace CommitParser
             modelBuilder.Configurations.Add(new StaarStatMapping());
             modelBuilder.Configurations.Add(new CompletedFileMapping());
             modelBuilder.Configurations.Add(new SubCatFieldMapping());
+            modelBuilder.Configurations.Add(new YearGradeLangMapping());
         }
 
         

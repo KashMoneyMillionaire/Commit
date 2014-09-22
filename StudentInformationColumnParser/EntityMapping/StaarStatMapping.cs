@@ -18,11 +18,6 @@ namespace CommitParser.EntityMapping
             Property(c => c.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            Property(c => c.Year);
-
-            Property(c => c.Grade);
-
-            Property(c => c.Language);
 
             Property(c => c.Value);
 
@@ -33,6 +28,10 @@ namespace CommitParser.EntityMapping
             HasRequired(c => c.Campus)
                 .WithMany(c => c.StaarStats)
                 .HasForeignKey(c => c.Campus_Id);
+
+            HasRequired(c => c.YearGradeLang)
+                .WithMany()
+                .HasForeignKey(c => c.YearGradeLang_Id);
         }
     }
 }

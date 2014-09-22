@@ -18,19 +18,25 @@ namespace CommitParser
     {
         static void Main(string[] args)
         {
-            ReadCampuses();
-            CreateSubCatFields();
-            var ctx = new OperationalDataContext();
-            var x = ctx.Campuses.First();
-            var y = new StaarStat
+            foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv").Where(c => !c.Contains("Parse")))
             {
-                Campus_Id = x.Id,
-                SubCatField_Id = ctx.SubCatFields.First().Id
-            };
-            //x.StaarStats = new List<StaarStat> { y };
-            ctx.BulkInsert(new List<StaarStat> { y });
-            //ctx.Campuses.AddOrUpdate(x);
-            ctx.SaveChangesAsync();
+                StaarSubjectUnpivotor.Unpivot(file, Grade.EOC, Language.English);
+            }
+
+            //ReadCampuses();
+            //CreateSubCatFields();
+            //CreateYearGradeLangs();
+            //var ctx = new OperationalDataContext();
+            //var x = ctx.Campuses.First();
+            //var y = new StaarStat
+            //{
+            //    Campus_Id = x.Id,
+            //    SubCatField_Id = ctx.SubCatFields.First().Id
+            //};
+            ////x.StaarStats = new List<StaarStat> { y };
+            //ctx.BulkInsert(new List<StaarStat> { y });
+            ////ctx.Campuses.AddOrUpdate(x);
+            //ctx.SaveChangesAsync();
 
             //foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv"))
             //{
@@ -44,6 +50,32 @@ namespace CommitParser
             //DeduplicateFile();
         }
 
+        private static void CreateYearGradeLangs()
+        {
+            var ctx = new OperationalDataContext();
+            if (!ctx.SubCatFields.Any())
+            {
+                var subCatField = new List<YearGradeLang>();
+                foreach (var year in new[] {2010, 2011, 2012, 2013, 2014})
+                {
+                    foreach (var grade in Enum.GetValues(typeof(Grade)).Cast<Grade>())
+                    {
+                        foreach (var language in Enum.GetValues(typeof(Language)).Cast<Language>())
+                        {
+                            subCatField.Add(new YearGradeLang
+                            {
+                                Year = year,
+                                Grade = grade,
+                                Language = language
+                            });
+                        }
+                    }
+                }
+                ctx.BulkInsert(subCatField);
+                ctx.SaveChanges();
+            }
+        }
+
         private static void CreateSubCatFields()
         {
             var ctx = new OperationalDataContext();
@@ -52,7 +84,7 @@ namespace CommitParser
                 var subCatField = new List<SubCatField>();
                 foreach (var cat in Enum.GetValues(typeof(StaarCategoryName)).Cast<StaarCategoryName>())
                 {
-                    foreach (var field in Enum.GetValues(typeof(StaarFieldName)).Cast<StaarFieldName>())
+                    foreach (var field in Enum.GetValues(typeof(StaarDemographic)).Cast<StaarDemographic>())
                     {
                         foreach (var sub in Enum.GetValues(typeof(StaarSubjectName)).Cast<StaarSubjectName>())
                         {
@@ -112,7 +144,7 @@ namespace CommitParser
         //            {
 
         //                staar.Subject = (StaarSubjectName)Enum.Parse(typeof(StaarSubjectName), columnBits[0]);
-        //                staar.Field = (StaarFieldName)Enum.Parse(typeof(StaarFieldName), columnBits[1]);
+        //                staar.Field = (StaarDemographic)Enum.Parse(typeof(StaarDemographic), columnBits[1]);
         //                staar.Category = (StaarCategoryName)Enum.Parse(typeof(StaarCategoryName), columnBits[2]);
         //            }
         //            catch (Exception)
@@ -193,21 +225,24 @@ namespace CommitParser
                     {
                         //split the column header
                         var staarStatValues = container.Header.Split(new[] { "_" }, 3, StringSplitOptions.None);
+                        var subject = Converter.GetSubject(staarStatValues[0]);
+                        var field = Converter.GetField(staarStatValues[1]);
+                        var category = Converter.GetCategory(staarStatValues[2]);
+                        var year = int.Parse(staarStats[1]);
+                        var grade = FindGradeBySubject(subject);
+                        var ygl =
+                            ctx.YearGradeLangs.Single(
+                                y => y.Year == year && y.Grade == grade && y.Language == Language.English);
+                        var scf =
+                            ctx.SubCatFields.Single(
+                                s => s.Category == category && s.Subject == subject && s.Field == field);
                         var staar = new StaarStat
                         {
-                            Language = Language.English,
                             Value = container.Stat,
-                            Year = int.Parse(staarStats[1]),
                             Campus_Id = campus.Id,
-                            SubCatField = new SubCatField
-                            {
-                                Subject = Converter.GetSubject(staarStatValues[0]),
-                                Field = Converter.GetField(staarStatValues[1]),
-                                Category = Converter.GetCategory(staarStatValues[2])
-                            }
+                            SubCatField = scf,
+                            YearGradeLang = ygl
                         };
-
-                        staar.Grade = FindGradeBySubject(staar.SubCatField.Subject); //(Grade)staarStats[6].Parse(); //6
                         closureBag.Add(staar);
                     });
 

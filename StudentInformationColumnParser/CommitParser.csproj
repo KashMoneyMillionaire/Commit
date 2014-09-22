@@ -63,6 +63,7 @@
     <Compile Include="Domain\Campus.cs" />
     <Compile Include="Domain\EntityBase.cs" />
     <Compile Include="Domain\CompletedFile.cs" />
+    <Compile Include="Domain\YearGradeLang.cs" />
     <Compile Include="Domain\SubCatField.cs" />
     <Compile Include="Domain\StaarStat.cs" />
     <Compile Include="Domain\YearStat.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.Designer.cs">
       <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
     </Compile>
+    <Compile Include="EntityMapping\YearGradeLangMapping.cs" />
     <Compile Include="EntityMapping\SubCatFieldMapping.cs" />
     <Compile Include="EntityMapping\CompletedFileMapping.cs" />
     <Compile Include="EntityMapping\Migrations\201409182249419_Initial.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="OperationalDataContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaarSubjectUnpivoter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

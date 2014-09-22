@@ -64,7 +64,7 @@ namespace CommitParser.Helpers
                     return Grade.G12;
             }
 
-            var fields = Enum.GetValues(typeof(StaarFieldName)).Cast<StaarFieldName>();
+            var fields = Enum.GetValues(typeof(StaarDemographic)).Cast<StaarDemographic>();
             foreach (var acc in fields.Where(acc => acc.ToString() == input))
             {
                 return acc;
@@ -177,141 +177,141 @@ namespace CommitParser.Helpers
             }
         }
 
-        public static StaarFieldName GetField(string thing)
+        public static StaarDemographic GetField(string thing)
         {
             switch (thing)
             {
                 case "all":
-                    return StaarFieldName.all;
+                    return StaarDemographic.all;
                 case "sexm":
-                    return StaarFieldName.sexm;
+                    return StaarDemographic.sexm;
                 case "sexf":
-                    return StaarFieldName.sexf;
+                    return StaarDemographic.sexf;
                 case "sexv":
-                    return StaarFieldName.sexv;
+                    return StaarDemographic.sexv;
                 case "ethh":
-                    return StaarFieldName.ethh;
+                    return StaarDemographic.ethh;
                 case "ethi":
-                    return StaarFieldName.ethi;
+                    return StaarDemographic.ethi;
                 case "etha":
-                    return StaarFieldName.etha;
+                    return StaarDemographic.etha;
                 case "ethb":
-                    return StaarFieldName.ethb;
+                    return StaarDemographic.ethb;
                 case "ethp":
-                    return StaarFieldName.ethp;
+                    return StaarDemographic.ethp;
                 case "ethw":
-                    return StaarFieldName.ethw;
+                    return StaarDemographic.ethw;
                 case "eth2":
-                    return StaarFieldName.eth2;
+                    return StaarDemographic.eth2;
                 case "ethv":
-                    return StaarFieldName.ethv;
+                    return StaarDemographic.ethv;
                 case "ecoy":
-                    return StaarFieldName.ecoy;
+                    return StaarDemographic.ecoy;
                 case "econ":
-                    return StaarFieldName.econ;
+                    return StaarDemographic.econ;
                 case "eco1":
-                    return StaarFieldName.eco1;
+                    return StaarDemographic.eco1;
                 case "eco2":
-                    return StaarFieldName.eco2;
+                    return StaarDemographic.eco2;
                 case "eco9":
-                    return StaarFieldName.eco9;
+                    return StaarDemographic.eco9;
                 case "ecov":
-                    return StaarFieldName.ecov;
+                    return StaarDemographic.ecov;
                 case "ti1y":
-                    return StaarFieldName.ti1y;
+                    return StaarDemographic.ti1y;
                 case "ti1n":
-                    return StaarFieldName.ti1n;
+                    return StaarDemographic.ti1n;
                 case "ti10":
-                    return StaarFieldName.ti10;
+                    return StaarDemographic.ti10;
                 case "ti16":
-                    return StaarFieldName.ti16;
+                    return StaarDemographic.ti16;
                 case "ti17":
-                    return StaarFieldName.ti17;
+                    return StaarDemographic.ti17;
                 case "ti18":
-                    return StaarFieldName.ti18;
+                    return StaarDemographic.ti18;
                 case "ti19":
-                    return StaarFieldName.ti19;
+                    return StaarDemographic.ti19;
                 case "ti1v":
-                    return StaarFieldName.ti1v;
+                    return StaarDemographic.ti1v;
                 case "migy":
-                    return StaarFieldName.migy;
+                    return StaarDemographic.migy;
                 case "mign":
-                    return StaarFieldName.mign;
+                    return StaarDemographic.mign;
                 case "migv":
-                    return StaarFieldName.migv;
+                    return StaarDemographic.migv;
                 case "lepc":
-                    return StaarFieldName.lepc;
+                    return StaarDemographic.lepc;
                 case "lepf":
-                    return StaarFieldName.lepf;
+                    return StaarDemographic.lepf;
                 case "leps":
-                    return StaarFieldName.leps;
+                    return StaarDemographic.leps;
                 case "lep0":
-                    return StaarFieldName.lep0;
+                    return StaarDemographic.lep0;
                 case "lepv":
-                    return StaarFieldName.lepv;
+                    return StaarDemographic.lepv;
                 case "bily":
-                    return StaarFieldName.bily;
+                    return StaarDemographic.bily;
                 case "biln":
-                    return StaarFieldName.biln;
+                    return StaarDemographic.biln;
                 case "bil2":
-                    return StaarFieldName.bil2;
+                    return StaarDemographic.bil2;
                 case "bil3":
-                    return StaarFieldName.bil3;
+                    return StaarDemographic.bil3;
                 case "bil4":
-                    return StaarFieldName.bil4;
+                    return StaarDemographic.bil4;
                 case "bil5":
-                    return StaarFieldName.bil5;
+                    return StaarDemographic.bil5;
                 case "bilv":
-                    return StaarFieldName.bilv;
+                    return StaarDemographic.bilv;
                 case "esly":
-                    return StaarFieldName.esly;
+                    return StaarDemographic.esly;
                 case "esln":
-                    return StaarFieldName.esln;
+                    return StaarDemographic.esln;
                 case "esl2":
-                    return StaarFieldName.esl2;
+                    return StaarDemographic.esl2;
                 case "esl3":
-                    return StaarFieldName.esl3;
+                    return StaarDemographic.esl3;
                 case "eslv":
-                    return StaarFieldName.eslv;
+                    return StaarDemographic.eslv;
                 case "esbiy":
-                    return StaarFieldName.esbiy;
+                    return StaarDemographic.esbiy;
                 case "esbin":
-                    return StaarFieldName.esbin;
+                    return StaarDemographic.esbin;
                 case "esbiv":
-                    return StaarFieldName.esbiv;
+                    return StaarDemographic.esbiv;
                 case "spey":
-                    return StaarFieldName.spey;
+                    return StaarDemographic.spey;
                 case "spen":
-                    return StaarFieldName.spen;
+                    return StaarDemographic.spen;
                 case "spev":
-                    return StaarFieldName.spev;
+                    return StaarDemographic.spev;
                 case "gify":
-                    return StaarFieldName.gify;
+                    return StaarDemographic.gify;
                 case "gifn":
-                    return StaarFieldName.gifn;
+                    return StaarDemographic.gifn;
                 case "gifv":
-                    return StaarFieldName.gifv;
+                    return StaarDemographic.gifv;
                 case "atry":
-                    return StaarFieldName.atry;
+                    return StaarDemographic.atry;
                 case "atrn":
-                    return StaarFieldName.atrn;
+                    return StaarDemographic.atrn;
                 case "atrv":
-                    return StaarFieldName.atrv;
+                    return StaarDemographic.atrv;
                 case "vocy":
-                    return StaarFieldName.vocy;
+                    return StaarDemographic.vocy;
                 case "vocn":
-                    return StaarFieldName.vocn;
+                    return StaarDemographic.vocn;
                 case "voc1":
-                    return StaarFieldName.voc1;
+                    return StaarDemographic.voc1;
                 case "voc2":
-                    return StaarFieldName.voc2;
+                    return StaarDemographic.voc2;
                 case "voc3":
-                    return StaarFieldName.voc3;
+                    return StaarDemographic.voc3;
                 case "vocv":
-                    return StaarFieldName.vocv;
+                    return StaarDemographic.vocv;
 
                 default:
-                    return StaarFieldName.Unknown;
+                    return StaarDemographic.voc1;
             }
         }
 
@@ -384,7 +384,7 @@ namespace CommitParser.Helpers
                 case "pct_cat5":
                     return StaarCategoryName.pct_cat5;
                 default:
-                    return StaarCategoryName.Unknown;
+                    return StaarCategoryName.pct_cat5;
             }
         }
 
