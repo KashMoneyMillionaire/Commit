@@ -11,6 +11,6 @@ namespace CommitParser.Domain
     {
         public StaarSubjectName Subject { get; set; }
         public StaarCategoryName Category { get; set; }
-        public StaarFieldName Field { get; set; }
+        public StaarDemographic Field { get; set; }
     }
 }

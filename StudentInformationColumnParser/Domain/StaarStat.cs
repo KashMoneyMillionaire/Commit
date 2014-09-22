@@ -12,9 +12,10 @@ namespace CommitParser.Domain
         public long SubCatField_Id { get; set; }
         [ForeignKey("SubCatField_Id")]
         public virtual SubCatField SubCatField { get; set; }
-        public long Year { get; set; }
-        public Grade Grade { get; set; }
-        public Language Language { get; set; }
+
+        public long YearGradeLang_Id { get; set; }
+        [ForeignKey("YearGradeLang_Id")]
+        public YearGradeLang YearGradeLang { get; set; }
 
         public string Value { get; set; }
     }

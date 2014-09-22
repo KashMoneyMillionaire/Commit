@@ -36,7 +36,8 @@ namespace CommitParser.Helpers
         G9,
         G10,
         G11,
-        G12
+        G12,
+        EOC
     }
 
     public enum GradeType : long
@@ -77,9 +78,9 @@ namespace CommitParser.Helpers
         TwoOrMore
     }
 
-    public enum StaarFieldName : long
+    public enum StaarDemographic : long
     {
-        Unknown = 0,
+        //Unknown = 0,
         [Description("All Students")]
         all,
         [Description("Male Students")]
@@ -248,7 +249,7 @@ namespace CommitParser.Helpers
 
     public enum StaarCategoryName : long
     {
-        Unknown = 0,
+        //Unknown = 0,
         [Description("# Tested")]
         d,
         [Description("# Achieved Level II Satisfactory--Phase-in 1")]
@@ -312,7 +313,7 @@ namespace CommitParser.Helpers
         [Description("# Avg Items Correct--Reporting Category 5 ")]
         avg_cat5,
         [Description("% Avg Items Correct--Reporting Category 5 ")]
-        pct_cat5,
+        pct_cat5
 
     }
 }
