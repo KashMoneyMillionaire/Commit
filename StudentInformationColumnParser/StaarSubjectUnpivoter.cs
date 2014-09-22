@@ -17,8 +17,10 @@ namespace CommitParser
         private static readonly List<string> Demographics =
             Enum.GetValues(typeof(StaarDemographic)).Cast<StaarDemographic>().Select(c => c.ToString()).ToList();
 
-        private static readonly List<string> Categories =
-            Enum.GetValues(typeof(StaarCategoryName)).Cast<StaarCategoryName>().Select(c => c.ToString()).ToList();
+        //private static readonly List<string> StaticCategories =
+        //    Enum.GetValues(typeof(StaarCategoryName)).Cast<StaarCategoryName>().Select(c => c.ToString()).ToList();
+
+        private static readonly string[] ExcludedCategories = {"docs_n", "abs_n", "oth_n", "docs_r", "abs_r", "oth_r"};
 
         private static object[] _rowTemplate;
 
@@ -29,13 +31,14 @@ namespace CommitParser
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             headers.AddRange(rows[1].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries));
             var sdc = headers.Select(h => h.Split(new[] { '_' }, 3)).ToList();
+            var dynamicCategories = sdc.Where(s => s.Count() == 3).Select(s => s[1]).Distinct().Except(ExcludedCategories).ToList();
             rows.RemoveRange(0, 2);
 
 
             //begin changing stuff
 
             var dataTable = new DataTable(string.Format("Parsed {0}", fileName));
-            var weirdHeaders = new List<string>();
+            //var weirdHeaders = new List<string>();
 
             //first X
 
@@ -55,20 +58,20 @@ namespace CommitParser
             var genericHeaders = new List<string>(new[] { "Subject", "Grade", "Language" });
 
 
-            //weird ones
+            ////weird ones
 
-            foreach (var split in headers.Select(header => header.Split(new[] { '_' }, 3)))
-            {
-                try
-                {
-                    if (!Categories.Contains(split[2].Trim()))
-                    {
-                        weirdHeaders.Add(split[2].Trim());
-                        dataTable.Columns.Add(split[2].Trim());
-                    }
-                }
-                catch { }
-            }
+            //foreach (var split in sdc)
+            //{
+            //    try
+            //    {
+            //        if (!StaticCategories.Contains(split[2].Trim()))
+            //        {
+            //            weirdHeaders.Add(split[2].Trim());
+            //            dataTable.Columns.Add(split[2].Trim());
+            //        }
+            //    }
+            //    catch { }
+            //}
 
 
             //demographics
@@ -95,10 +98,10 @@ namespace CommitParser
                 //set up basic set
 
                 FillFirstX(dataRow, campus, x);
-                FillWeirdHeaders(dataRow, weirdHeaders, headers, campus);
+                FillWeirdHeaders(dataRow, headers, campus);
                 FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), language.ToString());
 
-                foreach (var category in Categories)
+                foreach (var category in dynamicCategories)
                 {
                     //for each complex header whose category matches the current category
 
@@ -144,9 +147,9 @@ namespace CommitParser
             }
         }
 
-        private static void FillWeirdHeaders(DataRow dataRow, IEnumerable<string> weirdHeaders, List<string> headers, string[] campusData)
+        private static void FillWeirdHeaders(DataRow dataRow, List<string> headers, string[] campusData)
         {
-            foreach (var we in weirdHeaders)
+            foreach (var we in ExcludedCategories)
             {
                 dataRow[we] = campusData[headers.FindIndex(c => c.Contains(we))];
             }
