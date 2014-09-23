@@ -97,18 +97,20 @@ namespace CommitParser
                 return;
             }
             var currentIndex = 0;
+            var selectedGrade = (Grade)Enum.Parse(typeof(Grade), GradeDropDown.SelectedIndex.ToString());
+            var selectedLanguage = (Language)Enum.Parse(typeof(Language), LanguageDropDown.SelectedIndex.ToString());
             ProgressBar.Value = 0;
-            MessageBox.Text = "Unpivoting...";
+            MessageBox.Text = "Unpivoting...\r\n";
             var total = inputFiles.Count();
+
             foreach (var file in inputFiles)
             {
                 //I know this is bad Kash but im not quite sure how to make it like you did it before... :l
-                MessageBox.Text += "\r\n" + inputFiles[currentIndex].Substring(inputFiles[currentIndex].LastIndexOf("\\") +1) + "... ";
+                //Clay, this is how you do it.
+                MessageBox.Text += string.Format("{0} ... ", Path.GetFileNameWithoutExtension(inputFiles[currentIndex]));
                 try
                 {
                     Application.DoEvents();
-                    Grade selectedGrade = (Grade)Enum.Parse(typeof(Grade), GradeDropDown.SelectedIndex.ToString());
-                    Language selectedLanguage = (Language)Enum.Parse(typeof(Language), LanguageDropDown.SelectedIndex.ToString());
                     StaarSubjectUnpivotor.Unpivot(file, OutputPath.Text, selectedGrade, selectedLanguage);
                 }
                 catch (Exception ex)
@@ -120,7 +122,7 @@ namespace CommitParser
                 }
                 currentIndex++;
                 ProgressBar.Value = (int) Math.Round(currentIndex/(double) total*100.0);
-                MessageBox.Text += "done";
+                MessageBox.Text += "Done.\r\n";
             }
             MessageBox.Text += "\r\nDone Unpivoting";
             UnpivotButton.Enabled = true;
