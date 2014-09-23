@@ -36,6 +36,7 @@ namespace CommitParser
         private Label label2;
         private ComboBox LanguageDropDown;
         private Panel InputPanel;
+        private bool unpivoting = false;
 
         //Setup Form
         public Program()
@@ -89,6 +90,7 @@ namespace CommitParser
         //Start button
         protected void StartButton_Click(object obj, EventArgs e)
         {
+            UnpivotButton.Enabled = false;
             if (!inputFiles.Any() || OutputPath.Text.Trim() == "")
             {
                 MessageBox.Text = "Either the Input File(s) or Output Folder have not been chosen.";
@@ -96,25 +98,32 @@ namespace CommitParser
             }
             var currentIndex = 0;
             ProgressBar.Value = 0;
-            MessageBox.Text = "Unpivoting has begun...";
+            MessageBox.Text = "Unpivoting...";
             var total = inputFiles.Count();
             foreach (var file in inputFiles)
             {
-
+                //I know this is bad Kash but im not quite sure how to make it like you did it before... :l
+                MessageBox.Text += "\r\n" + inputFiles[currentIndex].Substring(inputFiles[currentIndex].LastIndexOf("\\") +1) + "... ";
                 try
                 {
-                    StaarSubjectUnpivotor.Unpivot(file, OutputPath.Text, Grade.EOC, Language.English);
+                    Application.DoEvents();
+                    Grade selectedGrade = (Grade)Enum.Parse(typeof(Grade), GradeDropDown.SelectedIndex.ToString());
+                    Language selectedLanguage = (Language)Enum.Parse(typeof(Language), LanguageDropDown.SelectedIndex.ToString());
+                    StaarSubjectUnpivotor.Unpivot(file, OutputPath.Text, selectedGrade, selectedLanguage);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Text = ex.Message;
                     ProgressBar.Value = 0;
+                    UnpivotButton.Enabled = true;
                     break;
                 }
                 currentIndex++;
                 ProgressBar.Value = (int) Math.Round(currentIndex/(double) total*100.0);
+                MessageBox.Text += "done";
             }
-            MessageBox.Text = "Done Unpivoting";
+            MessageBox.Text += "\r\nDone Unpivoting";
+            UnpivotButton.Enabled = true;
         }
 
         [STAThread]
@@ -213,6 +222,7 @@ namespace CommitParser
             // 
             resources.ApplyResources(this.MessageBox, "MessageBox");
             this.MessageBox.Name = "MessageBox";
+            this.MessageBox.Multiline = true;
             // 
             // UnpivotButton
             // 
