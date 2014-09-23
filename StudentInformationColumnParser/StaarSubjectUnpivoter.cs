@@ -26,7 +26,8 @@ namespace CommitParser
 
         public static void Unpivot(string fileName, Grade grade, Language language)
         {
-            Console.WriteLine("Let's unpivot this shit.");
+            //Lets unpivot this shit
+            Console.WriteLine("Unpivoting: {0}", fileName);
             var rows = File.ReadAllLines(fileName).ToList();
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             headers.AddRange(rows[1].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries));
