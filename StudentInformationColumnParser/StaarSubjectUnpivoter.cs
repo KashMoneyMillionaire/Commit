@@ -32,7 +32,12 @@ namespace CommitParser
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             headers.AddRange(rows[1].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries));
             var sdc = headers.Select(h => h.Split(new[] { '_' }, 3)).ToList();
-            var dynamicCategories = sdc.Where(s => s.Count() == 3).Select(s => s[1]).Distinct().Except(ExcludedCategories).ToList();
+            var dynamicCategories = sdc
+                .Where(s => s.Count() == 3)
+                .Select(s => s[2])
+                .Distinct()
+                .Except(ExcludedCategories)
+                .ToList();
             rows.RemoveRange(0, 2);
 
 
@@ -43,7 +48,7 @@ namespace CommitParser
 
             //first X
 
-            var x = 6;
+            const int x = 6;
             for (var i = 0; i < x; i++)
             {
                 dataTable.Columns.Add(headers[i]);
@@ -59,20 +64,12 @@ namespace CommitParser
             var genericHeaders = new List<string>(new[] { "Subject", "Grade", "Language" });
 
 
-            ////weird ones
+            //weird ones
 
-            //foreach (var split in sdc)
-            //{
-            //    try
-            //    {
-            //        if (!StaticCategories.Contains(split[2].Trim()))
-            //        {
-            //            weirdHeaders.Add(split[2].Trim());
-            //            dataTable.Columns.Add(split[2].Trim());
-            //        }
-            //    }
-            //    catch { }
-            //}
+            foreach (var cat in ExcludedCategories)
+            {
+                dataTable.Columns.Add(cat);
+            }
 
 
             //demographics
