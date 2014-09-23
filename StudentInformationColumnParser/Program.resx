@@ -118,13 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="OpenFolderButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>498, 37</value>
+  </data>
+  <data name="OpenFolderButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 23</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="OpenFolderButton.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="OpenFolderButton.Text" xml:space="preserve">
+    <value>Open Output Folder</value>
+  </data>
+  <data name="&gt;&gt;OpenFolderButton.Name" xml:space="preserve">
+    <value>OpenFolderButton</value>
+  </data>
+  <data name="&gt;&gt;OpenFolderButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OpenFolderButton.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;OpenFolderButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="GradeDropDown.Location" type="System.Drawing.Point, System.Drawing">
     <value>596, 171</value>
   </data>
   <data name="GradeDropDown.Size" type="System.Drawing.Size, System.Drawing">
     <value>176, 21</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="GradeDropDown.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
   </data>
@@ -138,7 +162,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;GradeDropDown.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -169,7 +193,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="LanguageDropDown.Location" type="System.Drawing.Point, System.Drawing">
     <value>596, 89</value>
@@ -190,7 +214,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;LanguageDropDown.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -217,7 +241,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="MessageBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 316</value>
@@ -244,7 +268,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;MessageBox.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="UnpivotButton.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 24pt, style=Bold</value>
@@ -271,7 +295,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;UnpivotButton.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="ProgressBar.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 657</value>
@@ -292,7 +316,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;ProgressBar.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="OutputButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -319,7 +343,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;OutputButton.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="OutputPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>429, 11</value>
@@ -340,7 +364,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;OutputPath.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="SelectFilesListView.Alignment" type="System.Windows.Forms.ListViewAlignment, System.Windows.Forms">
     <value>Left</value>
@@ -370,7 +394,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;SelectFilesListView.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="InputButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -397,7 +421,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;InputButton.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="InputPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 12</value>
@@ -418,7 +442,7 @@
     <value>panel1</value>
   </data>
   <data name="&gt;&gt;InputPath.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="panel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -444,9 +468,9 @@
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="$this.Localizable" type="System.Boolean, mscorlib">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
+  </metadata>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>784, 761</value>
   </data>

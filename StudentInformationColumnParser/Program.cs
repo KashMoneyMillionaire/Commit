@@ -36,6 +36,7 @@ namespace CommitParser
         private Label label2;
         private ComboBox LanguageDropDown;
         private Panel InputPanel;
+        private Button OpenFolderButton;
         private bool unpivoting = false;
 
         //Setup Form
@@ -178,11 +179,13 @@ namespace CommitParser
             this.FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.InputButton = new System.Windows.Forms.Button();
             this.InputPath = new System.Windows.Forms.TextBox();
+            this.OpenFolderButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.OpenFolderButton);
             this.panel1.Controls.Add(this.GradeDropDown);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.LanguageDropDown);
@@ -224,7 +227,6 @@ namespace CommitParser
             // 
             resources.ApplyResources(this.MessageBox, "MessageBox");
             this.MessageBox.Name = "MessageBox";
-            this.MessageBox.Multiline = true;
             // 
             // UnpivotButton
             // 
@@ -275,6 +277,13 @@ namespace CommitParser
             resources.ApplyResources(this.InputPath, "InputPath");
             this.InputPath.Name = "InputPath";
             // 
+            // OpenFolderButton
+            // 
+            resources.ApplyResources(this.OpenFolderButton, "OpenFolderButton");
+            this.OpenFolderButton.Name = "OpenFolderButton";
+            this.OpenFolderButton.UseVisualStyleBackColor = true;
+            this.OpenFolderButton.Click += new System.EventHandler(this.OpenFolderButton_Click);
+            // 
             // Program
             // 
             resources.ApplyResources(this, "$this");
@@ -285,6 +294,18 @@ namespace CommitParser
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
+        }
+
+        private void OpenFolderButton_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(OutputPath.Text))
+            {
+                Process.Start(OutputPath.Text);
+            }
+            else
+            {
+                MessageBox.Text = "The path does not exist to open.";
+            }
         }
 
 
