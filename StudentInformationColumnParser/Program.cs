@@ -20,7 +20,7 @@ namespace CommitParser
         {
             foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv").Where(c => !c.Contains("Parse")))
             {
-                StaarSubjectUnpivotor.Unpivot(file, "", Grade.EOC, Language.English);
+                StaarSubjectUnpivotor.Unpivot(file, Grade.EOC, Language.English);
             }
 
             //ReadCampuses();
