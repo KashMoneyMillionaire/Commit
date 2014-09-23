@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using CommitParser.Helpers;
 
 namespace CommitParser
@@ -22,15 +21,35 @@ namespace CommitParser
 
         private static readonly string[] ExcludedCategories = {"docs_n", "abs_n", "oth_n", "docs_r", "abs_r", "oth_r"};
 
-        private static object[] _rowTemplate;
-
-        public static void Unpivot(string fileName, Grade grade, Language language)
+        /// <summary>
+        /// This takes a csv file for the Staar Subject and unpivots it. It then saves it in the output folder.
+        /// </summary>
+        /// <param name="file">The *.csv path to read from.</param>
+        /// <param name="outPath">The folder to store the output.</param>
+        /// <param name="grade">The grade to be associated with the file(s).</param>
+        /// <param name="language">The language the test was taken in.</param>
+        public static void Unpivot(string file, string outPath, Grade grade, Language language)
         {
+            //Validation
+            if(!file.Contains(".csv"))
+                throw new Exception("The file is not a csv file.");
+
+
             //Lets unpivot this shit
-            Console.WriteLine("Unpivoting: {0}", fileName);
-            var rows = File.ReadAllLines(fileName).ToList();
+
+            Console.WriteLine("Unpivoting: {0}", file);
+            int j;
+
+            var rows = File.ReadAllLines(file).ToList();
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            headers.AddRange(rows[1].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries));
+            rows.RemoveAt(0); //pop the top off
+            var possibleHeader = rows[0].Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries);
+            if (!int.TryParse(possibleHeader[0], out j)) //check if second row of headers
+            {
+                headers.AddRange(possibleHeader);
+                rows.RemoveAt(0); //pop the top off
+            }
+            
             var sdc = headers.Select(h => h.Split(new[] { '_' }, 3)).ToList();
             var dynamicCategories = sdc
                 .Where(s => s.Count() == 3)
@@ -38,13 +57,12 @@ namespace CommitParser
                 .Distinct()
                 .Except(ExcludedCategories)
                 .ToList();
-            rows.RemoveRange(0, 2);
 
 
             //begin changing stuff
 
-            var dataTable = new DataTable(string.Format("Parsed {0}", fileName));
-            //var weirdHeaders = new List<string>();
+            var dataTable = new DataTable(string.Format("Parsed {0}", file));
+
 
             //first X
 
@@ -122,7 +140,8 @@ namespace CommitParser
                 }
             }
 
-            File.WriteAllText(fileName.Replace(".csv", " - Parsed.csv"), sb.ToString());
+            var fileName = Path.GetFileNameWithoutExtension(file);
+            File.WriteAllText(string.Format("{0}/{1} - Parsed.csv", outPath, fileName), sb.ToString());
 
         }
 
