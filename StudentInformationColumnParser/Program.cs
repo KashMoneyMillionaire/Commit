@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity.Migrations;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AutoMapper.Internal;
 using CommitParser.Domain;
 using CommitParser.Helpers;
@@ -14,14 +18,146 @@ using EntityFramework.BulkInsert.Extensions;
 
 namespace CommitParser
 {
-    class Program
+    class Program : Form
     {
-        static void Main(string[] args)
+        Button InputButton;
+        TextBox inFolder;
+        Button OutputButton;
+        TextBox outFolder;
+        Label grade;
+        ComboBox gradeSelection;
+        Label language;
+        ComboBox languageSelection;
+        Button StartButton;
+        ProgressBar progress;
+
+        //Setup Form
+        public Program()
         {
-            foreach (var file in Directory.EnumerateFiles(@"Resources\StaarData\Subject", "*.csv").Where(c => !c.Contains("Parse")))
+            Size = new Size(300, 180);
+            Text = "Unpivoter";
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            //Input Selection Dialog
+            InputButton = new Button();
+            InputButton.Text = "Input";
+            InputButton.Location = new Point(5, 5);
+            InputButton.Click += InputButton_Click;
+
+            //Input Folder TextBox
+            inFolder = new TextBox();
+            inFolder.Text = "";
+            inFolder.Location = new Point(85, 7);
+            inFolder.Width = 195;
+
+            //Output Selection Dialog
+            OutputButton = new Button();
+            OutputButton.Text = "Output";
+            OutputButton.Location = new Point(5, 35);
+            OutputButton.Click += OutputButton_Click;
+
+            //Output Folder TextBox
+            outFolder = new TextBox();
+            outFolder.Text = "";
+            outFolder.Location = new Point(85, 37);
+            outFolder.Width = 195;
+
+            //Grade Label
+            grade = new Label();
+            grade.Text = "Grade";
+            grade.Location = new Point(5, 67);
+            grade.Width = 40;
+
+            //Grade Selector
+            gradeSelection = new ComboBox();
+            gradeSelection.Location = new Point(50, 65);
+            gradeSelection.Width = 90;
+            gradeSelection.DataSource = Enum.GetValues(typeof(Grade));
+
+            //Language Label
+            language = new Label();
+            language.Text = "Grade";
+            language.Location = new Point(145, 67);
+            language.Width = 40;
+
+            //Language Selector
+            languageSelection = new ComboBox();
+            languageSelection.Location = new Point(190, 65);
+            languageSelection.Width = 90;
+            languageSelection.DataSource = Enum.GetValues(typeof(Language));
+
+            //Begin Button
+            StartButton = new Button();
+            StartButton.Text = "Unpivot";
+            StartButton.Location = new Point(5, 90);
+            StartButton.Width = 275;
+            StartButton.Click += StartButton_Click;
+
+            //Progress Bar
+            progress = new ProgressBar();
+            progress.Location = new Point(5, 115);
+            progress.Width = 275;
+            progress.Minimum = 0;
+            progress.Maximum = 100;
+
+            //Add to Form
+            Controls.Add(InputButton);
+            Controls.Add(inFolder);
+            Controls.Add(OutputButton);
+            Controls.Add(outFolder);
+            Controls.Add(grade);
+            Controls.Add(gradeSelection);
+            Controls.Add(language);
+            Controls.Add(languageSelection);
+            Controls.Add(StartButton);
+            Controls.Add(progress);
+        }
+
+        //Input selection button
+        protected void InputButton_Click(object obj, EventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+
+            try
             {
-                StaarSubjectUnpivotor.Unpivot(file, Grade.EOC, Language.English);
+                //string[] files = Directory.GetFiles(dlg.SelectedPath);
+                if (dlg.ShowDialog() == DialogResult.OK)
+                    inFolder.Text = dlg.SelectedPath;
             }
+            catch { }
+        }
+
+        //Output selection button
+        protected void OutputButton_Click(object obj, EventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+
+            try
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                    outFolder.Text = dlg.SelectedPath;
+            }
+            catch { }
+        }
+
+        //Start button
+        protected void StartButton_Click(object obj, EventArgs e)
+        {
+            int currentIndex = 0;
+            int total = (Directory.EnumerateFiles(inFolder.Text, "*.csv").Where(c => !c.Contains("Parse"))).Count();
+            foreach (var file in Directory.EnumerateFiles(inFolder.Text, "*.csv").Where(c => !c.Contains("Parse")))
+            {
+                StaarSubjectUnpivotor.Unpivot(file, outFolder.Text, Grade.EOC, Language.English);
+                currentIndex++;
+                progress.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
+            }
+        }
+
+        [STAThread]
+        public static int Main(string[] args)
+        {
+            Application.Run(new Program());
+            return 0;
 
             //ReadCampuses();
             //CreateSubCatFields();
@@ -314,7 +450,6 @@ namespace CommitParser
                     throw new ArgumentOutOfRangeException("No subject match");
             }
         }
-
 
         public static void ReadCampuses()
         {

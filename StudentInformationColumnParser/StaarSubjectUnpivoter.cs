@@ -24,11 +24,11 @@ namespace CommitParser
 
         private static object[] _rowTemplate;
 
-        public static void Unpivot(string fileName, Grade grade, Language language)
+        public static void Unpivot(string inFile, string outPath, Grade grade, Language language)
         {
             //Lets unpivot this shit
-            Console.WriteLine("Unpivoting: {0}", fileName);
-            var rows = File.ReadAllLines(fileName).ToList();
+            Console.WriteLine("Unpivoting: {0}", inFile);
+            var rows = File.ReadAllLines(inFile).ToList();
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             headers.AddRange(rows[1].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries));
             var sdc = headers.Select(h => h.Split(new[] { '_' }, 3)).ToList();
@@ -43,7 +43,7 @@ namespace CommitParser
 
             //begin changing stuff
 
-            var dataTable = new DataTable(string.Format("Parsed {0}", fileName));
+            var dataTable = new DataTable(string.Format("Parsed {0}", inFile));
             //var weirdHeaders = new List<string>();
 
             //first X
@@ -122,7 +122,7 @@ namespace CommitParser
                 }
             }
 
-            File.WriteAllText(fileName.Replace(".csv", " - Parsed.csv"), sb.ToString());
+            File.WriteAllText(inFile.Replace(".csv", " - Parsed.csv"), sb.ToString());
 
         }
 
