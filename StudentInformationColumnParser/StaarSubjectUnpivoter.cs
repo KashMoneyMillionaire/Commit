@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.IO;
 using System.Linq;
 using System.Text;
 using CommitParser.Helpers;
+using MoreLinq;
 
 namespace CommitParser
 {
@@ -32,7 +32,7 @@ namespace CommitParser
         {
             //Validation
             if (!file.Contains(".csv"))
-                throw new Exception("The file is not a csv file.");
+                throw new CustomException("This is not a csv file.");
 
 
             //Lets unpivot this shit
@@ -51,11 +51,10 @@ namespace CommitParser
             }
 
             var sdc = headers.Select(h => h.Split(new[] { '_' }, 3)).ToList();
-            var dynamicCategories = sdc
-                .Where(s => s.Count() == 3)
-                .Select(s => s[2])
-                .Distinct()
-                .Except(ExcludedCategories)
+            var subCatPairs = sdc
+                .Where(s => s.Count() == 3 && !ExcludedCategories.Contains(s[2]))
+                .Select(s => new[] { s[0], s[2] })
+                .DistinctBy(c => string.Format("{0}{1}", c[0], c[1]))
                 .ToList();
 
 
@@ -79,7 +78,7 @@ namespace CommitParser
             dataTable.Columns.Add("Grade");
             dataTable.Columns.Add("Language");
             dataTable.Columns.Add(Category);
-            var genericHeaders = new List<string>(new[] { "Subject", "Grade", "Language" });
+            var genericHeaders = new List<string>(new[] { "Grade", "Language" });
 
 
             //weird ones
@@ -101,7 +100,6 @@ namespace CommitParser
             //Write the column names to the sb
 
             var sb = new StringBuilder();
-
             var columnNames = dataTable.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
             sb.AppendLine(string.Join(",", columnNames));
 
@@ -117,13 +115,13 @@ namespace CommitParser
                 FillWeirdHeaders(dataRow, headers, campus);
                 FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), language.ToString());
 
-                foreach (var category in dynamicCategories)
+                foreach (var subCat in subCatPairs.OrderBy(s => s[0]))
                 {
                     //for each complex header whose category matches the current category
 
                     for (var i = 6; i < headers.Count; i++)
                     {
-                        if (sdc[i].Length == 3 && sdc[i][2] == category)
+                        if (sdc[i].Length == 3 && sdc[i][0] == subCat[0] && sdc[i][2] == subCat[1])
                         {
                             //set the data column of the found demographic equal to the 
                             dataRow[sdc[i][1]] = campus[i];
@@ -133,10 +131,9 @@ namespace CommitParser
 
                     //add the category, then write to sb
 
-                    dataRow[Category] = category;
+                    dataRow["Subject"] = subCat[0];
+                    dataRow[Category] = subCat[1];
                     sb.AppendLine(string.Join(",", dataRow.ItemArray));
-
-                    //dataTable.Rows.Add(dataRow);
                 }
             }
 
@@ -179,5 +176,10 @@ namespace CommitParser
                 dataRow[i] = row[i];
             }
         }
+    }
+
+    class CustomException : Exception
+    {
+        public CustomException(string message) : base(message){}
     }
 }

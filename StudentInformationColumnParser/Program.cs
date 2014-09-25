@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Entity.Migrations;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using AutoMapper.Internal;
-using CommitParser.Domain;
 using CommitParser.Helpers;
-using EntityFramework.BulkInsert.Extensions;
 
 namespace CommitParser
 {
@@ -35,16 +25,20 @@ namespace CommitParser
         private ComboBox GradeDropDown;
         private Label label2;
         private ComboBox LanguageDropDown;
-        private Panel InputPanel;
         private Button OpenFolderButton;
-        private bool unpivoting = false;
 
         //Setup Form
         public Program()
         {
             InitializeComponent();
-            GradeDropDown.DataSource = Enum.GetValues(typeof (Grade));
-            LanguageDropDown.DataSource = Enum.GetValues(typeof (Language));
+            GradeDropDown.DataSource = Enum.GetValues(typeof(Grade));
+            LanguageDropDown.DataSource = Enum.GetValues(typeof(Language));
+            
+            var path = Properties.Settings.Default.OutputPath.Trim();
+            if (Directory.Exists(path))
+            {
+                OutputPath.Text = Properties.Settings.Default.OutputPath;
+            }
         }
 
         //Input selection button
@@ -67,6 +61,7 @@ namespace CommitParser
                     {
                         SelectFilesListView.Items.Add(Path.GetFileName(inputFile));
                     }
+
                 }
             }
             catch
@@ -77,15 +72,21 @@ namespace CommitParser
         //Output selection button
         protected void OutputButton_Click(object obj, EventArgs e)
         {
-            
+
             var dlg = new FolderBrowserDialog();
 
             try
             {
                 if (dlg.ShowDialog() == DialogResult.OK)
+                {
                     OutputPath.Text = dlg.SelectedPath;
+                    Properties.Settings.Default.OutputPath = InputPath.Text;
+                    Properties.Settings.Default.Save();
+                }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         //Start button
@@ -114,15 +115,15 @@ namespace CommitParser
                     Application.DoEvents();
                     StaarSubjectUnpivotor.Unpivot(file, OutputPath.Text, selectedGrade, selectedLanguage);
                 }
-                catch (Exception ex)
+                catch (CustomException ex)
                 {
-                    MessageBox.Text = ex.Message;
+                    MessageBox.Text = string.Format("{0} Line: {1}", ex.Message, new StackTrace(ex, true).GetFrame(0).GetFileLineNumber());
                     ProgressBar.Value = 0;
                     UnpivotButton.Enabled = true;
                     break;
                 }
                 currentIndex++;
-                ProgressBar.Value = (int) Math.Round(currentIndex/(double) total*100.0);
+                ProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
                 MessageBox.Text += "Done.\r\n";
             }
             MessageBox.Text += "\r\nDone Unpivoting";
