@@ -4,11 +4,10 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using CommitParser.Helpers;
 using Infrastructure;
 using MoreLinq;
 
-namespace CommitParser
+namespace ParserUtilities
 {
     public static class StaarSubjectUnpivotor
     {

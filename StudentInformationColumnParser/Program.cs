@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CommitParser.Helpers;
 using Infrastructure;
+using ParserUtilities;
 
 namespace CommitParser
 {

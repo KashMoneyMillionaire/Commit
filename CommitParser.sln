@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserUtilities", "StudentInformationColumnParser\ParserUtilities.csproj", "{2111E272-1259-4C15-8FEC-7CCEC2D1784B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaarParser", "StaarParser\StaarParser.csproj", "{A04525ED-DA37-4F62-90C7-2AFC77C25788}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitGUI", "StaarParser\CommitGUI.csproj", "{A04525ED-DA37-4F62-90C7-2AFC77C25788}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{5C50146D-F6B5-4F33-AE74-753C1E9FB5AC}"
 EndProject
