@@ -54,6 +54,7 @@ namespace CommitGUI
 
             foreach (var file in GridValues)
             {
+                //Messagesss
                 MessageBox.Text = string.Format("{0}\r\n{1}", MessageBox.Text,
                     Path.GetFileNameWithoutExtension(file.FileName));
                 try
