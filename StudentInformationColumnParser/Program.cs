@@ -102,8 +102,6 @@ namespace CommitParser
 
             foreach (var file in inputFiles)
             {
-                //I know this is bad Kash but im not quite sure how to make it like you did it before... :l
-                //Clay, this is how you do it.
                 MessageBox.Text += string.Format("{0} ... ", Path.GetFileNameWithoutExtension(inputFiles[currentIndex]));
                 try
                 {
