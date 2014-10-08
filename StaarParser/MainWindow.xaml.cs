@@ -73,7 +73,7 @@ namespace CommitGUI
                 }
                 currentIndex++;
                 UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
-                MessageBox.Text += "Done.\r\n";
+                MessageBox.Text = string.Format("{0}\r\nDone", MessageBox.Text);
             }
 
             MessageBox.Text += "\r\nDone Unpivoting";
