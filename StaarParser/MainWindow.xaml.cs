@@ -57,7 +57,7 @@ namespace CommitGUI
                 //Messagesss
                 MessageBox.Text = string.Format("{0}\r\n{1}", MessageBox.Text,
                     Path.GetFileNameWithoutExtension(file.FileName));
-                try
+                try //to get it in
                 {
                     System.Windows.Forms.Application.DoEvents();
                     var file1 = file;
