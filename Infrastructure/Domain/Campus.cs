@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Core.Metadata.Edm;
-using CommitParser.Helpers;
 
-namespace CommitParser.Domain
+namespace Infrastructure.Domain
 {
     public class Campus : EntityBase<long>
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{2111E272-1259-4C15-8FEC-7CCEC2D1784B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CommitParser</RootNamespace>
-    <AssemblyName>CommitParser</AssemblyName>
+    <RootNamespace>ParserUtilities</RootNamespace>
+    <AssemblyName>ParserUtilities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -97,32 +97,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Campus.cs" />
-    <Compile Include="Domain\EntityBase.cs" />
-    <Compile Include="Domain\CompletedFile.cs" />
-    <Compile Include="Domain\YearGradeLang.cs" />
-    <Compile Include="Domain\SubCatField.cs" />
-    <Compile Include="Domain\StaarStat.cs" />
-    <Compile Include="Domain\YearStat.cs" />
-    <Compile Include="DTOs\CampusStudent1011.cs" />
-    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.cs" />
-    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.Designer.cs">
-      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EntityMapping\YearGradeLangMapping.cs" />
-    <Compile Include="EntityMapping\SubCatFieldMapping.cs" />
-    <Compile Include="EntityMapping\CompletedFileMapping.cs" />
-    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.cs" />
-    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.Designer.cs">
-      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EntityMapping\StaarStatMapping.cs" />
-    <Compile Include="EntityMapping\CampusMapping.cs" />
     <Compile Include="Helpers\Converter.cs" />
-    <Compile Include="Helpers\Enumerations.cs" />
-    <Compile Include="EntityMapping\Migrations\Configuration.cs" />
     <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="OperationalDataContext.cs" />
     <Compile Include="Program.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,12 +148,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EntityMapping\Migrations\201409182249419_Initial.resx">
-      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EntityMapping\Migrations\201409190634214_SubCatField.resx">
-      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Program.resx">
       <DependentUpon>Program.cs</DependentUpon>
     </EmbeddedResource>
@@ -201,6 +171,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{5C50146D-F6B5-4F33-AE74-753C1E9FB5AC}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CommitParser.Domain
+namespace Infrastructure.Domain
 {
     /// <summary>
     /// Base class for entities that must have an identifier attribute. If Identity Type is Guid, a new one is auto generated here.

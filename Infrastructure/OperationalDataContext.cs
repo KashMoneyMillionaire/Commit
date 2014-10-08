@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
-using CommitParser.Domain;
-using CommitParser.EntityMapping;
+using Infrastructure.Domain;
+using Infrastructure.EntityMapping;
 
-namespace CommitParser
+namespace Infrastructure
 {
     public class OperationalDataContext : DbContext
     {

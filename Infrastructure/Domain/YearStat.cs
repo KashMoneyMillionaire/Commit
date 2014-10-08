@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using CommitParser.Helpers;
 
-namespace CommitParser.Domain
+namespace Infrastructure.Domain
 {
     public class YearStat
     {

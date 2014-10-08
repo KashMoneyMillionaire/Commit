@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CommitParser.Helpers
+namespace Infrastructure
 {
     public enum AccountabilityRating : long
     {
@@ -22,27 +22,27 @@ namespace CommitParser.Helpers
     [Flags]
     public enum Grade : long
     {
-        EE,
-        PK,
-        KG,
-        G1,
-        G2,
-        G3,
-        G4,
-        G5,
-        G6,
-        G7,
-        G8,
-        G9,
-        G10,
-        G11,
-        G12,
-        EOC
+        EE = 1 << 0,
+        PK = 1 << 1,
+        KG = 1 << 2,
+        G1 = 1 << 3,
+        G2 = 1 << 4,
+        G3 = 1 << 5,
+        G4 = 1 << 6,
+        G5 = 1 << 7,
+        G6 = 1 << 8,
+        G7 = 1 << 9,
+        G8 = 1 << 10,
+        G9 = 1 << 11,
+        G10 = 1 << 12,
+        G11 = 1 << 13,
+        G12 = 1 << 14,
+        EOC = 1 << 15,
     }
 
     public enum GradeType : long
     {
-        E,M,S,B
+        E, M, S, B
     }
 
     [Flags]

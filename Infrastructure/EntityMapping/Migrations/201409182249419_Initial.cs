@@ -1,8 +1,7 @@
-namespace CommitParser.EntityMapping.Migrations
+using System.Data.Entity.Migrations;
+
+namespace Infrastructure.EntityMapping.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class Initial : DbMigration
     {
         public override void Up()

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CommitParser.Helpers;
+using Infrastructure;
 using MoreLinq;
 
 namespace CommitParser
@@ -178,7 +179,7 @@ namespace CommitParser
         }
     }
 
-    class CustomException : Exception
+    public class CustomException : Exception
     {
         public CustomException(string message) : base(message){}
     }

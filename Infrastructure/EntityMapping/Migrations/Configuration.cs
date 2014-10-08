@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace CommitParser.EntityMapping.Migrations
+namespace Infrastructure.EntityMapping.Migrations
 {
     internal sealed class Configuration : DbMigrationsConfiguration<OperationalDataContext>
     {

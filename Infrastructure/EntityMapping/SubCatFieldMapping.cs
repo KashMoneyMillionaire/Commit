@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using CommitParser.Domain;
+using Infrastructure.Domain;
 
-namespace CommitParser.EntityMapping
+namespace Infrastructure.EntityMapping
 {
     class SubCatFieldMapping : EntityTypeConfiguration<SubCatField>
     {

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5C50146D-F6B5-4F33-AE74-753C1E9FB5AC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Infrastructure</RootNamespace>
+    <AssemblyName>Infrastructure</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Domain\Campus.cs" />
+    <Compile Include="Domain\CompletedFile.cs" />
+    <Compile Include="Domain\EntityBase.cs" />
+    <Compile Include="Domain\StaarStat.cs" />
+    <Compile Include="Domain\SubCatField.cs" />
+    <Compile Include="Domain\YearGradeLang.cs" />
+    <Compile Include="Domain\YearStat.cs" />
+    <Compile Include="EntityMapping\CampusMapping.cs" />
+    <Compile Include="EntityMapping\CompletedFileMapping.cs" />
+    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.cs" />
+    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.Designer.cs">
+      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.cs" />
+    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.Designer.cs">
+      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EntityMapping\Migrations\201410032207037_Change.cs" />
+    <Compile Include="EntityMapping\Migrations\201410032207037_Change.Designer.cs">
+      <DependentUpon>201410032207037_Change.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EntityMapping\Migrations\Configuration.cs" />
+    <Compile Include="EntityMapping\StaarStatMapping.cs" />
+    <Compile Include="EntityMapping\SubCatFieldMapping.cs" />
+    <Compile Include="EntityMapping\YearGradeLangMapping.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="OperationalDataContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EntityMapping\Migrations\201409182249419_Initial.resx">
+      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EntityMapping\Migrations\201409190634214_SubCatField.resx">
+      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EntityMapping\Migrations\201410032207037_Change.resx">
+      <DependentUpon>201410032207037_Change.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using CommitParser.Helpers;
+using Infrastructure;
 
-namespace CommitParser.Helpers
+namespace ParserUtilities.Helpers
 {
     public static class Converter
     {
@@ -388,6 +391,54 @@ namespace CommitParser.Helpers
             }
         }
 
+        public static Grade ParseGrade(this string grade)
+        {
+            switch (grade)
+            {
+                case "EE":
+                    return Grade.EE;
+                case "PK":
+                case "Pre-Kindergarten":
+                    return Grade.PK;
+                case "KG":
+                case "Kindergarten":
+                    return Grade.KG;
+                case "01":
+                case "1":
+                    return Grade.G1;
+                case "02":
+                case "2":
+                    return Grade.G2;
+                case "03":
+                case "3":
+                    return Grade.G3;
+                case "04":
+                case "4":
+                    return Grade.G4;
+                case "05":
+                case "5":
+                    return Grade.G5;
+                case "06":
+                case "6":
+                    return Grade.G6;
+                case "07":
+                case "7":
+                    return Grade.G7;
+                case "08":
+                case "8":
+                    return Grade.G8;
+                case "09":
+                case "9":
+                    return Grade.G9;
+                case "10":
+                    return Grade.G10;
+                case "11":
+                    return Grade.G11;
+                case "12":
+                    return Grade.G12;
+            }
+            return Grade.EOC;
+        }
     }
 }
 

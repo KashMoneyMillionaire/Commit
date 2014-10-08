@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using CommitParser.Helpers;
+using Infrastructure;
 
 namespace CommitParser
 {
@@ -34,11 +35,6 @@ namespace CommitParser
             GradeDropDown.DataSource = Enum.GetValues(typeof(Grade));
             LanguageDropDown.DataSource = Enum.GetValues(typeof(Language));
             
-            var path = Properties.Settings.Default.OutputPath.Trim();
-            if (Directory.Exists(path))
-            {
-                OutputPath.Text = Properties.Settings.Default.OutputPath;
-            }
         }
 
         //Input selection button
@@ -80,8 +76,6 @@ namespace CommitParser
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     OutputPath.Text = dlg.SelectedPath;
-                    Properties.Settings.Default.OutputPath = InputPath.Text;
-                    Properties.Settings.Default.Save();
                 }
             }
             catch
@@ -167,6 +161,7 @@ namespace CommitParser
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Program));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.OpenFolderButton = new System.Windows.Forms.Button();
             this.GradeDropDown = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.LanguageDropDown = new System.Windows.Forms.ComboBox();
@@ -180,7 +175,6 @@ namespace CommitParser
             this.FileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.InputButton = new System.Windows.Forms.Button();
             this.InputPath = new System.Windows.Forms.TextBox();
-            this.OpenFolderButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -201,6 +195,13 @@ namespace CommitParser
             this.panel1.Controls.Add(this.InputPath);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // OpenFolderButton
+            // 
+            resources.ApplyResources(this.OpenFolderButton, "OpenFolderButton");
+            this.OpenFolderButton.Name = "OpenFolderButton";
+            this.OpenFolderButton.UseVisualStyleBackColor = true;
+            this.OpenFolderButton.Click += new System.EventHandler(this.OpenFolderButton_Click);
             // 
             // GradeDropDown
             // 
@@ -277,13 +278,6 @@ namespace CommitParser
             // 
             resources.ApplyResources(this.InputPath, "InputPath");
             this.InputPath.Name = "InputPath";
-            // 
-            // OpenFolderButton
-            // 
-            resources.ApplyResources(this.OpenFolderButton, "OpenFolderButton");
-            this.OpenFolderButton.Name = "OpenFolderButton";
-            this.OpenFolderButton.UseVisualStyleBackColor = true;
-            this.OpenFolderButton.Click += new System.EventHandler(this.OpenFolderButton_Click);
             // 
             // Program
             // 

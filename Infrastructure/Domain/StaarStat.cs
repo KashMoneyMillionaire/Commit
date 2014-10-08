@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using CommitParser.Helpers;
 
-namespace CommitParser.Domain
+namespace Infrastructure.Domain
 {
     public class StaarStat : EntityBase<long>
     {
