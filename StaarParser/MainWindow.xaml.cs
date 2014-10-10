@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -43,15 +44,15 @@ namespace CommitGUI
 
             if (!GridValues.Any() || OutputPath.Text.Trim() == "")
             {
-                MessageBox.Text = "Either the Input File(s) or Output Folder have not been chosen.";
+                MessageBox.Text += "\r\nEither the Input File(s) or Output Folder have not been chosen.";
                 return;
             }
 
             //Double check Azure export
 
-            if (AzureCheckBox.IsChecked.Value)
+            if (AzureCheckBox.IsChecked != null && AzureCheckBox.IsChecked.Value)
             {
-                MessageBoxResult result = System.Windows.MessageBox.Show("Are you sure you want to export to Azure?", "Azure Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var result = System.Windows.MessageBox.Show("Are you sure you want to export to Azure?", "Azure Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
                     return;
             }
@@ -73,18 +74,24 @@ namespace CommitGUI
                     System.Windows.Forms.Application.DoEvents();
                     var file1 = file;
                     Thread.Sleep(1000);
+                    currentIndex++;
+                    UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
+                    MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
                     //await Task.Run(() => StaarSubjectUnpivotor.Unpivot(file1.FileName, OutputPath.Text, file1.Grade, file1.FileLanguage));
                 }
                 catch (CustomException ex)
                 {
-                    MessageBox.Text = string.Format("{0} Line: {1}", ex.Message, new StackTrace(ex, true).GetFrame(0).GetFileLineNumber());
+                    MessageBox.Text = string.Format("{0} Line: {1}", ex.Message,
+                        new StackTrace(ex, true).GetFrame(0).GetFileLineNumber());
                     UnpivotProgressBar.Value = 0;
                     UnpivotButton.IsEnabled = true;
-                    break;
                 }
-                currentIndex++;
-                UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
-                MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
+                catch (FileNotFoundException ex)
+                {
+                    MessageBox.Text = string.Format("{0}No file found with the name {1}.", MessageBox.Text, file);
+                    UnpivotProgressBar.Value = 0;
+                    UnpivotButton.IsEnabled = true;
+                }
             }
             MessageBox.Text = string.Format("{0}\r\nDone Unpivoting", MessageBox.Text);
             UnpivotButton.IsEnabled = true;
