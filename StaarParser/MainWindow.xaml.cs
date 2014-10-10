@@ -31,6 +31,8 @@ namespace CommitGUI
 
         private async void UnpivotClick(object sender, RoutedEventArgs e)
         {
+            StaarSubjectUnpivotor.TestAzure();
+
             var currentIndex = 0;
             var total = GridValues.Count();
 

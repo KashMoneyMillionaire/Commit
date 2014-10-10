@@ -2,17 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:StaarParser"
-        x:Class="CommitGUI.MainWindow"
+        xmlns:infrastructure="clr-namespace:Infrastructure;assembly=Infrastructure"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    x:Class="CommitGUI.MainWindow"
         Title="Commit!" Height="500" Width="850" MinWidth="850" MinHeight="500">
-    <!--<Window.Resources>
+    <Window.Resources>
         <ObjectDataProvider MethodName="GetValues" 
                             ObjectType="{x:Type sys:Enum}" 
-                            x:Key="GetEnumValues">
+                            x:Key="GetLanguage">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local:Grade"/>
+                <x:Type TypeName="infrastructure:Language"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-    </Window.Resources>-->
+        <ObjectDataProvider MethodName="GetValues" 
+                            ObjectType="{x:Type sys:Enum}" 
+                            x:Key="GetGrade">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="infrastructure:Grade"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <TabControl TabStripPlacement="Top">
             <TabItem Header="Staar Test Parser" MaxHeight="50" MinWidth="75">
@@ -42,13 +52,58 @@
                                                 Width="*"/>
                             <DataGridComboBoxColumn Header="Grade"
                                                     x:Name="GradeColumn"  
+                                                    ItemsSource="{Binding Source={StaticResource GetGrade}}"
                                                     SelectedValueBinding="{Binding Grade, Mode=TwoWay}"/>
+
+
                             <DataGridComboBoxColumn Header="Language"
-                                                    x:Name="LanguageColumn"  
-                                                    SelectedValueBinding="{Binding Language, Mode=TwoWay}"/>
+                                                    x:Name="LanguageColumn"
+                                                    ItemsSource="{Binding Source={StaticResource GetLanguage}}"
+                                                    
+                                                    SelectedValueBinding="{Binding FileLanguage, Mode=TwoWay}">
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="IsDropDownOpen" Value="True"></Setter>
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
+
+
                             <DataGridTextColumn Header="Start Columns"
                                                 x:Name="StartColumn"
                                                 Binding="{Binding NumberOfColumnsAtBeginning}"/>
+
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding FileLanguage}" 
+                                                  ItemsSource="{Binding Source={StaticResource GetLanguage}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate >
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding FileLanguage}" 
+                                                  ItemsSource="{Binding Source={StaticResource GetLanguage}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!--<DataGridTemplateColumn Header="New Language"
+                                                    Width="*">
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox x:Name="NewLanguage" 
+                                            SelectedValue="{Binding FileLanguage}" 
+                                            ItemsSource="{Binding Source={StaticResource GetLanguage}, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Grid}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>-->
+
+
+
+
+
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Grid.Row="0" Grid.Column="1">

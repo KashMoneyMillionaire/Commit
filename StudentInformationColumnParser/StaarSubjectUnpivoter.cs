@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Infrastructure;
+using Infrastructure.Domain;
 using MoreLinq;
 
 namespace ParserUtilities
@@ -12,6 +13,8 @@ namespace ParserUtilities
     public static class StaarSubjectUnpivotor
     {
         private const string Category = "Category";
+
+
 
         private static readonly List<string> Demographics =
             Enum.GetValues(typeof(StaarDemographic)).Cast<StaarDemographic>().Select(c => c.ToString()).ToList();
@@ -142,6 +145,28 @@ namespace ParserUtilities
 
         }
 
+        public static void TestAzure()
+        {
+            var ctx = new AzureDataContext();
+            var list = new List<YearGradeLang>();
+            var y = ctx.YearGradeLangs.ToList();
+            ctx.YearGradeLangs.RemoveRange(y);
+
+            for (var i = 0; i < 100; i++)
+            {
+
+                list.Add(new YearGradeLang
+                {
+                    Language = Language.English,
+                    Grade = Grade.EOC,
+                    Year = i
+                });
+
+            }
+            ctx.YearGradeLangs.AddRange(list);
+            ctx.SaveChanges();
+        }
+
         private static void FillGenericData(DataRow dataRow, IEnumerable<string> genericHeaders, string sub, string grade, string language)
         {
             foreach (var header in genericHeaders)
@@ -180,6 +205,6 @@ namespace ParserUtilities
 
     public class CustomException : Exception
     {
-        public CustomException(string message) : base(message){}
+        public CustomException(string message) : base(message) { }
     }
 }
