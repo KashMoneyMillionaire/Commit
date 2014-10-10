@@ -72,6 +72,7 @@
     <Compile Include="EntityMapping\SubCatFieldMapping.cs" />
     <Compile Include="EntityMapping\YearGradeLangMapping.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="AzureDataContext.cs" />
     <Compile Include="OperationalDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

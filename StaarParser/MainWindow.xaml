@@ -4,6 +4,9 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:e="clr-namespace:Infrastructure;assembly=Infrastructure"
         xmlns:local="clr-namespace:StaarParser"
+        xmlns:infrastructure="clr-namespace:Infrastructure;assembly=Infrastructure"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="CommitGUI.MainWindow"
         Title="Commit!" Height="500" Width="850" MinWidth="1200" MinHeight="700">
     <Window.Resources>
@@ -43,7 +46,7 @@
 
                     <DataGrid x:Name="FileGrid" 
                               Margin="10" 
-                              SelectionMode="Single"
+                              SelectionMode="Single" 
                               Grid.Row="0"
                               Grid.Column="1"
                               Grid.RowSpan="2"
@@ -51,8 +54,8 @@
                               CanUserResizeRows="False"
                               CanUserResizeColumns="False"
                               CanUserAddRows="False"
-                              AutoGenerateColumns="False"
-                              Background="#FFF0F0F0"
+                              AutoGenerateColumns="False" 
+                              Background="#FFF0F0F0" 
                               CanUserReorderColumns="False"
                               AlternatingRowBackground="White"
                               RowBackground="#FFE1E1E1">
@@ -65,7 +68,7 @@
                             
                             <!--GRADE-->
                             <DataGridTemplateColumn Header="Grade"
-                                                    x:Name="GradeColumn"
+                                                    x:Name="GradeColumn"  
                                                     Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -105,6 +108,38 @@
                                                 Width="90"
                                                 ElementStyle="{StaticResource RightAlignment}"
                                                 Binding="{Binding NumberOfColumnsAtBeginning}"/>
+
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding FileLanguage}" 
+                                                  ItemsSource="{Binding Source={StaticResource GetLanguage}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate >
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding FileLanguage}" 
+                                                  ItemsSource="{Binding Source={StaticResource GetLanguage}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!--<DataGridTemplateColumn Header="New Language"
+                                                    Width="*">
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox x:Name="NewLanguage" 
+                                            SelectedValue="{Binding FileLanguage}" 
+                                            ItemsSource="{Binding Source={StaticResource GetLanguage}, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Grid}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>-->
+
+
+
+
+
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Grid.Row="0"
@@ -119,7 +154,7 @@
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Grid.Row="0"
+                        <TextBox Grid.Row="0" 
                                  Grid.Column="0"
                                  Name="InputPath"
                                  Margin="10,5,5,5" 
@@ -146,7 +181,7 @@
                                   Grid.Row="2"
                                   Grid.Column="0"
                                   Grid.ColumnSpan="2"
-                                  HorizontalAlignment="Right"
+                                HorizontalAlignment="Right" 
                                   VerticalAlignment="Center"
                                   Margin="5,5,15,5"
                                   Content="Send To Azure"/>
@@ -159,10 +194,10 @@
                             Margin="10">
                         <ScrollViewer Name="UnpivotScrollViewer"
                                       ScrollChanged="UnpivotScrollViewer_ScrollChanged">
-                            <TextBlock x:Name="MessageBox" 
-                                       TextWrapping="Wrap"
+                        <TextBlock x:Name="MessageBox" 
+                                   TextWrapping="Wrap" 
                                        Background="#FFF0F0F0"
-                                       Text="Messages appear here."/>
+                                   Text="Messages appear here."/>
                         </ScrollViewer>
                     </Border>
                     <ProgressBar x:Name="UnpivotProgressBar"
