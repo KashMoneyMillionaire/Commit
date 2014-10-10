@@ -39,7 +39,6 @@ namespace CommitGUI
             var currentIndex = 0;
             var total = GridValues.Count();
 
-
             //Check to make sure there are any files
 
             if (!GridValues.Any() || OutputPath.Text.Trim() == "")
