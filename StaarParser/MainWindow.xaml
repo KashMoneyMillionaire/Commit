@@ -1,76 +1,112 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:e="clr-namespace:Infrastructure;assembly=Infrastructure"
         xmlns:local="clr-namespace:StaarParser"
         xmlns:infrastructure="clr-namespace:Infrastructure;assembly=Infrastructure"
         xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-    x:Class="CommitGUI.MainWindow"
-        Title="Commit!" Height="500" Width="850" MinWidth="850" MinHeight="500">
+        x:Class="CommitGUI.MainWindow"
+        Title="Commit!" Height="500" Width="850" MinWidth="1200" MinHeight="700">
     <Window.Resources>
-        <ObjectDataProvider MethodName="GetValues" 
-                            ObjectType="{x:Type sys:Enum}" 
-                            x:Key="GetLanguage">
+        <Style x:Key="RightAlignment" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+        <ObjectDataProvider x:Key="GradeEnumData"
+                MethodName="GetValues" 
+                ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="infrastructure:Language"/>
+                <x:Type TypeName="e:Grade" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <ObjectDataProvider MethodName="GetValues" 
-                            ObjectType="{x:Type sys:Enum}" 
-                            x:Key="GetGrade">
+        <ObjectDataProvider x:Key="LanguageEnumData"
+                MethodName="GetValues" 
+                ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="infrastructure:Grade"/>
+                <x:Type TypeName="e:Language" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
     <Grid>
         <TabControl TabStripPlacement="Top">
-            <TabItem Header="Staar Test Parser" MaxHeight="50" MinWidth="75">
+            <TabItem Header="Staar Test Parser"
+                     MaxHeight="35"
+                     Width="110">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*"/>
-                        <ColumnDefinition Width="4*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="6*"/>
-                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="105"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="55"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="6*"/>
+                    </Grid.ColumnDefinitions>
 
                     <DataGrid x:Name="FileGrid" 
                               Margin="10" 
                               SelectionMode="Single" 
-                              Grid.Column="0" 
-                              MinWidth="250" 
+                              Grid.Row="0"
+                              Grid.Column="1"
+                              Grid.RowSpan="2"
+                              RowHeight="24"
+                              CanUserResizeRows="False"
+                              CanUserResizeColumns="False"
                               CanUserAddRows="False"
                               AutoGenerateColumns="False" 
                               Background="#FFF0F0F0" 
-                              CanUserReorderColumns="False">
+                              CanUserReorderColumns="False"
+                              AlternatingRowBackground="White"
+                              RowBackground="#FFE1E1E1">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="File Name"
                                                 x:Name="FileNameColumn" 
                                                 Binding="{Binding FileName}"
-                                                Width="*"/>
-                            <DataGridComboBoxColumn Header="Grade"
+                                                Width="*"
+                                                IsReadOnly="True"/>
+                            
+                            <!--GRADE-->
+                            <DataGridTemplateColumn Header="Grade"
                                                     x:Name="GradeColumn"  
-                                                    ItemsSource="{Binding Source={StaticResource GetGrade}}"
-                                                    SelectedValueBinding="{Binding Grade, Mode=TwoWay}"/>
-
-
-                            <DataGridComboBoxColumn Header="Language"
-                                                    x:Name="LanguageColumn"
-                                                    ItemsSource="{Binding Source={StaticResource GetLanguage}}"
-                                                    
-                                                    SelectedValueBinding="{Binding FileLanguage, Mode=TwoWay}">
-                                <DataGridComboBoxColumn.EditingElementStyle>
-                                    <Style TargetType="ComboBox">
-                                        <Setter Property="IsDropDownOpen" Value="True"></Setter>
-                                    </Style>
-                                </DataGridComboBoxColumn.EditingElementStyle>
-                            </DataGridComboBoxColumn>
-
-
+                                                    Width="70">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding Grade}"
+                                                  ItemsSource="{Binding Source={StaticResource GradeEnumData}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding Grade}"
+                                                  ItemsSource="{Binding Source={StaticResource GradeEnumData}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <!--LANGUAGE-->
+                            <DataGridTemplateColumn Header="Language"
+                                                    x:Name="LanguageColumn"  
+                                                    Width="70">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding FileLanguage}"
+                                                  ItemsSource="{Binding Source={StaticResource LanguageEnumData}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate >
+                                    <DataTemplate>
+                                        <ComboBox SelectedValue="{Binding FileLanguage}"
+                                                  ItemsSource="{Binding Source={StaticResource LanguageEnumData}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            
                             <DataGridTextColumn Header="Start Columns"
                                                 x:Name="StartColumn"
+                                                Width="90"
+                                                ElementStyle="{StaticResource RightAlignment}"
                                                 Binding="{Binding NumberOfColumnsAtBeginning}"/>
 
 
@@ -106,77 +142,84 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid Grid.Row="0"
+                          Grid.Column="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="3*"></RowDefinition>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
-
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="135"/>
+                        </Grid.ColumnDefinitions>
 
                         <TextBox Grid.Row="0" 
+                                 Grid.Column="0"
                                  Name="InputPath"
-                                 Height="22" 
-                                 Margin="0,0,10,5" 
-                                 TextWrapping="Wrap" 
-                                 VerticalContentAlignment="Center" VerticalAlignment="Bottom"/>
-                        <TextBox Grid.Row="2" 
+                                 Margin="10,5,5,5" 
+                                 TextWrapping="NoWrap"
+                                 IsReadOnly="True"
+                                 VerticalContentAlignment="Center"/>
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="0"
                                  Name="OutputPath"
-                                 Height="22" 
-                                 Margin="0,0,10,5" 
-                                 TextWrapping="Wrap" 
-                                 VerticalContentAlignment="Center" VerticalAlignment="Bottom"/>
-                        <Button Content="Select Input Files" 
-                                Grid.Row="1" 
-                                HorizontalAlignment="Right" 
-                                VerticalAlignment="Top" 
-                                Width="147" 
-                                Height="22" Margin="0,5,10,0" 
+                                 Margin="10,5,5,5" 
+                                 TextWrapping="NoWrap" 
+                                 VerticalContentAlignment="Center"/>
+                        <Button Grid.Row="0"
+                                Grid.Column="1"
+                                Content="Select Input Files" 
+                                Margin="5,5,10,5"
                                 Click="SelectInputFilesButtonClick"/>
-                        <Button Content="Select Output Folder" 
-                                Grid.Row="3" 
+                        <Button Grid.Row="1"
+                                Grid.Column="3"
+                                Content="Select Output Folder" 
+                                Margin="5,5,10,5"
+                                Click="SelectOutputFolderButtonClick"/>
+                        <CheckBox x:Name="AzureCheckBox"
+                                  Grid.Row="2"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="2"
                                 HorizontalAlignment="Right" 
-                                VerticalAlignment="Top" 
-                                Width="147" 
-                                Height="22" 
-                                Margin="5,0,10,0" Click="SelectOutputFolderButtonClick"/>
-
+                                  VerticalAlignment="Center"
+                                  Margin="5,5,15,5"
+                                  Content="Send To Azure"/>
                     </Grid>
-                    <Border Grid.Row="1" Grid.Column="0" 
+                    <Border Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.RowSpan="2"
                             BorderBrush="Black" 
                             BorderThickness="1" 
                             Margin="10">
+                        <ScrollViewer Name="UnpivotScrollViewer"
+                                      ScrollChanged="UnpivotScrollViewer_ScrollChanged">
                         <TextBlock x:Name="MessageBox" 
                                    TextWrapping="Wrap" 
+                                       Background="#FFF0F0F0"
                                    Text="Messages appear here."/>
+                        </ScrollViewer>
                     </Border>
-                    <ProgressBar Grid.Column="1" 
-                    	         x:Name="UnpivotProgressBar"
+                    <ProgressBar x:Name="UnpivotProgressBar"
                                  Minimum="0"
                                  Visibility="Hidden"
                     	         Maximum="100" 
-                                 Margin="15,0,15,24" 
-                                 Height="55"
-                                 Grid.Row="1" 
-                                 HorizontalContentAlignment="Center" 
-                                 VerticalAlignment="Bottom"/>
-
+                                 Margin="10,5,10,10"
+                                 Grid.Row="2"
+                                 Grid.Column="1" />
                     <Button Content="Begin Unpivoting"
                             Name="UnpivotButton"
                             Click="UnpivotClick" 
-                            Margin="15,0,15,24" 
-                            Height="55"
-                            Grid.Row="1" 
-                            Grid.Column="1" 
-                            HorizontalContentAlignment="Center" 
-                            VerticalAlignment="Bottom" >
+                            Margin="10,5,10,10" 
+                            Grid.Row="2" 
+                            Grid.Column="1">
                     </Button>
 
                 </Grid>
             </TabItem>
-            <TabItem Header="AEIS Parser" MaxHeight="50" Height="50" MinWidth="75">
+            <TabItem Header="AEIS Parser"
+                     Height="35"
+                     Width="110">
                 <Label Content="More content here!"/>
             </TabItem>
         </TabControl>

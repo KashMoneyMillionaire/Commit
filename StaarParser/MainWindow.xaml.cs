@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Threading;
+using System.Windows.Controls;
 using Infrastructure;
 using ParserUtilities;
 using ParserUtilities.Helpers;
@@ -20,6 +22,7 @@ namespace CommitGUI
     public partial class MainWindow : Window
     {
         public ObservableCollection<FileDataGrid> GridValues = new ObservableCollection<FileDataGrid>();
+        private Boolean AutoScroll = true;
 
         public MainWindow()
         {
@@ -45,6 +48,14 @@ namespace CommitGUI
                 return;
             }
 
+            //Double check Azure export
+
+            if (AzureCheckBox.IsChecked.Value)
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Are you sure you want to export to Azure?", "Azure Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
 
             //Hide button, display progress bar
 
@@ -52,14 +63,13 @@ namespace CommitGUI
             UnpivotProgressBar.Value = 0;
             UnpivotButton.Visibility = Visibility.Hidden;
             UnpivotProgressBar.Visibility = Visibility.Visible;
-            MessageBox.Text = "Unpivoting...\r\n";
+            MessageBox.Text = "Unpivoting...";
 
             foreach (var file in GridValues)
             {
-                //Messagesss
-                MessageBox.Text = string.Format("{0}\r\n{1}", MessageBox.Text,
+                MessageBox.Text = string.Format("{0}\r\n{1}...", MessageBox.Text,
                     Path.GetFileNameWithoutExtension(file.FileName));
-                try //to get it in
+                try
                 {
                     System.Windows.Forms.Application.DoEvents();
                     var file1 = file;
@@ -75,10 +85,9 @@ namespace CommitGUI
                 }
                 currentIndex++;
                 UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
-                MessageBox.Text = string.Format("{0}\r\nDone", MessageBox.Text);
+                MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
             }
-
-            MessageBox.Text += "\r\nDone Unpivoting";
+            MessageBox.Text = string.Format("{0}\r\nDone Unpivoting", MessageBox.Text);
             UnpivotButton.IsEnabled = true;
             UnpivotButton.Visibility = Visibility.Visible;
             UnpivotProgressBar.Visibility = Visibility.Hidden;
@@ -145,6 +154,30 @@ namespace CommitGUI
             }
         }
 
+        private void UnpivotScrollViewer_ScrollChanged(Object sender, ScrollChangedEventArgs e)
+        {
+            // User scroll event : set or unset autoscroll mode
+            if (e.ExtentHeightChange == 0)
+            {   // Content unchanged : user scroll event
+                if (UnpivotScrollViewer.VerticalOffset == UnpivotScrollViewer.ScrollableHeight)
+                {   // Scroll bar is in bottom
+                    // Set autoscroll mode
+                    AutoScroll = true;
+                }
+                else
+                {   // Scroll bar isn't in bottom
+                    // Unset autoscroll mode
+                    AutoScroll = false;
+                }
+            }
+
+            // Content scroll event : autoscroll eventually
+            if (AutoScroll && e.ExtentHeightChange != 0)
+            {   // Content changed and autoscroll mode set
+                // Autoscroll
+                UnpivotScrollViewer.ScrollToVerticalOffset(UnpivotScrollViewer.ExtentHeight);
+            }
+        }
     }
 
     public class FileDataGrid
