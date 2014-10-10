@@ -147,24 +147,24 @@ namespace ParserUtilities
 
         public static void TestAzure()
         {
-            var ctx = new AzureDataContext();
-            var list = new List<YearGradeLang>();
-            var y = ctx.YearGradeLangs.ToList();
-            ctx.YearGradeLangs.RemoveRange(y);
+            //var ctx = new AzureDataContext();
+            //var list = new List<YearGradeLang>();
+            //var y = ctx.YearGradeLangs.ToList();
+            //ctx.YearGradeLangs.RemoveRange(y);
 
-            for (var i = 0; i < 100; i++)
-            {
+            //for (var i = 0; i < 100; i++)
+            //{
 
-                list.Add(new YearGradeLang
-                {
-                    Language = Language.English,
-                    Grade = Grade.EOC,
-                    Year = i
-                });
+            //    list.Add(new YearGradeLang
+            //    {
+            //        Language = Language.English,
+            //        Grade = Grade.EOC,
+            //        Year = i
+            //    });
 
-            }
-            ctx.YearGradeLangs.AddRange(list);
-            ctx.SaveChanges();
+            //}
+            //ctx.YearGradeLangs.AddRange(list);
+            //ctx.SaveChanges();
         }
 
         private static void FillGenericData(DataRow dataRow, IEnumerable<string> genericHeaders, string sub, string grade, string language)

@@ -5,8 +5,8 @@
         xmlns:e="clr-namespace:Infrastructure;assembly=Infrastructure"
         xmlns:local="clr-namespace:StaarParser"
         xmlns:infrastructure="clr-namespace:Infrastructure;assembly=Infrastructure"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="CommitGUI.MainWindow"
         Title="Commit!" Height="500" Width="850" MinWidth="1200" MinHeight="700">
     <Window.Resources>
@@ -108,22 +108,6 @@
                                                 Width="90"
                                                 ElementStyle="{StaticResource RightAlignment}"
                                                 Binding="{Binding NumberOfColumnsAtBeginning}"/>
-
-
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding FileLanguage}" 
-                                                  ItemsSource="{Binding Source={StaticResource GetLanguage}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate >
-                                    <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding FileLanguage}" 
-                                                  ItemsSource="{Binding Source={StaticResource GetLanguage}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
 
                             <!--<DataGridTemplateColumn Header="New Language"
                                                     Width="*">
