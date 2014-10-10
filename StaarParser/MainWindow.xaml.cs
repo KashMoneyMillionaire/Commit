@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -73,11 +74,13 @@ namespace CommitGUI
                 {
                     System.Windows.Forms.Application.DoEvents();
                     var file1 = file;
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(1000);
                     currentIndex++;
+                    StaarSubjectUnpivotor.Unpivot(file1.FullFile, OutputPath.Text, file1.Grade, file1.FileLanguage);
+                    
                     UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
                     MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
-                    //await Task.Run(() => StaarSubjectUnpivotor.Unpivot(file1.FileName, OutputPath.Text, file1.Grade, file1.FileLanguage));
+
                 }
                 catch (CustomException ex)
                 {
@@ -88,7 +91,7 @@ namespace CommitGUI
                 }
                 catch (FileNotFoundException ex)
                 {
-                    MessageBox.Text = string.Format("{0}No file found with the name {1}.", MessageBox.Text, file);
+                    MessageBox.Text = string.Format("{0}No file found with the name {1}.", MessageBox.Text, file.FileName);
                     UnpivotProgressBar.Value = 0;
                     UnpivotButton.IsEnabled = true;
                 }
@@ -137,6 +140,7 @@ namespace CommitGUI
                         gridList.Add(new FileDataGrid
                         {
                             FileName = Path.GetFileName(inputFile),
+                            FullFile = inputFile,
                             NumberOfColumnsAtBeginning = 6,
                             Grade = grade,
                             FileLanguage = language
@@ -192,5 +196,6 @@ namespace CommitGUI
         public Language FileLanguage { get; set; }
         public Grade Grade { get; set; }
         public int NumberOfColumnsAtBeginning { get; set; }
+        public string FullFile { get; set; }
     }
 }
