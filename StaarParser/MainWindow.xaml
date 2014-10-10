@@ -12,6 +12,8 @@
     <Window.Resources>
         <Style x:Key="RightAlignment" TargetType="{x:Type TextBlock}">
             <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <ObjectDataProvider x:Key="GradeEnumData"
                 MethodName="GetValues" 
@@ -35,21 +37,24 @@
                      Width="110">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="105"/>
+                        <RowDefinition Height="55"/>
+                        <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="55"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"/>
-                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
 
                     <DataGrid x:Name="FileGrid" 
                               Margin="10" 
-                              SelectionMode="Single" 
-                              Grid.Row="0"
+                              SelectionMode="Extended"
+                              Grid.Row="1"
                               Grid.Column="1"
                               Grid.RowSpan="2"
+                              Grid.ColumnSpan="2"
                               RowHeight="24"
                               CanUserResizeRows="False"
                               CanUserResizeColumns="False"
@@ -103,6 +108,7 @@
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
                             
+                            <!--START COLUMNS-->
                             <DataGridTextColumn Header="Start Columns"
                                                 x:Name="StartColumn"
                                                 Width="90"
@@ -120,18 +126,16 @@
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>-->
 
-
-
-
-
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Grid.Row="0"
-                          Grid.Column="0">
+                          Grid.Column="0"
+                          Grid.RowSpan="2"
+                          Margin="0,5,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="35"/>
-                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -165,40 +169,57 @@
                                   Grid.Row="2"
                                   Grid.Column="0"
                                   Grid.ColumnSpan="2"
-                                HorizontalAlignment="Right" 
+                                  HorizontalAlignment="Right" 
                                   VerticalAlignment="Center"
-                                  Margin="5,5,15,5"
+                                  Margin="5,0,15,0"
                                   Content="Send To Azure"/>
                     </Grid>
-                    <Border Grid.Row="1"
+                    <Border Grid.Row="2"
                             Grid.Column="0"
                             Grid.RowSpan="2"
                             BorderBrush="Black" 
                             BorderThickness="1" 
-                            Margin="10">
+                            Margin="10,0,10,10">
                         <ScrollViewer Name="UnpivotScrollViewer"
                                       ScrollChanged="UnpivotScrollViewer_ScrollChanged">
                         <TextBlock x:Name="MessageBox" 
                                    TextWrapping="Wrap" 
-                                       Background="#FFF0F0F0"
+                                   Background="#FFF0F0F0"
                                    Text="Messages appear here."/>
                         </ScrollViewer>
                     </Border>
+                    <Button Content="Remove Selected"
+                            Name="RemoveSelectedButton"
+                            Click="RemoveSelectedClick" 
+                            Margin="10,10,5,5" 
+                            Grid.Row="0" 
+                            Grid.Column="1"/>
+                    <Button Content="Remove All"
+                            Name="RemoveButton"
+                            Click="RemoveClick" 
+                            Margin="5,10,10,5" 
+                            Grid.Row="0" 
+                            Grid.Column="2"/>
                     <ProgressBar x:Name="UnpivotProgressBar"
                                  Minimum="0"
                                  Visibility="Hidden"
                     	         Maximum="100" 
-                                 Margin="10,5,10,10"
-                                 Grid.Row="2"
-                                 Grid.Column="1" />
-                    <Button Content="Begin Unpivoting"
+                                 Margin="10,5,5,10"
+                                 Grid.Row="3"
+                                 Grid.Column="1"
+                                 Grid.ColumnSpan="2"/>
+                    <Button Content="Unpivot Selected"
+                            Name="UnpivotSelectedButton"
+                            Click="UnpivotSelectedClick" 
+                            Margin="10,5,5,10" 
+                            Grid.Row="3" 
+                            Grid.Column="1"/>
+                    <Button Content="Unpivot All"
                             Name="UnpivotButton"
                             Click="UnpivotClick" 
-                            Margin="10,5,10,10" 
-                            Grid.Row="2" 
-                            Grid.Column="1">
-                    </Button>
-
+                            Margin="5,5,10,10" 
+                            Grid.Row="3" 
+                            Grid.Column="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="AEIS Parser"
@@ -207,6 +228,5 @@
                 <Label Content="More content here!"/>
             </TabItem>
         </TabControl>
-
     </Grid>
 </Window>

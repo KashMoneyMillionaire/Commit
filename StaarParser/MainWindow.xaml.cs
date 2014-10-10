@@ -32,18 +32,37 @@ namespace CommitGUI
             FileGrid.ItemsSource = GridValues;
         }
 
+        private async void RemoveSelectedClick(object sender, RoutedEventArgs e)
+        {
+            //Remove Selected Rows from DataGrid
+        }
+
+        private async void RemoveClick(object sender, RoutedEventArgs e)
+        {
+            GridValues.Clear();
+        }
+
+        private async void UnpivotSelectedClick(object sender, RoutedEventArgs e)
+        {
+            Upivot(true);
+        }
+
         private async void UnpivotClick(object sender, RoutedEventArgs e)
+        {
+            Upivot(false);
+        }
+
+        private void Upivot(bool onlySelected)
         {
             //StaarSubjectUnpivotor.TestAzure();
 
             var currentIndex = 0;
-            var total = GridValues.Count();
 
             //Check to make sure there are any files
 
             if (!GridValues.Any() || OutputPath.Text.Trim() == "")
             {
-                MessageBox.Text = "Either the Input File(s) or Output Folder have not been chosen.";
+                System.Windows.MessageBox.Show("Either the Input File(s) or Output Folder have not been chosen.", "Incorrect Input/Output", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -59,36 +78,71 @@ namespace CommitGUI
             //Hide button, display progress bar
 
             UnpivotButton.IsEnabled = false;
+            UnpivotSelectedButton.IsEnabled = false;
             UnpivotProgressBar.Value = 0;
             UnpivotButton.Visibility = Visibility.Hidden;
+            UnpivotSelectedButton.Visibility = Visibility.Hidden;
             UnpivotProgressBar.Visibility = Visibility.Visible;
             MessageBox.Text = "Unpivoting...";
 
-            foreach (var file in GridValues)
+            if (onlySelected)
             {
-                MessageBox.Text = string.Format("{0}\r\n{1}...", MessageBox.Text,
-                    Path.GetFileNameWithoutExtension(file.FileName));
-                try
+                var total = FileGrid.SelectedItems.Count;
+                foreach (FileDataGrid file in FileGrid.SelectedItems)
                 {
-                    System.Windows.Forms.Application.DoEvents();
-                    var file1 = file;
-                    Thread.Sleep(1000);
-                    //await Task.Run(() => StaarSubjectUnpivotor.Unpivot(file1.FileName, OutputPath.Text, file1.Grade, file1.FileLanguage));
+                    MessageBox.Text = string.Format("{0}\r\n{1}...", MessageBox.Text,
+                        Path.GetFileNameWithoutExtension(file.FileName));
+                    try
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        var file1 = file;
+                        Thread.Sleep(1000);
+                        //await Task.Run(() => StaarSubjectUnpivotor.Unpivot(file1.FileName, OutputPath.Text, file1.Grade, file1.FileLanguage));
+                    }
+                    catch (CustomException ex)
+                    {
+                        MessageBox.Text = string.Format("{0} Line: {1}", ex.Message, new StackTrace(ex, true).GetFrame(0).GetFileLineNumber());
+                        UnpivotProgressBar.Value = 0;
+                        UnpivotButton.IsEnabled = true;
+                        break;
+                    }
+                    currentIndex++;
+                    UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
+                    MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
                 }
-                catch (CustomException ex)
-                {
-                    MessageBox.Text = string.Format("{0} Line: {1}", ex.Message, new StackTrace(ex, true).GetFrame(0).GetFileLineNumber());
-                    UnpivotProgressBar.Value = 0;
-                    UnpivotButton.IsEnabled = true;
-                    break;
-                }
-                currentIndex++;
-                UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
-                MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
             }
+            else
+            {
+                var total = GridValues.Count();
+                foreach (var file in GridValues)
+                {
+                    MessageBox.Text = string.Format("{0}\r\n{1}...", MessageBox.Text,
+                        Path.GetFileNameWithoutExtension(file.FileName));
+                    try
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        var file1 = file;
+                        Thread.Sleep(1000);
+                        //await Task.Run(() => StaarSubjectUnpivotor.Unpivot(file1.FileName, OutputPath.Text, file1.Grade, file1.FileLanguage));
+                    }
+                    catch (CustomException ex)
+                    {
+                        MessageBox.Text = string.Format("{0} Line: {1}", ex.Message, new StackTrace(ex, true).GetFrame(0).GetFileLineNumber());
+                        UnpivotProgressBar.Value = 0;
+                        UnpivotButton.IsEnabled = true;
+                        break;
+                    }
+                    currentIndex++;
+                    UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
+                    MessageBox.Text = string.Format("{0} Done", MessageBox.Text);
+                }
+            }
+
             MessageBox.Text = string.Format("{0}\r\nDone Unpivoting", MessageBox.Text);
             UnpivotButton.IsEnabled = true;
+            UnpivotSelectedButton.IsEnabled = true;
             UnpivotButton.Visibility = Visibility.Visible;
+            UnpivotSelectedButton.Visibility = Visibility.Visible;
             UnpivotProgressBar.Visibility = Visibility.Hidden;
         }
 
@@ -107,6 +161,9 @@ namespace CommitGUI
                     InputPath.Text = Path.GetDirectoryName(dlg.FileName);
                     var inputFiles = dlg.FileNames.ToList();
                     var gridList = (ObservableCollection<FileDataGrid>)FileGrid.ItemsSource;
+
+                    //Needs to add instead of replace
+                    //but not add duplicates...
                     gridList.Clear();
 
                     foreach (var inputFile in inputFiles)
@@ -116,8 +173,7 @@ namespace CommitGUI
                         if (gradeRegex.IsMatch(inputFile))
                         {
                             var gradeMatch = gradeRegex.Match(inputFile);
-                            grade =
-                                gradeMatch.Value.Split(new[] { "Grade " }, StringSplitOptions.None)[1].ParseGrade();
+                            grade = gradeMatch.Value.Split(new[] { "Grade " }, StringSplitOptions.None)[1].ParseGrade();
                         }
 
                         var languageRegex = new Regex(@"[S|s]panish");
@@ -125,7 +181,6 @@ namespace CommitGUI
                         var language = languageMatch
                             ? Infrastructure.Language.Spanish
                             : Infrastructure.Language.English;
-
 
                         gridList.Add(new FileDataGrid
                         {
@@ -135,7 +190,6 @@ namespace CommitGUI
                             FileLanguage = language
                         });
                     }
-
                 }
             }
             catch
