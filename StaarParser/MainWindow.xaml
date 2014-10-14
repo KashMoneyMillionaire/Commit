@@ -74,7 +74,7 @@
                             <!--GRADE-->
                             <DataGridTemplateColumn Header="Grade"
                                                     x:Name="GradeColumn"  
-                                                    Width="70">
+                                                    Width="75">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox SelectedValue="{Binding Grade}"
@@ -93,7 +93,7 @@
                             <!--LANGUAGE-->
                             <DataGridTemplateColumn Header="Language"
                                                     x:Name="LanguageColumn"  
-                                                    Width="70">
+                                                    Width="75">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox SelectedValue="{Binding FileLanguage}"
