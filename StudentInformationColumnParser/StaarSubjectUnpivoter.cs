@@ -145,7 +145,8 @@ namespace ParserUtilities
                     {
                         dataRow["Demographic"] = ExcludedCategories[i];
                         dataRow["Value"] = campus[x + 1 + i]; //Excluded Category Value (Hard coded... is this bad?)
-                        sb.AppendLine(string.Join(",", dataRow.ItemArray));
+                        if (!campus[x + 1 + i].Equals("0") && !campus[x + 1 + i].Equals(""))
+                            sb.AppendLine(string.Join(",", dataRow.ItemArray));
                     }
 
                     //for each complex header whose category matches the current category make a demo and value
@@ -159,7 +160,7 @@ namespace ParserUtilities
                             dataRow["Value"] = campus[i];
 
                             //Removes 0 and empties
-                            if (campus[i].Equals("0") || campus[i].Equals(""))
+                            if (!campus[i].Equals("0") && !campus[i].Equals(""))
                                 sb.AppendLine(string.Join(",", dataRow.ItemArray));
                         }
                     }
