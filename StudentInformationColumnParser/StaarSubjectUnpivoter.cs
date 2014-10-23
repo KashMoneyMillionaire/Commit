@@ -37,7 +37,6 @@ namespace ParserUtilities
             if (!file.Contains(".csv"))
                 throw new CustomException("This is not a csv file.");
 
-
             //Lets unpivot this shit
 
             Console.WriteLine("Unpivoting: {0}", file);
@@ -46,6 +45,7 @@ namespace ParserUtilities
             var rows = File.ReadAllLines(file).ToList();
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             rows.RemoveAt(0); //pop the top off
+
             var possibleHeader = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (!int.TryParse(possibleHeader[0], out j)) //check if second row of headers
             {
@@ -80,32 +80,35 @@ namespace ParserUtilities
             dataTable.Columns.Add("Subject");
             dataTable.Columns.Add("Grade");
             dataTable.Columns.Add("Language");
-            dataTable.Columns.Add(Category);
             var genericHeaders = new List<string>(new[] { "Grade", "Language" });
-
+            dataTable.Columns.Add(Category);
+            
+            //pivoting Demos also - Clay
+            dataTable.Columns.Add("Demographic");
+            dataTable.Columns.Add("Value");
 
             //weird ones
 
-            foreach (var cat in ExcludedCategories)
-            {
-                dataTable.Columns.Add(cat);
-            }
+            //foreach (var cat in ExcludedCategories)
+            //{
+            //    //-Clay
+            //    //dataTable.Columns.Add(cat);
+            //}
 
 
             //demographics
 
-            foreach (var demo in Demographics)
-            {
-                dataTable.Columns.Add(demo);
-            }
+            //foreach (var demo in Demographics)
+            //{
+            //    //-Clay
+            //    //dataTable.Columns.Add(demo);
+            //}
 
 
             //Write the column names to the sb
-
             var sb = new StringBuilder();
             var columnNames = dataTable.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
             sb.AppendLine(string.Join(",", columnNames));
-
 
             //Begin adding data
 
@@ -113,36 +116,58 @@ namespace ParserUtilities
             foreach (var campus in rows.Select(row => row.Split(',')))
             {
                 //set up basic set
-
-                FillFirstX(dataRow, campus, x);
-                FillWeirdHeaders(dataRow, headers, campus);
+                FillFirstX(dataRow, campus, x); //First 6 (Campus, year, region, district, dname, cname)
+                //FillWeirdHeaders(dataRow, headers, campus); Not needed anymore
                 FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), language.ToString());
 
                 foreach (var subCat in subCatPairs.OrderBy(s => s[0]))
                 {
                     //for each complex header whose category matches the current category
+                    //Thanks for this part Kash
+
+                    //for (var i = 6; i < headers.Count; i++)
+                    //{
+                    //    if (sdc[i].Length == 3 && sdc[i][0] == subCat[0] && sdc[i][2] == subCat[1])
+                    //    {
+                    //        //set the data column of the found demographic equal to the 
+                    //        //dataRow[sdc[i][1]] = campus[i];
+                    //    }
+                    //}
+
+                    //add the category
+
+                    dataRow["Subject"] = subCat[0];
+                    dataRow[Category] = subCat[1];
+
+                    //Write EVERY value
+
+                    for(int i = 0; i < ExcludedCategories.Length; i++)
+                    {
+                        dataRow["Demographic"] = ExcludedCategories[i];
+                        dataRow["Value"] = campus[x + 1 + i]; //Excluded Category Value (Hard coded... is this bad?)
+                        sb.AppendLine(string.Join(",", dataRow.ItemArray));
+                    }
+
+                    //for each complex header whose category matches the current category make a demo and value
 
                     for (var i = 6; i < headers.Count; i++)
                     {
                         if (sdc[i].Length == 3 && sdc[i][0] == subCat[0] && sdc[i][2] == subCat[1])
                         {
-                            //set the data column of the found demographic equal to the 
-                            dataRow[sdc[i][1]] = campus[i];
+                            //set the data column of the found demographic and its value
+                            dataRow["Demographic"] = sdc[i][1];
+                            dataRow["Value"] = campus[i];
+
+                            //Removes 0 and empties
+                            if (campus[i].Equals("0") || campus[i].Equals(""))
+                                sb.AppendLine(string.Join(",", dataRow.ItemArray));
                         }
                     }
-
-
-                    //add the category, then write to sb
-
-                    dataRow["Subject"] = subCat[0];
-                    dataRow[Category] = subCat[1];
-                    sb.AppendLine(string.Join(",", dataRow.ItemArray));
                 }
             }
 
             var fileName = Path.GetFileNameWithoutExtension(file);
             File.WriteAllText(string.Format("{0}/{1} - Parsed.csv", outPath, fileName), sb.ToString());
-
         }
 
         public static void TestAzure()
