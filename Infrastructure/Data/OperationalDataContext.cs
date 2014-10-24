@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
+using Infrastructure.Data.Mappings;
 using Infrastructure.Domain;
-using Infrastructure.EntityMapping;
 
-namespace Infrastructure
+namespace Infrastructure.Data
 {
     public class OperationalDataContext : DbContext
     {
@@ -19,18 +19,18 @@ namespace Infrastructure
         }
 
         public DbSet<Campus> Campuses { get; set; }
-        public DbSet<StaarStat> StaarStats { get; set; }
-        public DbSet<CompletedFile> CompletedFiles { get; set; }
-        public DbSet<SubCatField> SubCatFields { get; set; }
-        public DbSet<YearGradeLang> YearGradeLangs { get; set; }
+        public DbSet<StaarTest> StaarStats { get; set; }
+        //public DbSet<CompletedFile> CompletedFiles { get; set; }
+        //public DbSet<SubCatField> SubCatFields { get; set; }
+        //public DbSet<YearGradeLang> YearGradeLangs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new CampusMapping());
             modelBuilder.Configurations.Add(new StaarStatMapping());
-            modelBuilder.Configurations.Add(new CompletedFileMapping());
-            modelBuilder.Configurations.Add(new SubCatFieldMapping());
-            modelBuilder.Configurations.Add(new YearGradeLangMapping());
+            //modelBuilder.Configurations.Add(new CompletedFileMapping());
+            //modelBuilder.Configurations.Add(new SubCatFieldMapping());
+            //modelBuilder.Configurations.Add(new YearGradeLangMapping());
         }
 
         

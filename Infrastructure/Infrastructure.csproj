@@ -46,46 +46,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Mappings\CategoryDetailMapping.cs" />
+    <Compile Include="Data\Mappings\CategoryMappinng.cs" />
+    <Compile Include="Data\Mappings\DemographicDetailMapping.cs" />
+    <Compile Include="Data\Mappings\DemographicMapping.cs" />
+    <Compile Include="Data\Mappings\DistrictMapping.cs" />
+    <Compile Include="Data\Mappings\LanguageMapping.cs" />
+    <Compile Include="Data\Mappings\RegionMapping.cs" />
+    <Compile Include="Data\Mappings\StaarStatMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\Mappings\SubjectMapping.cs" />
     <Compile Include="Domain\Campus.cs" />
-    <Compile Include="Domain\CompletedFile.cs" />
+    <Compile Include="Domain\Category.cs" />
+    <Compile Include="Domain\CategoryDetail.cs" />
+    <Compile Include="Domain\DemographicDetail.cs" />
+    <Compile Include="Domain\Demographic.cs" />
+    <Compile Include="Domain\District.cs" />
     <Compile Include="Domain\EntityBase.cs" />
-    <Compile Include="Domain\StaarStat.cs" />
-    <Compile Include="Domain\SubCatField.cs" />
-    <Compile Include="Domain\YearGradeLang.cs" />
-    <Compile Include="Domain\YearStat.cs" />
-    <Compile Include="EntityMapping\CampusMapping.cs" />
-    <Compile Include="EntityMapping\CompletedFileMapping.cs" />
-    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.cs" />
-    <Compile Include="EntityMapping\Migrations\201409182249419_Initial.Designer.cs">
-      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.cs" />
-    <Compile Include="EntityMapping\Migrations\201409190634214_SubCatField.Designer.cs">
-      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EntityMapping\Migrations\201410032207037_Change.cs" />
-    <Compile Include="EntityMapping\Migrations\201410032207037_Change.Designer.cs">
-      <DependentUpon>201410032207037_Change.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EntityMapping\Migrations\Configuration.cs" />
-    <Compile Include="EntityMapping\StaarStatMapping.cs" />
-    <Compile Include="EntityMapping\SubCatFieldMapping.cs" />
-    <Compile Include="EntityMapping\YearGradeLangMapping.cs" />
+    <Compile Include="Domain\Language.cs" />
+    <Compile Include="Domain\Region.cs" />
+    <Compile Include="Domain\StaarTest.cs" />
+    <Compile Include="Domain\Subject.cs" />
+    <Compile Include="Data\Mappings\CampusMapping.cs" />
+    <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="Enumerations.cs" />
-    <Compile Include="AzureDataContext.cs" />
-    <Compile Include="OperationalDataContext.cs" />
+    <Compile Include="Data\AzureDataContext.cs" />
+    <Compile Include="Data\OperationalDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="EntityMapping\Migrations\201409182249419_Initial.resx">
-      <DependentUpon>201409182249419_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EntityMapping\Migrations\201409190634214_SubCatField.resx">
-      <DependentUpon>201409190634214_SubCatField.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EntityMapping\Migrations\201410032207037_Change.resx">
-      <DependentUpon>201410032207037_Change.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -12,18 +12,6 @@ namespace ParserUtilities
 {
     public static class StaarSubjectUnpivotor
     {
-        private const string Category = "Category";
-
-
-
-        private static readonly List<string> Demographics =
-            Enum.GetValues(typeof(StaarDemographic)).Cast<StaarDemographic>().Select(c => c.ToString()).ToList();
-
-        //private static readonly List<string> StaticCategories =
-        //    Enum.GetValues(typeof(StaarCategoryName)).Cast<StaarCategoryName>().Select(c => c.ToString()).ToList();
-
-        private static readonly string[] ExcludedCategories = { "docs_n", "abs_n", "oth_n", "docs_r", "abs_r", "oth_r" };
-
         /// <summary>
         /// This takes a csv file for the Staar Subject and unpivots it. It then saves it in the output folder.
         /// </summary>
@@ -31,20 +19,34 @@ namespace ParserUtilities
         /// <param name="outPath">The folder to store the output.</param>
         /// <param name="grade">The grade to be associated with the file(s).</param>
         /// <param name="language">The language the test was taken in.</param>
-        public static void Unpivot(string file, string outPath, Grade grade, Language language)
+        public static void Unpivot(string file, string outPath, Grade grade, LanguageEnum language, int x)
         {
+            //var genericHeaders = new List<string>(new[] { "Grade", "LanguageEnum" });
+            
+            var dataTable = new DataTable(string.Format("Parsed {0}", file));
+            int j;
+            var sb = new StringBuilder();
+
+
             //Validation
+
             if (!file.Contains(".csv"))
                 throw new CustomException("This is not a csv file.");
+
 
             //Lets unpivot this shit
 
             Console.WriteLine("Unpivoting: {0}", file);
-            int j;
+
+
+            //read the lines in. First row is headers. save it then remove
 
             var rows = File.ReadAllLines(file).ToList();
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             rows.RemoveAt(0); //pop the top off
+
+
+            // check if second row is headers
 
             var possibleHeader = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (!int.TryParse(possibleHeader[0], out j)) //check if second row of headers
@@ -53,119 +55,73 @@ namespace ParserUtilities
                 rows.RemoveAt(0); //pop the top off
             }
 
-            var sdc = headers.Select(h => h.Split(new[] { '_' }, 3)).ToList();
-            var subCatPairs = sdc
-                .Where(s => s.Count() == 3 && !ExcludedCategories.Contains(s[2]))
-                .Select(s => new[] { s[0], s[2] })
-                .DistinctBy(c => string.Format("{0}{1}", c[0], c[1]))
-                .ToList();
 
+            //setup the headers for the first X columns
 
-            //begin changing stuff
-
-            var dataTable = new DataTable(string.Format("Parsed {0}", file));
-
-
-            //first X
-
-            const int x = 6;
             for (var i = 0; i < x; i++)
             {
                 dataTable.Columns.Add(headers[i]);
             }
 
 
-            //subject, grade, language, category
+            //set up remaining headers
 
-            dataTable.Columns.Add("Subject");
             dataTable.Columns.Add("Grade");
-            dataTable.Columns.Add("Language");
-            var genericHeaders = new List<string>(new[] { "Grade", "Language" });
-            dataTable.Columns.Add(Category);
-            
-            //pivoting Demos also - Clay
+            dataTable.Columns.Add("LanguageEnum");
+            dataTable.Columns.Add("Subject");
+            dataTable.Columns.Add("Category");
             dataTable.Columns.Add("Demographic");
             dataTable.Columns.Add("Value");
 
-            //weird ones
 
-            //foreach (var cat in ExcludedCategories)
-            //{
-            //    //-Clay
-            //    //dataTable.Columns.Add(cat);
-            //}
+            //Write the column names to the stringbuilder
 
-
-            //demographics
-
-            //foreach (var demo in Demographics)
-            //{
-            //    //-Clay
-            //    //dataTable.Columns.Add(demo);
-            //}
-
-
-            //Write the column names to the sb
-            var sb = new StringBuilder();
             var columnNames = dataTable.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
             sb.AppendLine(string.Join(",", columnNames));
+
 
             //Begin adding data
 
             var dataRow = dataTable.NewRow();
             foreach (var campus in rows.Select(row => row.Split(',')))
             {
-                //set up basic set
+                //fill the first columns. These are the same for every campus
+
                 FillFirstX(dataRow, campus, x); //First 6 (Campus, year, region, district, dname, cname)
-                //FillWeirdHeaders(dataRow, headers, campus); Not needed anymore
-                FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), language.ToString());
+                dataRow["Grade"] = grade;
+                dataRow["LanguageEnum"] = language;
 
-                foreach (var subCat in subCatPairs.OrderBy(s => s[0]))
+                
+                //for each complex header whose category matches the current category make a demo and value
+
+                for (var i = x; i < headers.Count; i++)
                 {
-                    //for each complex header whose category matches the current category
-                    //Thanks for this part Kash
+                    //if the value is empty, skip it
 
-                    //for (var i = 6; i < headers.Count; i++)
-                    //{
-                    //    if (sdc[i].Length == 3 && sdc[i][0] == subCat[0] && sdc[i][2] == subCat[1])
-                    //    {
-                    //        //set the data column of the found demographic equal to the 
-                    //        //dataRow[sdc[i][1]] = campus[i];
-                    //    }
-                    //}
+                    if (new[] { "0", "", "." }.Contains(campus[i])) 
+                        continue;
 
-                    //add the category
 
-                    dataRow["Subject"] = subCat[0];
-                    dataRow[Category] = subCat[1];
+                    //if it is not a triple (the first x columns), skip it
 
-                    //Write EVERY value
+                    var triple = headers[i].Split(new[] {'_'}, 3);
+                    if (triple.Length != 3)
+                        continue;
 
-                    for(int i = 0; i < ExcludedCategories.Length; i++)
-                    {
-                        dataRow["Demographic"] = ExcludedCategories[i];
-                        dataRow["Value"] = campus[x + 1 + i]; //Excluded Category Value (Hard coded... is this bad?)
-                        if (!campus[x + 1 + i].Equals("0") && !campus[x + 1 + i].Equals(""))
-                            sb.AppendLine(string.Join(",", dataRow.ItemArray));
-                    }
 
-                    //for each complex header whose category matches the current category make a demo and value
+                    //write the remaining values, then write to stringbuilder
 
-                    for (var i = 6; i < headers.Count; i++)
-                    {
-                        if (sdc[i].Length == 3 && sdc[i][0] == subCat[0] && sdc[i][2] == subCat[1])
-                        {
-                            //set the data column of the found demographic and its value
-                            dataRow["Demographic"] = sdc[i][1];
-                            dataRow["Value"] = campus[i];
+                    dataRow["Subject"] = triple[0];
+                    dataRow["Category"] = triple[1];
+                    dataRow["Demographic"] = triple[2];
+                    dataRow["Value"] = campus[i];
 
-                            //Removes 0 and empties
-                            if (!campus[i].Equals("0") && !campus[i].Equals(""))
-                                sb.AppendLine(string.Join(",", dataRow.ItemArray));
-                        }
-                    }
+                    sb.AppendLine(string.Join(",", dataRow.ItemArray));
                 }
             }
+
+
+            //write stringbuilder to file
 
             var fileName = Path.GetFileNameWithoutExtension(file);
             File.WriteAllText(string.Format("{0}/{1} - Parsed.csv", outPath, fileName), sb.ToString());
@@ -183,7 +139,7 @@ namespace ParserUtilities
 
             //    list.Add(new YearGradeLang
             //    {
-            //        Language = Language.English,
+            //        LanguageEnum = LanguageEnum.English,
             //        Grade = Grade.EOC,
             //        Year = i
             //    });
@@ -192,34 +148,7 @@ namespace ParserUtilities
             //ctx.YearGradeLangs.AddRange(list);
             //ctx.SaveChanges();
         }
-
-        private static void FillGenericData(DataRow dataRow, IEnumerable<string> genericHeaders, string sub, string grade, string language)
-        {
-            foreach (var header in genericHeaders)
-            {
-                switch (header)
-                {
-                    case "Subject":
-                        dataRow[header] = sub;
-                        break;
-                    case "Grade":
-                        dataRow[header] = grade;
-                        break;
-                    case "Language":
-                        dataRow[header] = language;
-                        break;
-                }
-            }
-        }
-
-        private static void FillWeirdHeaders(DataRow dataRow, List<string> headers, string[] campusData)
-        {
-            foreach (var we in ExcludedCategories)
-            {
-                dataRow[we] = campusData[headers.FindIndex(c => c.Contains(we))];
-            }
-        }
-
+        
         private static void FillFirstX(DataRow dataRow, IList<string> row, int x)
         {
             for (var i = 0; i < x; i++)

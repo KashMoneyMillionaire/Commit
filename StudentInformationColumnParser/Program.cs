@@ -34,7 +34,7 @@ namespace CommitParser
         {
             InitializeComponent();
             GradeDropDown.DataSource = Enum.GetValues(typeof(Grade));
-            LanguageDropDown.DataSource = Enum.GetValues(typeof(Language));
+            LanguageDropDown.DataSource = Enum.GetValues(typeof(LanguageEnum));
             
         }
 
@@ -95,7 +95,7 @@ namespace CommitParser
             }
             var currentIndex = 0;
             var selectedGrade = (Grade)Enum.Parse(typeof(Grade), GradeDropDown.SelectedIndex.ToString());
-            var selectedLanguage = (Language)Enum.Parse(typeof(Language), LanguageDropDown.SelectedIndex.ToString());
+            var selectedLanguage = (LanguageEnum)Enum.Parse(typeof(LanguageEnum), LanguageDropDown.SelectedIndex.ToString());
             ProgressBar.Value = 0;
             MessageBox.Text = "Unpivoting...\r\n";
             var total = inputFiles.Count();
@@ -106,7 +106,7 @@ namespace CommitParser
                 try
                 {
                     Application.DoEvents();
-                    StaarSubjectUnpivotor.Unpivot(file, OutputPath.Text, selectedGrade, selectedLanguage);
+                    StaarSubjectUnpivotor.Unpivot(file, OutputPath.Text, selectedGrade, selectedLanguage, 6);
                 }
                 catch (CustomException ex)
                 {
@@ -134,13 +134,13 @@ namespace CommitParser
             //CreateYearGradeLangs();
             //var ctx = new OperationalDataContext();
             //var x = ctx.Campuses.First();
-            //var y = new StaarStat
+            //var y = new StaarTest
             //{
             //    Campus_Id = x.Id,
             //    SubCatField_Id = ctx.SubCatFields.First().Id
             //};
-            ////x.StaarStats = new List<StaarStat> { y };
-            //ctx.BulkInsert(new List<StaarStat> { y });
+            ////x.StaarStats = new List<StaarTest> { y };
+            //ctx.BulkInsert(new List<StaarTest> { y });
             ////ctx.Campuses.AddOrUpdate(x);
             //ctx.SaveChangesAsync();
 
@@ -313,13 +313,13 @@ namespace CommitParser
         //        {
         //            foreach (var grade in Enum.GetValues(typeof(Grade)).Cast<Grade>())
         //            {
-        //                foreach (var language in Enum.GetValues(typeof(Language)).Cast<Language>())
+        //                foreach (var language in Enum.GetValues(typeof(LanguageEnum)).Cast<LanguageEnum>())
         //                {
         //                    subCatField.Add(new YearGradeLang
         //                    {
         //                        Year = year,
         //                        Grade = grade,
-        //                        Language = language
+        //                        LanguageEnum = language
         //                    });
         //                }
         //            }
@@ -384,14 +384,14 @@ namespace CommitParser
         ////            continue;
         ////        }
 
-        ////        campus.StaarStats = new List<StaarStat>();
+        ////        campus.StaarStats = new List<StaarTest>();
 
-        ////        //for each cell in the row (each StaarStat)
+        ////        //for each cell in the row (each StaarTest)
         ////        for (var i = 13; i < cells.Length; i++)
         ////        {
         ////            //split the column header
         ////            var columnBits = headers[i].Split(new[] { "_" }, 3, StringSplitOptions.None);
-        ////            var staar = new StaarStat();
+        ////            var staar = new StaarTest();
 
         ////            try
         ////            {
@@ -441,7 +441,7 @@ namespace CommitParser
 
         //    //for each row in the file
 
-        //    var bag = new ConcurrentBag<StaarStat>();
+        //    var bag = new ConcurrentBag<StaarTest>();
         //    var campusCount = 0;
         //    foreach (var campusRow in campusRows)
         //    {
@@ -485,11 +485,11 @@ namespace CommitParser
         //                var grade = FindGradeBySubject(subject);
         //                var ygl =
         //                    ctx.YearGradeLangs.Single(
-        //                        y => y.Year == year && y.Grade == grade && y.Language == Language.English);
+        //                        y => y.Year == year && y.Grade == grade && y.LanguageEnum == LanguageEnum.English);
         //                var scf =
         //                    ctx.SubCatFields.Single(
         //                        s => s.Category == category && s.Subject == subject && s.Field == field);
-        //                var staar = new StaarStat
+        //                var staar = new StaarTest
         //                {
         //                    Value = container.Stat,
         //                    Campus_Id = campus.Id,
@@ -506,7 +506,7 @@ namespace CommitParser
         //        //{
         //        //    Console.Write("\tWriting ~100,000 more stats... {0} campuses so far... ", campusCount);
         //        //    ctx.BulkInsert(bag);
-        //        //    bag = new ConcurrentBag<StaarStat>();
+        //        //    bag = new ConcurrentBag<StaarTest>();
         //        //    Console.WriteLine("Done.");
         //        //}
         //        if (campusCount % 200 == 0)
@@ -732,7 +732,7 @@ namespace CommitParser
 
         //public void StaarParser()
         //{
-        //    //var dict = new Dictionary<long, StaarStat>();
+        //    //var dict = new Dictionary<long, StaarTest>();
 
         //    //var text = System.IO.File.ReadLines(
         //    //        string.Format("C:/Users/kcummings/Google Drive/Work/Commit/StudentInformation/ Columns.txt"));

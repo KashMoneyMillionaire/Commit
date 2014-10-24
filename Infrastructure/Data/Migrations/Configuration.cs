@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace Infrastructure.EntityMapping.Migrations
+namespace Infrastructure.Data.Migrations
 {
     internal sealed class Configuration : DbMigrationsConfiguration<OperationalDataContext>
     {
@@ -8,7 +8,7 @@ namespace Infrastructure.EntityMapping.Migrations
         {
             AutomaticMigrationsEnabled = false;
 
-            MigrationsDirectory = @"EntityMapping\Migrations";
+            MigrationsDirectory = @"Data\Migrations";
             MigrationsNamespace = typeof(Configuration).Namespace;
 
         }

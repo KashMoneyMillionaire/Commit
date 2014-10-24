@@ -14,7 +14,7 @@ namespace Infrastructure
         Undefined
     }
 
-    public enum Language : long
+    public enum LanguageEnum : long
     {
         English, Spanish
     }
@@ -157,9 +157,9 @@ namespace Infrastructure
         bil2,
         [Description("Transitional Bilingual/ Late Exit")]
         bil3,
-        [Description("Dual Language Immersion/ Two Way")]
+        [Description("Dual LanguageEnum Immersion/ Two Way")]
         bil4,
-        [Description("Dual Language Immersion/ One Way")]
+        [Description("Dual LanguageEnum Immersion/ One Way")]
         bil5,
         [Description("No Info Bilingual")]
         bilv,

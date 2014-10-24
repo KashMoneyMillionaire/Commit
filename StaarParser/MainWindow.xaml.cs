@@ -128,7 +128,7 @@ namespace CommitGUI
                     try
                     {
                         StaarSubjectUnpivotor.Unpivot(closureFile.FullFile, output, closureFile.Grade,
-                            closureFile.FileLanguage);
+                            closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
                     }
                     catch (Exception ex)
                     {
@@ -201,15 +201,15 @@ namespace CommitGUI
                         var languageRegex = new Regex(@"[S|s]panish");
                         var languageMatch = languageRegex.IsMatch(inputFile);
                         var language = languageMatch
-                            ? Infrastructure.Language.Spanish
-                            : Infrastructure.Language.English;
+                            ? Infrastructure.LanguageEnum.Spanish
+                            : Infrastructure.LanguageEnum.English;
 
                         gridList.Add(new FileDataGrid
                         {
                             FileName = Path.GetFileName(inputFile),
                             NumberOfColumnsAtBeginning = 6,
                             Grade = grade,
-                            FileLanguage = language,
+                            FileLanguageEnum = language,
                             FullFile = inputFile
                         });
                     }
@@ -260,7 +260,7 @@ namespace CommitGUI
     {
         public string FullFile { get; set; }
         public string FileName { get; set; }
-        public Language FileLanguage { get; set; }
+        public LanguageEnum FileLanguageEnum { get; set; }
         public Grade Grade { get; set; }
         public int NumberOfColumnsAtBeginning { get; set; }
     }
