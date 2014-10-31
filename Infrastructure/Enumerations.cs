@@ -45,6 +45,13 @@ namespace Infrastructure
         E, M, S, B
     }
 
+    public enum CategoryType
+    {
+        Undefined = 0,
+        Count = 1,
+        Percentage = 2
+    }
+
     [Flags]
     public enum CackDtl : long
     {

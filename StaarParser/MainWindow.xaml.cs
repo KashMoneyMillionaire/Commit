@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Threading;
 using System.Windows.Controls;
-using CommitParser.Helpers;
+using System.Windows.Forms;
 using Infrastructure;
 using ParserUtilities;
 using ParserUtilities.Helpers;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using Path = System.IO.Path;
 
-namespace CommitGUI
+namespace Commit.Desktop
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -127,7 +121,7 @@ namespace CommitGUI
                 {
                     try
                     {
-                        StaarSubjectUnpivotor.Unpivot(closureFile.FullFile, output, closureFile.Grade,
+                        StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.Grade,
                             closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
                     }
                     catch (Exception ex)
@@ -166,6 +160,9 @@ namespace CommitGUI
             UnpivotButton.Visibility = Visibility.Visible;
             UnpivotSelectedButton.Visibility = Visibility.Visible;
             UnpivotProgressBar.Visibility = Visibility.Hidden;
+
+            //StaarTestUnpivotor.UnpivotAndPopulateDatabase(
+            //    @"C:\Users\kcummings\Desktop\Parse\ParseNew\2014 Algebra 1 - Parsed.csv");
         }
 
         private void SelectInputFilesButtonClick(object sender, RoutedEventArgs e)

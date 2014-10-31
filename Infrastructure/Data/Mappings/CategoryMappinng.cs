@@ -25,7 +25,7 @@ namespace Infrastructure.Data.Mappings
             Property(c => c.Description);
 
             Property(c => c.Name);
-            
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.Domain
 {
@@ -7,6 +8,7 @@ namespace Infrastructure.Domain
         public long Number { get; set; }
         public string Name { get; set; }
         public virtual District District { get; set; }
+        public long District_Id { get; set; }
 
         //public long CampusNumber { get; set; }
         //public string Name { get; set; }

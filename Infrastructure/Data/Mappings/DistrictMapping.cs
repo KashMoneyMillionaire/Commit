@@ -27,7 +27,8 @@ namespace Infrastructure.Data.Mappings
             Property(c => c.Name);
 
             HasRequired(c => c.Region)
-                .WithMany();
+                .WithMany()
+                .HasForeignKey(c => c.Region_Id);
 
         }
     }

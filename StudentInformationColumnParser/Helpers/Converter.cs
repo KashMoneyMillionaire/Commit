@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using CommitParser.Helpers;
 using Infrastructure;
 
 namespace ParserUtilities.Helpers

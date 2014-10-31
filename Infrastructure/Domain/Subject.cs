@@ -9,6 +9,7 @@ namespace Infrastructure.Domain
     public class Subject : EntityBase<long>
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public int YearStarted { get; set; }
 
     }

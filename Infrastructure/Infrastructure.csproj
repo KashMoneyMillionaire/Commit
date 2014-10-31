@@ -53,10 +53,22 @@
     <Compile Include="Data\Mappings\DistrictMapping.cs" />
     <Compile Include="Data\Mappings\LanguageMapping.cs" />
     <Compile Include="Data\Mappings\RegionMapping.cs" />
-    <Compile Include="Data\Mappings\StaarStatMapping.cs">
+    <Compile Include="Data\Mappings\StaarTestMapping.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\Mappings\SubjectMapping.cs" />
+    <Compile Include="Data\Migrations\201410240537185_Initial.cs" />
+    <Compile Include="Data\Migrations\201410240537185_Initial.Designer.cs">
+      <DependentUpon>201410240537185_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Migrations\201410301718170_CategoryUpdates.cs" />
+    <Compile Include="Data\Migrations\201410301718170_CategoryUpdates.Designer.cs">
+      <DependentUpon>201410301718170_CategoryUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Migrations\201410310557049_Rearangement.cs" />
+    <Compile Include="Data\Migrations\201410310557049_Rearangement.Designer.cs">
+      <DependentUpon>201410310557049_Rearangement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Domain\Campus.cs" />
     <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\CategoryDetail.cs" />
@@ -78,6 +90,17 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Migrations\201410240537185_Initial.resx">
+      <DependentUpon>201410240537185_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\201410301718170_CategoryUpdates.resx">
+      <DependentUpon>201410301718170_CategoryUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\201410310557049_Rearangement.resx">
+      <DependentUpon>201410310557049_Rearangement.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

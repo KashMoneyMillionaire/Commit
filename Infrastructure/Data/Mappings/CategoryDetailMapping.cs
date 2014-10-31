@@ -26,6 +26,10 @@ namespace Infrastructure.Data.Mappings
 
             Property(c => c.Detail);
 
+            Property(c => c.YearStarted);
+
+            Property(c => c.CategoryType);
+
             HasRequired(c => c.Category)
                 .WithMany();
 

@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:e="clr-namespace:Infrastructure;assembly=Infrastructure"
-        xmlns:local="clr-namespace:StaarParser"
-        xmlns:infrastructure="clr-namespace:Infrastructure;assembly=Infrastructure"
+    xmlns:infrastructure="clr-namespace:Infrastructure;assembly=Infrastructure"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-        x:Class="CommitGUI.MainWindow"
+        x:Class="Commit.Desktop.MainWindow"
         Title="Commit!" Height="500" Width="850" MinWidth="1200" MinHeight="700">
     <Window.Resources>
         <Style x:Key="RightAlignment" TargetType="{x:Type TextBlock}">
@@ -91,18 +90,18 @@
                             </DataGridTemplateColumn>
                             
                             <!--LANGUAGE-->
-                            <DataGridTemplateColumn Header="LanguageEnum"
+                            <DataGridTemplateColumn Header="Language"
                                                     x:Name="LanguageColumn"  
                                                     Width="75">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding FileLanguage}"
+                                        <ComboBox SelectedValue="{Binding FileLanguageEnum}"
                                                   ItemsSource="{Binding Source={StaticResource LanguageEnumData}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                                 <DataGridTemplateColumn.CellEditingTemplate >
                                     <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding FileLanguage}"
+                                        <ComboBox SelectedValue="{Binding FileLanguageEnum}"
                                                   ItemsSource="{Binding Source={StaticResource LanguageEnumData}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>

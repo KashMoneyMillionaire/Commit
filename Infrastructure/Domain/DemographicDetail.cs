@@ -11,5 +11,6 @@ namespace Infrastructure.Domain
         public virtual Demographic Demographic { get; set; }
         public string Detail { get; set; }
         public string Description { get; set; }
+        public int YearStarted { get; set; }
     }
 }

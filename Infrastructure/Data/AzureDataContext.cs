@@ -27,7 +27,7 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new CampusMapping());
-            modelBuilder.Configurations.Add(new StaarStatMapping());
+            modelBuilder.Configurations.Add(new StaarTestMapping());
             //modelBuilder.Configurations.Add(new CompletedFileMapping());
             //modelBuilder.Configurations.Add(new SubCatFieldMapping());
             //modelBuilder.Configurations.Add(new YearGradeLangMapping());

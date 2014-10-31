@@ -1,0 +1,192 @@
+﻿@model Commit.Web.Controllers.DemoViewModel
+@{
+    ViewBag.Title = "Demo";
+}
+
+<h2>Demo</h2>
+
+<div>
+    <h4>Select Items</h4>
+
+    <div style="display: inline-block">
+        <p>
+            <label for="demographics">Demographics:</label>
+            <select id="demographics"
+                    data-text-field="Text"
+                    data-value-field="DropDownId"
+                    data-option-label="Select Detail..."
+                    data-bind="source: demographics" data-role="dropdownlist"></select>
+        </p>
+        <p>
+            <label for="demographicDetails">Detail:</label>
+            <select id="demographicDetails" data-cascade-from="demographics"
+                    data-text-field="Text"
+                    data-value-field="DropDownId"
+                    data-option-label="Select Detail..."
+                    data-bind="value: selectedDemographic, source:demographicDetails" data-role="dropdownlist"></select>
+        </p>
+    </div>
+    <div style="display: inline-block; margin: 20px">
+        <p>
+            <label for="categories">Category:</label>
+            <select id="categories"
+                    data-text-field="Text"
+                    data-value-field="DropDownId"
+                    data-option-label="Select Detail..."
+                    data-bind="source: categories" data-role="dropdownlist"></select>
+        </p>
+        <p>
+            <label for="categoryDetails">Detail:</label>
+            <select id="categoryDetails" data-cascade-from="categories"
+                    data-text-field="Text"
+                    data-value-field="DropDownId"
+                    data-option-label="Select Detail..."
+                    data-bind="value: selectedCategory, source:categoryDetails" data-role="dropdownlist"></select>
+        </p>
+    </div>
+    <div style="display: inline-block; margin: 20px">
+        <p>
+            <label for="subjects">Subjects:</label>
+            <select id="subjects"
+                    data-text-field="Text"
+                    data-value-field="DropDownId"
+                    data-option-label="Select Subject..."
+                    data-bind="value: selectedSubject, source: subjects" data-role="dropdownlist"></select>
+        </p>
+    </div>
+    <div style="display: inline-block; margin: 20px">
+        <p>
+            <label for="campus">Campus:</label>
+            <select id="campus"
+                    data-text-field="Text"
+                    data-value-field="DropDownId"
+                    data-option-label="Select Campus..."
+                    data-bind="value: selectedCampus, source: campuses" data-role="dropdownlist"></select>
+        </p>
+    </div>
+</div>
+<button id="refreshGrid" type="button">Refresh Grid</button>
+<div id="grid">
+
+</div>
+
+
+
+
+<script>
+
+    var demographicList = @Html.Raw(Json.Encode(Model.Demographics));
+    var demoDetailList = @Html.Raw(Json.Encode(Model.DemographicDetails));
+    var categoryList = @Html.Raw(Json.Encode(Model.Categories));
+    var catDetailList = @Html.Raw(Json.Encode(Model.CategoryDetails));
+    var subjectList = @Html.Raw(Json.Encode(Model.Subjects));
+    var campusList = @Html.Raw(Json.Encode(Model.Campuses));
+
+    var viewModel = kendo.observable({
+        demographics: demographicList,
+        demographicDetails: demoDetailList,
+        categories: categoryList,
+        categoryDetails: catDetailList,
+        subjects: subjectList,
+        campuses: campusList,
+    });
+
+    $(document).ready(function () {
+        //var demographics = $("#demographics").kendoDropDownList({
+        //    optionLabel: "Select Demographic...",
+        //    dataTextField: "Text",
+        //    dataValueField: "Value",
+        //    dataSource: demographicList
+        //}).data("kendoDropDownList");
+
+        //var demoDetails = $("#demographicDetails").kendoDropDownList({
+        //    autoBind: false,
+        //    cascadeFrom: "demographics",
+        //    optionLabel: "Select Detail...",
+        //    dataTextField: "Text",
+        //    dataValueField: "Value",
+        //    dataSource: demoDetailList
+        //}).data("kendoDropDownList");
+
+        //var categories = $("#categories").kendoDropDownList({
+        //    autoBind: false,
+        //    cascadeFrom: "products",
+        //    optionLabel: "Select Detail...",
+        //    dataTextField: "Text",
+        //    dataValueField: "Value",
+        //    dataSource: categoryList
+        //}).data("kendoDropDownList");
+
+        //var catDetails = $("#categoryDetails").kendoDropDownList({
+        //    autoBind: false,
+        //    cascadeFrom: "categories",
+        //    optionLabel: "Select Detail...",
+        //    dataTextField: "Text",
+        //    dataValueField: "Value",
+        //    dataSource: catDetailList
+        //}).data("kendoDropDownList");
+
+        //var subjects = $("#subjects").kendoDropDownList({
+        //    optionLabel: "Select Subject...",
+        //    dataTextField: "Text",
+        //    dataValueField: "Value",
+        //    dataSource: subjectList
+        //}).data("kendoDropDownList");
+
+        $("#refreshGrid").on('click', function() {
+            $('#grid').data('kendoGrid').dataSource.read();
+            $('#grid').data('kendoGrid').refresh();
+        })
+
+        kendo.bind(document.body, viewModel);
+
+        $("#grid").kendoGrid({
+            autoBind: false,
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/api/StaarRequest/GetTests",
+                        type: "POST",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: function() {
+                            return {
+                                categoryDetailId: viewModel.selectedCategory.MyId,
+                                demographicDetailId: viewModel.selectedDemographic.MyId,
+                                campusId: viewModel.selectedCampus.MyId,
+                                subjectId:viewModel.selectedSubject.MyId,
+                            };
+                        }
+                    },
+                    serverPaging: true,
+                    serverSorting: true,
+                    serverFiltering: true,
+                    navigatable: true
+                },
+                pageSize: 10,
+            },
+            height: 550,
+            groupable: true,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            columns: [{
+                field: "CampusName",
+                title: "School Name",
+                width: 200
+            }, {
+                field: "Subject",
+            }, {
+                field: "Demographic",
+            }, {
+                field: "Category",
+            }, {
+                field: "Value",
+            }]
+        });
+
+    });
+</script>

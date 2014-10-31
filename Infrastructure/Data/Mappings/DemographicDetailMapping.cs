@@ -26,6 +26,8 @@ namespace Infrastructure.Data.Mappings
 
             Property(c => c.Description);
 
+            Property(c => c.YearStarted);
+
             HasRequired(c => c.Demographic)
                 .WithMany();
 
