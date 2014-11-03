@@ -29,6 +29,12 @@ namespace Commit.Desktop
             InitializeComponent();
             DataContext = this;
             FileGrid.ItemsSource = GridValues;
+
+            List<string> options = new List<string>();
+            options.Add("Narrow");
+            options.Add("Wide");
+            WidthSetting.ItemsSource = options;
+            WidthSetting.SelectedIndex = 0;
         }
 
         private async void RemoveSelectedClick(object sender, RoutedEventArgs e)
@@ -121,8 +127,14 @@ namespace Commit.Desktop
                 {
                     try
                     {
-                        StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.Grade,
-                            closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                        if (WidthSetting.SelectedItem == "Narrow")
+                        {
+                            StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.Grade, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                        }
+                        else
+                        {
+                            StaarTestUnpivotor.UnpivotWide(closureFile.FullFile, output, closureFile.Grade, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                        }
                     }
                     catch (Exception ex)
                     {

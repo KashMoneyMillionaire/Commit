@@ -138,11 +138,13 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBox Grid.Row="0" 
                                  Grid.Column="0"
+                                 Grid.ColumnSpan="2"
                                  Name="InputPath"
                                  Margin="10,5,5,5" 
                                  TextWrapping="NoWrap"
@@ -150,24 +152,33 @@
                                  VerticalContentAlignment="Center"/>
                         <TextBox Grid.Row="1"
                                  Grid.Column="0"
+                                 Grid.ColumnSpan="2"
                                  Name="OutputPath"
                                  Margin="10,5,5,5" 
                                  TextWrapping="NoWrap" 
                                  VerticalContentAlignment="Center"/>
                         <Button Grid.Row="0"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 Content="Select Input Files" 
                                 Margin="5,5,10,5"
                                 Click="SelectInputFilesButtonClick"/>
                         <Button Grid.Row="1"
-                                Grid.Column="3"
+                                Grid.Column="2"
                                 Content="Select Output Folder" 
                                 Margin="5,5,10,5"
                                 Click="SelectOutputFolderButtonClick"/>
+                        <Label Grid.Row="2"
+                               Grid.Column="0"
+                               Content="Width"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,5,0"/>
+                        <ComboBox x:Name="WidthSetting"
+                                  Grid.Row="2"
+                                  Grid.Column="1"
+                                  Margin="2"/>
                         <CheckBox x:Name="AzureCheckBox"
                                   Grid.Row="2"
-                                  Grid.Column="0"
-                                  Grid.ColumnSpan="2"
+                                  Grid.Column="3"
                                   HorizontalAlignment="Right" 
                                   VerticalAlignment="Center"
                                   Margin="5,0,15,0"

@@ -156,7 +156,7 @@ namespace ParserUtilities
         /// <param name="grade">The grade to be associated with the file(s).</param>
         /// <param name="language">The language the test was taken in.</param>
         /// <param name="x">The number of columns at the beginning.</param>
-        public static void UnpivotWide(string file, string outPath, Grade grade, Language language, int x)
+        public static void UnpivotWide(string file, string outPath, Grade grade, LanguageEnum language, int x)
         {
             //Validation
             if (!file.Contains(".csv"))
@@ -240,9 +240,15 @@ namespace ParserUtilities
             {
                 //set up basic set
 
+                string lang;
+                if(language == LanguageEnum.English)
+                    lang = "English";
+                else
+                    lang = "Spanish";
+
                 FillFirstX(dataRow, campus, x);
                 FillWeirdHeaders(dataRow, headers, campus);
-                FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), language.ToString());
+                FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), lang);
 
                 foreach (var category in dynamicCategories)
                 {
