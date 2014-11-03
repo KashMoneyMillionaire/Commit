@@ -201,21 +201,17 @@
                         dataType: "json",
                         data: function() {
                             return {
-                                DemographicDetailIds: viewModel.checkedDds,
-                                CategoryDetailIds: viewModel.checkedCds,
-                                SubjectIds: viewModel.checkedSubs,
+                                //DemographicDetailIds: [1],
+                                //CategoryDetailIds: [1,2],
+                                //SubjectIds: [1,2,3],
+                                //CampusIds: []
+                                DemographicDetailIds: viewModel.checkedDds.toJSON(),
+                                CategoryDetailIds: viewModel.checkedCds.toJSON(),
+                                SubjectIds: viewModel.checkedSubs.toJSON(),
                                 CampusIds: selectedCampuses.value(),
                             };
                         }
                     },
-                    parameterMap: function (options) {
-                        if (options.sort.length == 0) {
-                            return [];
-                        }
-                        else {
-                            return options.sort[0].field + ',' + options.sort[0].dir;
-                        }
-                    }
                     //serverPaging: true,
                     //serverSorting: true,
                     //serverFiltering: true,
@@ -227,7 +223,6 @@
             //groupable: true,
             //sortable: true,
             //pageable: {
-            //    refresh: true,
             //    pageSizes: true,
             //    buttonCount: 5
             //},

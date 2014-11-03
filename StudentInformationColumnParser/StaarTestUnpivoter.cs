@@ -241,7 +241,7 @@ namespace ParserUtilities
                 //set up basic set
 
                 string lang;
-                if(language == LanguageEnum.English)
+                if (language == LanguageEnum.English)
                     lang = "English";
                 else
                     lang = "Spanish";
@@ -345,11 +345,11 @@ namespace ParserUtilities
             else if (year < 90) year += 2000;
 
             var language = langs.Single(l => l.Name == sortedRows[0][7]);
-            var campusTests = new List<StaarTest>(500);
+            var campusTests = new List<StaarTest>(90005);
+            var sortedCount = sortedRows.Count;
 
 
-
-            for (var i = 0; i < sortedRows.Count(); i++)
+            for (var i = 0; i < sortedCount; i++)
             {
                 try
                 {
@@ -366,59 +366,51 @@ namespace ParserUtilities
 
                     if (previousCampus != record[0])
                     {
-                        using (var transactionScope = new TransactionScope())
+                        //Find the school. Create if not new
+
+                        long regionNum = int.Parse(record[2]);
+                        long campusNum = int.Parse(record[0]);
+                        long districtNum = int.Parse(record[1]);
+
+                        //check region, district, and campus
+
+                        var region = regs.FirstOrDefault(r => r.Number == regionNum);
+                        if (region == null)
                         {
-                            //Find the school. Create if not new
-
-                            long regionNum = int.Parse(record[2]);
-                            long campusNum = int.Parse(record[0]);
-                            long districtNum = int.Parse(record[1]);
-
-                            //check region, district, and campus
-
-                            var region = regs.FirstOrDefault(r => r.Number == regionNum);
-                            if (region == null)
+                            region = new Region
                             {
-                                region = new Region
-                                {
-                                    Name = string.Format("Region {0}", regionNum),
-                                    Number = regionNum
-                                };
-                                ctx.Regions.Add(region);
-                            }
-
-                            var district = dists.FirstOrDefault(r => r.Number == districtNum);
-                            if (district == null)
-                            {
-                                district = new District
-                                {
-                                    Name = record[4],
-                                    Number = districtNum,
-                                    Region_Id = region.Id
-                                };
-                                ctx.Districts.Add(district);
-                            }
-
-                            var campus = camps.FirstOrDefault(r => r.Number == campusNum);
-                            if (campus == null)
-                            {
-                                campus = new Campus
-                                {
-                                    Name = record[5],
-                                    Number = campusNum,
-                                    District_Id = district.Id
-                                };
-                                ctx.Campuses.Add(campus);
-                            }
-
-                            if (campusTests.Count > 0) ctx.BulkInsert(campusTests);
-                            if (ctx.ChangeTracker.HasChanges() || campusTests.Count > 0) ctx.SaveChanges();
-                            
-                            campusTests = new List<StaarTest>(500);
-                            campusId = campus.Id;
-
-                            transactionScope.Complete();
+                                Name = string.Format("Region {0}", regionNum),
+                                Number = regionNum
+                            };
+                            ctx.Regions.Add(region);
                         }
+
+                        var district = dists.FirstOrDefault(r => r.Number == districtNum);
+                        if (district == null)
+                        {
+                            district = new District
+                            {
+                                Name = record[4],
+                                Number = districtNum,
+                                Region_Id = region.Id
+                            };
+                            ctx.Districts.Add(district);
+                        }
+
+                        var campus = camps.FirstOrDefault(r => r.Number == campusNum);
+                        if (campus == null)
+                        {
+                            campus = new Campus
+                            {
+                                Name = record[5],
+                                Number = campusNum,
+                                District_Id = district.Id
+                            };
+                            ctx.Campuses.Add(campus);
+                        }
+
+                        ctx.SaveChanges();
+                        campusId = campus.Id;
                     }
 
                     if (previousSubject != record[8])
@@ -450,6 +442,12 @@ namespace ParserUtilities
                         Value = Convert.ToDecimal(record[11]),
                         Grade = record[6]
                     });
+
+                    if (campusTests.Count >= 90000 || i == sortedCount - 1)
+                    {
+                        ctx.BulkInsert(campusTests);
+                        campusTests = new List<StaarTest>(90005);
+                    }
 
                     previousCampus = record[0];
                     previousSubject = record[8];

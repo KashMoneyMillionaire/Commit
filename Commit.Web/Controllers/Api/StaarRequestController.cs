@@ -25,24 +25,35 @@ namespace Commit.Web.Controllers.Api
             var id = int.Parse(filter.Filters[0].Field);
             return
                 _ctx.DemographicDetails.Where(d => d.Demographic.Id == id)
-                    .Select(c => new DropDownViewModel {Text = c.Description, Value = c.Id.ToString()}).ToList();
+                    .Select(c => new DropDownViewModel { Text = c.Description, Value = c.Id.ToString() }).ToList();
         }
 
         [HttpPost]
         public List<DemoGrid> ReadTests(RequestModel model)
         {
-            return _ctx.StaarTests.Where(s => model.CategoryDetailIds.Contains(s.CategoryDetail_Id)
-                                       && model.DemographicDetailIds.Contains(s.DemographicDetail_Id)
-                                       && model.CampusIds.Contains(s.Campus_Id)
-                                       && model.SubjectIds.Contains(s.Subject_Id))
-                .Select(s => new DemoGrid
-                {
-                    Value = s.Value,
-                    Subject = s.Subject.Description,
-                    Demographic = s.DemographicDetail.Description,
-                    Category = s.CategoryDetail.Description,
-                    CampusName = s.Campus.Name
-                }).ToList();
+            var x = _ctx.StaarTests.AsQueryable();
+
+            if (model.CampusIds != null)
+                x = x.Where(s => model.CampusIds.Contains(s.Campus_Id));
+
+            if (model.SubjectIds != null)
+                x = x.Where(s => model.SubjectIds.Contains(s.Subject_Id));
+
+            if (model.CategoryDetailIds != null)
+                x = x.Where(s => model.CategoryDetailIds.Contains(s.CategoryDetail_Id));
+
+            if (model.DemographicDetailIds != null)
+                x = x.Where(s => model.DemographicDetailIds.Contains(s.DemographicDetail_Id));
+
+
+            return x.Select(s => new DemoGrid
+            {
+                Value = s.Value,
+                Subject = s.Subject.Description,
+                Demographic = s.DemographicDetail.Description,
+                Category = s.CategoryDetail.Description,
+                CampusName = s.Campus.Name
+            }).ToList();
         }
 
         public List<DropDownViewModel> ReadCampuses(GridPageModel model)
@@ -50,11 +61,11 @@ namespace Commit.Web.Controllers.Api
             var sort = model.Filter.Filters[0].Value;
 
             return _ctx.Campuses.Where(c => c.Name.Contains(sort))
-                .Select(c => new DropDownViewModel{Value = c.Id.ToString(), Text = c.Name})
+                .Select(c => new DropDownViewModel { Value = c.Id.ToString(), Text = c.Name })
                 .Take(model.Take)
                 .ToList();
 
-        } 
+        }
 
         public class DemoGrid
         {
