@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Mappings\CampusMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data\Mappings\CategoryDetailMapping.cs" />
     <Compile Include="Data\Mappings\CategoryMappinng.cs" />
     <Compile Include="Data\Mappings\DemographicDetailMapping.cs" />
@@ -80,7 +83,6 @@
     <Compile Include="Domain\Region.cs" />
     <Compile Include="Domain\StaarTest.cs" />
     <Compile Include="Domain\Subject.cs" />
-    <Compile Include="Data\Mappings\CampusMapping.cs" />
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Data\AzureDataContext.cs" />
