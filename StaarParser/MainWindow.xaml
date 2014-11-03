@@ -224,7 +224,9 @@
             <TabItem Header="AEIS Parser"
                      Height="35"
                      Width="110">
-                <Label Content="More content here!"/>
+                <Grid >
+                    <Button Content="Kash's Button - Do Not Remove" Height="40" Width="250" Click="Button_Click"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

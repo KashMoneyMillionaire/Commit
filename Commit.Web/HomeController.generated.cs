@@ -101,10 +101,12 @@ namespace Commit.Web.Controllers
             {
                 public readonly string About = "About";
                 public readonly string Contact = "Contact";
+                public readonly string Demo = "Demo";
                 public readonly string Index = "Index";
             }
             public readonly string About = "~/Views/Home/About.cshtml";
             public readonly string Contact = "~/Views/Home/Contact.cshtml";
+            public readonly string Demo = "~/Views/Home/Demo.cshtml";
             public readonly string Index = "~/Views/Home/Index.cshtml";
         }
     }

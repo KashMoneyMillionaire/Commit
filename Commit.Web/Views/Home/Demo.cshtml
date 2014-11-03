@@ -8,135 +8,186 @@
 <div>
     <h4>Select Items</h4>
 
-    <div style="display: inline-block">
-        <p>
-            <label for="demographics">Demographics:</label>
-            <select id="demographics"
-                    data-text-field="Text"
-                    data-value-field="DropDownId"
-                    data-option-label="Select Detail..."
-                    data-bind="source: demographics" data-role="dropdownlist"></select>
-        </p>
-        <p>
-            <label for="demographicDetails">Detail:</label>
-            <select id="demographicDetails" data-cascade-from="demographics"
-                    data-text-field="Text"
-                    data-value-field="DropDownId"
-                    data-option-label="Select Detail..."
-                    data-bind="value: selectedDemographic, source:demographicDetails" data-role="dropdownlist"></select>
-        </p>
-    </div>
-    <div style="display: inline-block; margin: 20px">
-        <p>
-            <label for="categories">Category:</label>
-            <select id="categories"
-                    data-text-field="Text"
-                    data-value-field="DropDownId"
-                    data-option-label="Select Detail..."
-                    data-bind="source: categories" data-role="dropdownlist"></select>
-        </p>
-        <p>
-            <label for="categoryDetails">Detail:</label>
-            <select id="categoryDetails" data-cascade-from="categories"
-                    data-text-field="Text"
-                    data-value-field="DropDownId"
-                    data-option-label="Select Detail..."
-                    data-bind="value: selectedCategory, source:categoryDetails" data-role="dropdownlist"></select>
-        </p>
-    </div>
-    <div style="display: inline-block; margin: 20px">
-        <p>
-            <label for="subjects">Subjects:</label>
-            <select id="subjects"
-                    data-text-field="Text"
-                    data-value-field="DropDownId"
-                    data-option-label="Select Subject..."
-                    data-bind="value: selectedSubject, source: subjects" data-role="dropdownlist"></select>
-        </p>
-    </div>
-    <div style="display: inline-block; margin: 20px">
-        <p>
-            <label for="campus">Campus:</label>
-            <select id="campus"
-                    data-text-field="Text"
-                    data-value-field="DropDownId"
-                    data-option-label="Select Campus..."
-                    data-bind="value: selectedCampus, source: campuses" data-role="dropdownlist"></select>
-        </p>
+
+    <div id="pageContainer">
+        <div id="selectionLeft">
+            <div class="panel-group" id="demoAccordion" role="tablist" aria-multiselectable="false">
+
+                <!-- Demographics -->
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="demoHeading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#demoAccordion" href="#demoCollapse" aria-expanded="false" aria-controls="demoCollapse">
+                                Demographics
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="demoCollapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="demoHeading">
+                        <div class="panel-body">
+                            @foreach (var demo in Model.Demographics)
+                            {
+                                <div>
+                                    <b>@demo.Text</b>
+                                </div>
+                                foreach (var dd in Model.DemographicDetails.Where(dd => dd.DropDownId == demo.DropDownId))
+                                {
+                                    <div>
+                                        <span>@dd.Text</span>
+                                        <input type="checkbox" value="@dd.MyId" data-bind="checked: checkedDds" />
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="panel panel-default ">
+                    <div class="panel-heading" role="tab" id="catHeading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#catAccordion" href="#catCollapse" aria-expanded="false" aria-controls="catCollapse">
+                                Categories
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="catCollapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="catHeading">
+                        <div class="panel-body">
+                            @foreach (var cat in Model.Categories)
+                            {
+                                <div>
+                                    <b>@cat.Text</b>
+                                </div>
+                                foreach (var cd in Model.CategoryDetails.Where(dd => dd.DropDownId == cat.DropDownId))
+                                {
+                                    <div>
+                                        <span>@cd.Text</span>
+                                        <input type="checkbox" value="@cd.MyId" data-bind="checked: checkedCds" />
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subjects -->
+                <div class="panel panel-default ">
+                    <div class="panel-heading" role="tab" id="subjHeading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#subAccordion" href="#subjCollapse" aria-expanded="false" aria-controls="subjCollapse">
+                                Subjects
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="subjCollapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="subjHeading">
+                        <div class="panel-body">
+                            @foreach (var sub in Model.Subjects)
+                            {
+                                <div>
+                                    <span>@sub.Text</span>
+                                    <input type="checkbox" value="@sub.MyId" data-bind="checked: checkedSubs" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campuses -->
+                <div class="panel panel-default ">
+                    <div class="panel-heading" role="tab" id="campHeading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#campAccordion" href="#campCollapse" aria-expanded="false" aria-controls="campCollapse">
+                                Campuses
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="campCollapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="campHeading">
+                        <div class="panel-body">
+                            <select id="campuses"></select>
+                            <select data-role="multiselect"
+                                    data-placeholder="Type a product e.g. 'Chai'"
+                                    data-value-primitive="true"
+                                    data-text-field="ProductName"
+                                    data-value-field="ProductID"
+                                    data-bind="value: selectedProduct,
+                              source: products,
+                              visible: isVisible,
+                              enabled: isEnabled,
+                              events: {
+                                change: onChange,
+                                open: onOpen,
+                                close: onClose
+                              }"
+                                    style="width: 300px"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="gridRight">
+
+            <div id="grid"></div>
+            <div class="btn-table">
+                <button id="refreshGrid" class="btn btn-primary btn-lg" type="button">Refresh Grid</button>
+            </div>
+        </div>
+
     </div>
 </div>
-<button id="refreshGrid" type="button">Refresh Grid</button>
-<div id="grid">
-
-</div>
-
-
-
 
 <script>
 
-    var demographicList = @Html.Raw(Json.Encode(Model.Demographics));
+    @*var demographicList = @Html.Raw(Json.Encode(Model.Demographics));
     var demoDetailList = @Html.Raw(Json.Encode(Model.DemographicDetails));
     var categoryList = @Html.Raw(Json.Encode(Model.Categories));
     var catDetailList = @Html.Raw(Json.Encode(Model.CategoryDetails));
     var subjectList = @Html.Raw(Json.Encode(Model.Subjects));
-    var campusList = @Html.Raw(Json.Encode(Model.Campuses));
+    var campusList = @Html.Raw(Json.Encode(Model.Campuses));*@
 
     var viewModel = kendo.observable({
-        demographics: demographicList,
-        demographicDetails: demoDetailList,
-        categories: categoryList,
-        categoryDetails: catDetailList,
-        subjects: subjectList,
-        campuses: campusList,
+        //demographics: demographicList,
+        //demographicDetails: demoDetailList,
+        //categories: categoryList,
+        //categoryDetails: catDetailList,
+        //subjects: subjectList,
+        //campuses: campusList,
+        checkedDds: [],
+        checkedCds: [],
+        checkedSubs: []
     });
 
     $(document).ready(function () {
-        //var demographics = $("#demographics").kendoDropDownList({
-        //    optionLabel: "Select Demographic...",
-        //    dataTextField: "Text",
-        //    dataValueField: "Value",
-        //    dataSource: demographicList
-        //}).data("kendoDropDownList");
-
-        //var demoDetails = $("#demographicDetails").kendoDropDownList({
-        //    autoBind: false,
-        //    cascadeFrom: "demographics",
-        //    optionLabel: "Select Detail...",
-        //    dataTextField: "Text",
-        //    dataValueField: "Value",
-        //    dataSource: demoDetailList
-        //}).data("kendoDropDownList");
-
-        //var categories = $("#categories").kendoDropDownList({
-        //    autoBind: false,
-        //    cascadeFrom: "products",
-        //    optionLabel: "Select Detail...",
-        //    dataTextField: "Text",
-        //    dataValueField: "Value",
-        //    dataSource: categoryList
-        //}).data("kendoDropDownList");
-
-        //var catDetails = $("#categoryDetails").kendoDropDownList({
-        //    autoBind: false,
-        //    cascadeFrom: "categories",
-        //    optionLabel: "Select Detail...",
-        //    dataTextField: "Text",
-        //    dataValueField: "Value",
-        //    dataSource: catDetailList
-        //}).data("kendoDropDownList");
-
-        //var subjects = $("#subjects").kendoDropDownList({
-        //    optionLabel: "Select Subject...",
-        //    dataTextField: "Text",
-        //    dataValueField: "Value",
-        //    dataSource: subjectList
-        //}).data("kendoDropDownList");
-
         $("#refreshGrid").on('click', function() {
             $('#grid').data('kendoGrid').dataSource.read();
             $('#grid').data('kendoGrid').refresh();
-        })
+        });
+
+        var selectedCampuses = $("#campuses").kendoMultiSelect({
+            placeholder: "Select Campuses",
+            dataTextField: "Text",
+            dataValueField: "Value",
+            autoBind: false,
+            autoClose: false,
+            filter: "contains",
+            minLength: 2,
+            delay: 500,
+            dataSource: {
+                transport:
+                {
+                    read:
+                    {
+                        url: "/api/StaarRequest/ReadCampuses",
+                        type: "POST",
+                        dataType: "json"
+                    }
+                },
+                pageSize: 25,
+                serverPaging: true,
+                serverSorting: true,
+                serverFiltering: true,
+                navigatable: true
+            }
+        }).data("kendoMultiSelect");
 
         kendo.bind(document.body, viewModel);
 
@@ -145,38 +196,44 @@
             dataSource: {
                 transport: {
                     read: {
-                        url: "/api/StaarRequest/GetTests",
+                        url: "/api/StaarRequest/ReadTests",
                         type: "POST",
-                        contentType: "application/json",
                         dataType: "json",
                         data: function() {
                             return {
-                                categoryDetailId: viewModel.selectedCategory.MyId,
-                                demographicDetailId: viewModel.selectedDemographic.MyId,
-                                campusId: viewModel.selectedCampus.MyId,
-                                subjectId:viewModel.selectedSubject.MyId,
+                                DemographicDetailIds: viewModel.checkedDds,
+                                CategoryDetailIds: viewModel.checkedCds,
+                                SubjectIds: viewModel.checkedSubs,
+                                CampusIds: selectedCampuses.value(),
                             };
                         }
                     },
-                    serverPaging: true,
-                    serverSorting: true,
-                    serverFiltering: true,
-                    navigatable: true
+                    parameterMap: function (options) {
+                        if (options.sort.length == 0) {
+                            return [];
+                        }
+                        else {
+                            return options.sort[0].field + ',' + options.sort[0].dir;
+                        }
+                    }
+                    //serverPaging: true,
+                    //serverSorting: true,
+                    //serverFiltering: true,
+                    //navigatable: true
                 },
-                pageSize: 10,
+                //pageSize: 10,
             },
-            height: 550,
-            groupable: true,
-            sortable: true,
-            pageable: {
-                refresh: true,
-                pageSizes: true,
-                buttonCount: 5
-            },
+            height: 750,
+            //groupable: true,
+            //sortable: true,
+            //pageable: {
+            //    refresh: true,
+            //    pageSizes: true,
+            //    buttonCount: 5
+            //},
             columns: [{
                 field: "CampusName",
                 title: "School Name",
-                width: 200
             }, {
                 field: "Subject",
             }, {
@@ -190,3 +247,29 @@
 
     });
 </script>
+
+<style>
+    #selectionLeft {
+        float: left;
+        width: 400px;
+    }
+
+    #gridRight {
+        margin-left: 430px;
+        max-width: 1000px;
+    }
+
+    .panel-collapse {
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    .btn-table {
+        float: right;
+        margin-top: 15px;
+    }
+
+    input[type=checkbox] {
+        float: right;
+    }
+</style>

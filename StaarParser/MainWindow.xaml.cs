@@ -134,7 +134,7 @@ namespace Commit.Desktop
 
                 }));
             }
-            
+
             //wait for results
             try
             {
@@ -153,7 +153,7 @@ namespace Commit.Desktop
                 currentIndex++;
                 UnpivotProgressBar.Value = (int)Math.Round(currentIndex / (double)total * 100.0);
             }
-            
+
             MessageBox.Text = string.Format("{0}\r\nDone Unpivoting", MessageBox.Text);
             UnpivotButton.IsEnabled = true;
             UnpivotSelectedButton.IsEnabled = true;
@@ -161,8 +161,6 @@ namespace Commit.Desktop
             UnpivotSelectedButton.Visibility = Visibility.Visible;
             UnpivotProgressBar.Visibility = Visibility.Hidden;
 
-            //StaarTestUnpivotor.UnpivotAndPopulateDatabase(
-            //    @"C:\Users\kcummings\Desktop\Parse\ParseNew\2014 Algebra 1 - Parsed.csv");
         }
 
         private void SelectInputFilesButtonClick(object sender, RoutedEventArgs e)
@@ -251,6 +249,13 @@ namespace Commit.Desktop
                 UnpivotScrollViewer.ScrollToVerticalOffset(UnpivotScrollViewer.ExtentHeight);
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StaarTestUnpivotor.UnpivotAndPopulateDatabase(
+                @"C:\Users\kcummings\Desktop\Parse\ParseNew\2014 Algebra 1 - Parsed.csv");
+        }
+
     }
 
     public class FileDataGrid
