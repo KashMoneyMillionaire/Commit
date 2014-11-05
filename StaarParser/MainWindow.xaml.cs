@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using Infrastructure;
+using Infrastructure.Data;
+using Infrastructure.Domain;
 using ParserUtilities;
 using ParserUtilities.Helpers;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -30,7 +32,7 @@ namespace Commit.Desktop
             DataContext = this;
             FileGrid.ItemsSource = GridValues;
 
-            List<string> options = new List<string>();
+            var options = new List<string>();
             options.Add("Narrow");
             options.Add("Wide");
             WidthSetting.ItemsSource = options;
@@ -123,11 +125,12 @@ namespace Commit.Desktop
                 System.Windows.Forms.Application.DoEvents();
                 var closureFile = file;
                 var output = OutputPath.Text;
+                var isNarrow = WidthSetting.SelectedItem.ToString() == "Narrow";
                 results.Add(Task.Run(() =>
                 {
                     try
                     {
-                        if (WidthSetting.SelectedItem == "Narrow")
+                        if (isNarrow)
                         {
                             StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.Grade, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
                         }
@@ -264,9 +267,11 @@ namespace Commit.Desktop
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            StaarTestUnpivotor.UnpivotAndPopulateDatabase(
-                @"C:\Users\kcummings\Desktop\Parse\ParseNew\2014 Algebra 1 - Parsed.csv");
+            //StaarTestUnpivotor.UnpivotAndPopulateDatabase(
+            //    @"C:\Users\kcummings\Desktop\Parse\ParseNew\2014 Biology - Parsed.csv");
+
         }
+
 
     }
 

@@ -1,12 +1,12 @@
 ﻿@model Commit.Web.Controllers.DemoViewModel
 @{
-    ViewBag.Title = "Demo";
+    ViewBag.Title = "Staar Test Demo";
 }
 
-<h2>Demo</h2>
+<h2>Staar Test Demo</h2>
 
 <div>
-    <h4>Select Items</h4>
+    <br/>
 
 
     <div id="pageContainer">
@@ -14,11 +14,11 @@
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
                 <!-- Demographics -->
-                    <div class="panel panel-default">
+                <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="demoHeading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#demoCollapse" aria-expanded="false" aria-controls="demoCollapse">
-                                Demographics
+                            <a class="accordion-header" data-toggle="collapse" data-parent="#accordion" href="#demoCollapse" aria-expanded="false" aria-controls="demoCollapse">
+                                Demographics<i class="fa fa-angle-up"></i>  <span class="selectedCount">(<span data-bind="text: checkedDds.length"></span> Selected)</span>
                             </a>
                         </h4>
                     </div>
@@ -46,7 +46,7 @@
                     <div class="panel-heading" role="tab" id="catHeading">
                         <h4 class="panel-title">
                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#catCollapse" aria-expanded="false" aria-controls="catCollapse">
-                                Categories
+                                Categories<i class="fa fa-angle-down"></i>  <span class="selectedCount">(<span data-bind="text: checkedCds.length"></span> Selected)</span>
                             </a>
                         </h4>
                     </div>
@@ -74,7 +74,7 @@
                     <div class="panel-heading" role="tab" id="subjHeading">
                         <h4 class="panel-title">
                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#subjCollapse" aria-expanded="false" aria-controls="subjCollapse">
-                                Subjects
+                                Subjects<i class="fa fa-angle-down"></i>  <span class="selectedCount">(<span data-bind="text: checkedSubs.length"></span> Selected)</span>
                             </a>
                         </h4>
                     </div>
@@ -96,27 +96,22 @@
                     <div class="panel-heading" role="tab" id="campHeading">
                         <h4 class="panel-title">
                             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#campCollapse" aria-expanded="false" aria-controls="campCollapse">
-                                Campuses
+                                Campuses<i class="fa fa-angle-down"></i>  <span class="selectedCount">(<span data-bind="text: selectedCamps.length"></span> Selected)</span>
                             </a>
                         </h4>
                     </div>
                     <div id="campCollapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="campHeading">
                         <div class="panel-body">
-                            <select id="campuses"></select>
                             <select data-role="multiselect"
-                                    data-placeholder="Type a product e.g. 'Chai'"
+                                    data-placeholder="Select Campuses"
                                     data-value-primitive="true"
-                                    data-text-field="ProductName"
-                                    data-value-field="ProductID"
-                                    data-bind="value: selectedProduct,
-                              source: products,
-                              visible: isVisible,
-                              enabled: isEnabled,
-                              events: {
-                                change: onChange,
-                                open: onOpen,
-                                close: onClose
-                              }"
+                                    data-text-field="Text"
+                                    data-value-field="Value"
+                                    data-auto-bind="false"
+                                    data-auto-close="false"
+                                    data-delay="200"
+                                    data-bind="value: selectedCamps,
+                                               source: campusSource"
                                     style="width: 300px"></select>
                         </div>
                     </div>
@@ -137,59 +132,40 @@
 
 <script>
 
-    @*var demographicList = @Html.Raw(Json.Encode(Model.Demographics));
-    var demoDetailList = @Html.Raw(Json.Encode(Model.DemographicDetails));
-    var categoryList = @Html.Raw(Json.Encode(Model.Categories));
-    var catDetailList = @Html.Raw(Json.Encode(Model.CategoryDetails));
-    var subjectList = @Html.Raw(Json.Encode(Model.Subjects));
-    var campusList = @Html.Raw(Json.Encode(Model.Campuses));*@
-
     var viewModel = kendo.observable({
-        //demographics: demographicList,
-        //demographicDetails: demoDetailList,
-        //categories: categoryList,
-        //categoryDetails: catDetailList,
-        //subjects: subjectList,
-        //campuses: campusList,
         checkedDds: [],
         checkedCds: [],
-        checkedSubs: []
+        checkedSubs: [],
+        selectedCamps: [],
+        campusSource: new kendo.data.DataSource({
+            transport:
+            {
+                read:
+                {
+                    url: "/api/StaarRequest/ReadCampuses",
+                    type: "POST",
+                    dataType: "json"
+                }
+            },
+            serverFiltering: true
+        })
     });
 
     $(document).ready(function () {
-        $("#refreshGrid").on('click', function() {
+        kendo.bind(document.body, viewModel);
+
+        $('#accordion').on('hide.bs.collapse', function() {
+            $(this).find('.panel-collapse.in').parent().find('.fa-angle-up').removeClass('fa-angle-up').addClass('fa-angle-down');
+        });
+
+        $('#accordion').on('shown.bs.collapse', function () {
+            $('#accordion').find('.panel-collapse.in').parent().find('.fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-up');
+        });
+
+        $("#refreshGrid").on('click', function () {
             $('#grid').data('kendoGrid').dataSource.read();
             $('#grid').data('kendoGrid').refresh();
         });
-
-        var selectedCampuses = $("#campuses").kendoMultiSelect({
-            placeholder: "Select Campuses",
-            dataTextField: "Text",
-            dataValueField: "Value",
-            autoBind: false,
-            autoClose: false,
-            filter: "contains",
-            minLength: 2,
-            delay: 500,
-            dataSource: {
-                transport:
-                {
-                    read:
-                    {
-                        url: "/api/StaarRequest/ReadCampuses",
-                        type: "POST",
-                        dataType: "json"
-                    }
-                },
-                pageSize: 25,
-                serverPaging: true,
-                serverSorting: true,
-                serverFiltering: true,
-                navigatable: true
-            }
-        }).data("kendoMultiSelect");
-
-        kendo.bind(document.body, viewModel);
 
         $("#grid").kendoGrid({
             autoBind: false,
@@ -199,33 +175,28 @@
                         url: "/api/StaarRequest/ReadTests",
                         type: "POST",
                         dataType: "json",
-                        data: function() {
+                        data: function () {
                             return {
-                                //DemographicDetailIds: [1],
-                                //CategoryDetailIds: [1,2],
-                                //SubjectIds: [1,2,3],
-                                //CampusIds: []
                                 DemographicDetailIds: viewModel.checkedDds.toJSON(),
                                 CategoryDetailIds: viewModel.checkedCds.toJSON(),
                                 SubjectIds: viewModel.checkedSubs.toJSON(),
-                                CampusIds: selectedCampuses.value(),
+                                CampusIds: viewModel.selectedCamps.toJSON(),
                             };
                         }
                     },
-                    //serverPaging: true,
-                    //serverSorting: true,
-                    //serverFiltering: true,
-                    //navigatable: true
+                    serverPaging: true,
+                    serverSorting: true,
+                    serverFiltering: true,
                 },
-                //pageSize: 10,
+                pageSize: 15,
             },
             height: 750,
-            //groupable: true,
-            //sortable: true,
-            //pageable: {
-            //    pageSizes: true,
-            //    buttonCount: 5
-            //},
+            groupable: true,
+            sortable: true,
+            pageable: {
+                pageSizes: true,
+                buttonCount: 5
+            },
             columns: [{
                 field: "CampusName",
                 title: "School Name",
@@ -266,5 +237,13 @@
 
     input[type=checkbox] {
         float: right;
+    }
+
+    .selectedCount {
+        float: right;
+    }
+
+    .accordion-header {
+        display: block;
     }
 </style>

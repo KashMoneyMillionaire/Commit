@@ -6,5 +6,5 @@
         {
             return string.Format("{0}{1}", source, addition);
         }
-    }
+        }
 }

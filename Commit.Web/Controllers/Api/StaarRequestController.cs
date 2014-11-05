@@ -11,13 +11,13 @@ namespace Commit.Web.Controllers.Api
 {
     public class StaarRequestController : ApiController
     {
-        private readonly OperationalDataContext _ctx = new OperationalDataContext();
+        private readonly AzureDataContext _ctx = new AzureDataContext();
 
 
         public List<DropDownViewModel> GetDemographics()
         {
             return
-                _ctx.Demographics.Select(c => new DropDownViewModel { Text = c.Name, Value = c.Id.ToString() }).ToList();
+                _ctx.Demographics.Select(c => new DropDownViewModel { Text = c.Name, Value = c.Id }).ToList();
         }
 
         public List<DropDownViewModel> GetDemographicDetails(GridFilterModel filter)
@@ -25,12 +25,14 @@ namespace Commit.Web.Controllers.Api
             var id = int.Parse(filter.Filters[0].Field);
             return
                 _ctx.DemographicDetails.Where(d => d.Demographic.Id == id)
-                    .Select(c => new DropDownViewModel { Text = c.Description, Value = c.Id.ToString() }).ToList();
+                    .Select(c => new DropDownViewModel { Text = c.Description, Value = c.Id }).ToList();
         }
 
         [HttpPost]
         public List<DemoGrid> ReadTests(RequestModel model)
         {
+            if (model == null) return new List<DemoGrid>();
+
             var x = _ctx.StaarTests.AsQueryable();
 
             if (model.CampusIds != null)
@@ -50,21 +52,22 @@ namespace Commit.Web.Controllers.Api
             {
                 Value = s.Value,
                 Subject = s.Subject.Description,
-                Demographic = s.DemographicDetail.Description,
-                Category = s.CategoryDetail.Description,
+                Demographic = s.DemographicDetail.Demographic.Name + ": " + s.DemographicDetail.Description,
+                Category = s.CategoryDetail.Category.Name + ": " + s.CategoryDetail.Description,
                 CampusName = s.Campus.Name
             }).ToList();
         }
 
-        public List<DropDownViewModel> ReadCampuses(GridPageModel model)
+        public IEnumerable<DropDownViewModel> ReadCampuses(GridPageModel model)
         {
+            if(model == null) return new List<DropDownViewModel>();
+            
             var sort = model.Filter.Filters[0].Value;
 
-            return _ctx.Campuses.Where(c => c.Name.Contains(sort))
-                .Select(c => new DropDownViewModel { Value = c.Id.ToString(), Text = c.Name })
-                .Take(model.Take)
-                .ToList();
-
+            var campuses = _ctx.Campuses.Where(c => c.Name.Contains(sort))
+                .Take(25)
+                .ToDropDown(c => c.Name);
+            return campuses;
         }
 
         public class DemoGrid
@@ -76,7 +79,7 @@ namespace Commit.Web.Controllers.Api
             public decimal Value { get; set; }
         }
 
-        public class RequestModel
+        public class RequestModel : GridPageModel
         {
             public List<long> CategoryDetailIds { get; set; }
             public List<long> DemographicDetailIds { get; set; }

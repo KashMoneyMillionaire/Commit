@@ -132,6 +132,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\StaarRequestController.cs" />
     <Compile Include="Controllers\Web\HomeController.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -158,6 +159,8 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\kendo\2014.1.318\Black\editor.png" />
     <Content Include="Content\kendo\2014.1.318\Black\imagebrowser.png" />
     <Content Include="Content\kendo\2014.1.318\Black\indeterminate.gif" />
@@ -327,6 +330,7 @@
     <Content Include="Content\kendo\2014.1.318\Uniform\sprite.png" />
     <Content Include="Content\kendo\2014.1.318\Uniform\sprite_2x.png" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\Fontawesome\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -334,6 +338,11 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\kendo\2014.1.318\images\kendoui.ttf" />
     <Content Include="Content\kendo\2014.1.318\images\kendoui.woff" />
+    <Content Include="fonts\Fontawesome\fontawesome-webfont.eot" />
+    <Content Include="fonts\Fontawesome\fontawesome-webfont.ttf" />
+    <Content Include="fonts\Fontawesome\fontawesome-webfont.woff" />
+    <Content Include="fonts\Fontawesome\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\CommitDallas.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

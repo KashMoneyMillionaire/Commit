@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.schoolSearchInput {
+    float: right;
+    display: block;
+    margin-top: 8px;
+}

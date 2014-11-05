@@ -11,7 +11,7 @@ namespace Commit.Web.Controllers
 {
     public partial class HomeController : Controller
     {
-        private readonly OperationalDataContext _ctx = new OperationalDataContext();
+        private readonly AzureDataContext _ctx = new AzureDataContext();
 
         public virtual ActionResult Index()
         {

@@ -28,8 +28,9 @@ namespace Commit.Web
                "~/Scripts/kendo/2014.1.318/kendo.web.js"
                ));
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                "~/Content/bootstrap.css",
+                "~/Content/site.css",
+                "~/Content/font-awesome.css"));
 
             bundles.Add(new StyleBundle("~/content/kendo/2014.1.318/kendo").Include(
                 "~/Content/kendo/2014.1.318/kendo.common.min.css",

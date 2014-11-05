@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -241,10 +242,7 @@ namespace ParserUtilities
                 //set up basic set
 
                 string lang;
-                if (language == LanguageEnum.English)
-                    lang = "English";
-                else
-                    lang = "Spanish";
+                lang = language == LanguageEnum.English ? "English" : "Spanish";
 
                 FillFirstX(dataRow, campus, x);
                 FillWeirdHeaders(dataRow, headers, campus);
@@ -355,9 +353,9 @@ namespace ParserUtilities
                 {
                     var record = sortedRows[i];
 
-                    if (completed.Any(c => c.Grade == record[6]
+                    if (completed.Any(c => c.CampusNumber == Convert.ToInt32(record[0])
                         && c.SubjectName == record[8]
-                        && c.CampusNumber == int.Parse(record[0])
+                        && c.Grade == record[6]
                         && c.Year == year
                         && c.Language == language.Name))
                         continue;
@@ -368,9 +366,9 @@ namespace ParserUtilities
                     {
                         //Find the school. Create if not new
 
-                        long regionNum = int.Parse(record[2]);
-                        long campusNum = int.Parse(record[0]);
-                        long districtNum = int.Parse(record[1]);
+                        long regionNum = Convert.ToInt32(record[2]);
+                        long campusNum = Convert.ToInt32(record[0]);
+                        long districtNum = Convert.ToInt32(record[1]);
 
                         //check region, district, and campus
 
@@ -409,7 +407,7 @@ namespace ParserUtilities
                             ctx.Campuses.Add(campus);
                         }
 
-                        ctx.SaveChanges();
+                        //TODO ctx.SaveChanges();
                         campusId = campus.Id;
                     }
 
@@ -445,7 +443,7 @@ namespace ParserUtilities
 
                     if (campusTests.Count >= 90000 || i == sortedCount - 1)
                     {
-                        ctx.BulkInsert(campusTests);
+                        //ctx.BulkInsert(campusTests);
                         campusTests = new List<StaarTest>(90005);
                     }
 
@@ -456,10 +454,11 @@ namespace ParserUtilities
                 }
                 catch (Exception ex)
                 {
-                    log.WriteLine("Message - {0}\nStackTrace - {1}", ex.Message, ex.StackTrace);
+                    log.WriteLine("Message - {0}\r\nStackTrace - {1}", ex.Message, ex.StackTrace);
                     //throw;
                 }
             }
+            //TODO ctx.SaveChanges();
             log.Flush();
             log.Close();
         }
