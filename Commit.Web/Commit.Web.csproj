@@ -130,8 +130,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BackgroundController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\Api\DemographicsController.cs" />
     <Compile Include="Controllers\Api\StaarRequestController.cs" />
+    <Compile Include="Controllers\Web\BackgroundController.cs" />
     <Compile Include="Controllers\Web\HomeController.cs" />
+    <Compile Include="Controllers\Web\SchoolController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -139,13 +145,15 @@
     <Compile Include="HomeController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\StaarGridViewModel.cs" />
-    <Compile Include="Models\WebElements.cs" />
+    <Compile Include="Models\ApiViewModels\BackgroundViewModels.cs" />
+    <Compile Include="Models\WebViewModels\SchoolModels.cs" />
+    <Compile Include="Models\ApiViewModels\StaarGridViewModel.cs" />
+    <Compile Include="Models\BasicViewModels\WebElements.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharedController.generated.cs">
+    <Compile Include="SchoolController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Compile Include="StaarRequestController.generated.cs">
+    <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
     <Compile Include="T4MVC.cs">
@@ -334,6 +342,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\commit_logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\kendo\2014.1.318\images\kendoui.ttf" />
@@ -864,10 +873,11 @@
       <LastGenOutput>T4MVC.cs</LastGenOutput>
     </None>
     <Content Include="Views\Home\Demo.cshtml" />
+    <Content Include="Views\School\Info.cshtml" />
+    <Content Include="Views\Background\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\StaarRequest\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -33,7 +33,7 @@
                                 {
                                     <div>
                                         <span>@dd.Text</span>
-                                        <input type="checkbox" value="@dd.MyId" data-bind="checked: checkedDds" />
+                                        <input type="checkbox" class="demoChecks" value="@dd.MyId" data-bind="checked: checkedDds" />
                                     </div>
                                 }
                             }
@@ -61,7 +61,7 @@
                                 {
                                     <div>
                                         <span>@cd.Text</span>
-                                        <input type="checkbox" value="@cd.MyId" data-bind="checked: checkedCds" />
+                                        <input type="checkbox" class="catChecks" value="@cd.MyId" data-bind="checked: checkedCds" />
                                     </div>
                                 }
                             }
@@ -84,7 +84,7 @@
                             {
                                 <div>
                                     <span>@sub.Text</span>
-                                    <input type="checkbox" value="@sub.MyId" data-bind="checked: checkedSubs" />
+                                    <input type="checkbox" class="subjChecks" value="@sub.MyId" data-bind="checked: checkedSubs" />
                                 </div>
                             }
                         </div>
@@ -117,133 +117,105 @@
                     </div>
                 </div>
             </div>
+
+            <div class="btn-table">
+                <button id="refreshGrid" class="btn btn-primary btn-lg" type="button">Retrieve Tests</button>
+                <br/>
+                <label>*Note: Only 500 tests will be retrieved</label>
+            </div>
         </div>
 
         <div id="gridRight">
-
             <div id="grid"></div>
-            <div class="btn-table">
-                <button id="refreshGrid" class="btn btn-primary btn-lg" type="button">Refresh Grid</button>
-            </div>
         </div>
 
     </div>
 </div>
 
-<script>
+@section scripts{
+    <script>
 
-    var viewModel = kendo.observable({
-        checkedDds: [],
-        checkedCds: [],
-        checkedSubs: [],
-        selectedCamps: [],
-        campusSource: new kendo.data.DataSource({
-            transport:
-            {
-                read:
+        var viewModel = kendo.observable({
+            checkedDds: [],
+            checkedCds: [],
+            checkedSubs: [],
+            selectedCamps: [],
+            campusSource: new kendo.data.DataSource({
+                transport:
                 {
-                    url: "/api/StaarRequest/ReadCampuses",
-                    type: "POST",
-                    dataType: "json"
-                }
-            },
-            serverFiltering: true
-        })
-    });
-
-    $(document).ready(function () {
-        kendo.bind(document.body, viewModel);
-
-        $('#accordion').on('hide.bs.collapse', function() {
-            $(this).find('.panel-collapse.in').parent().find('.fa-angle-up').removeClass('fa-angle-up').addClass('fa-angle-down');
-        });
-
-        $('#accordion').on('shown.bs.collapse', function () {
-            $('#accordion').find('.panel-collapse.in').parent().find('.fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-up');
-        });
-
-        $("#refreshGrid").on('click', function () {
-            $('#grid').data('kendoGrid').dataSource.read();
-            $('#grid').data('kendoGrid').refresh();
-        });
-
-        $("#grid").kendoGrid({
-            autoBind: false,
-            dataSource: {
-                transport: {
-                    read: {
-                        url: "/api/StaarRequest/ReadTests",
+                    read:
+                    {
+                        url: "/api/StaarRequest/ReadCampuses",
                         type: "POST",
-                        dataType: "json",
-                        data: function () {
-                            return {
-                                DemographicDetailIds: viewModel.checkedDds.toJSON(),
-                                CategoryDetailIds: viewModel.checkedCds.toJSON(),
-                                SubjectIds: viewModel.checkedSubs.toJSON(),
-                                CampusIds: viewModel.selectedCamps.toJSON(),
-                            };
-                        }
-                    },
-                    serverPaging: true,
-                    serverSorting: true,
-                    serverFiltering: true,
+                        dataType: "json"
+                    }
                 },
-                pageSize: 15,
-            },
-            height: 750,
-            groupable: true,
-            sortable: true,
-            pageable: {
-                pageSizes: true,
-                buttonCount: 5
-            },
-            columns: [{
-                field: "CampusName",
-                title: "School Name",
-            }, {
-                field: "Subject",
-            }, {
-                field: "Demographic",
-            }, {
-                field: "Category",
-            }, {
-                field: "Value",
-            }]
+                serverFiltering: true
+            })
         });
 
-    });
-</script>
+        $(document).ready(function() {
+            kendo.bind(document.body, viewModel);
 
-<style>
-    #selectionLeft {
-        float: left;
-        width: 400px;
-    }
+            $('#accordion').on('hide.bs.collapse', function() {
+                $(this).find('.panel-collapse.in').parent().find('.fa-angle-up').removeClass('fa-angle-up').addClass('fa-angle-down');
+            });
 
-    #gridRight {
-        margin-left: 430px;
-        max-width: 1000px;
-    }
+            $('#accordion').on('shown.bs.collapse', function() {
+                $('#accordion').find('.panel-collapse.in').parent().find('.fa-angle-down').removeClass('fa-angle-down').addClass('fa-angle-up');
+            });
 
-    .panel-collapse {
-        max-height: 500px;
-        overflow: auto;
-    }
+            $("#refreshGrid").on('click', function() {
+                $('#grid').data('kendoGrid').dataSource.read();
+                $('#grid').data('kendoGrid').refresh();
+            });
 
-    .btn-table {
-        float: right;
-        margin-top: 15px;
-    }
+            $("#grid").kendoGrid({
+                autoBind: false,
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/api/StaarRequest/ReadTests",
+                            type: "POST",
+                            dataType: "json",
+                            data: function() {
+                                return {
+                                    DemographicDetailIds: viewModel.checkedDds.toJSON(),
+                                    CategoryDetailIds: viewModel.checkedCds.toJSON(),
+                                    SubjectIds: viewModel.checkedSubs.toJSON(),
+                                    CampusIds: viewModel.selectedCamps.toJSON(),
+                                };
+                            }
+                        },
+                        serverPaging: true,
+                        serverSorting: true,
+                        serverFiltering: true,
+                    },
+                    pageSize: 15,
+                },
+                height: 750,
+                groupable: true,
+                sortable: true,
+                pageable: {
+                    pageSizes: true,
+                    buttonCount: 5
+                },
+                columns: [
+                    {
+                        field: "CampusName",
+                        title: "School Name",
+                    }, {
+                        field: "Subject",
+                    }, {
+                        field: "Demographic",
+                    }, {
+                        field: "Category",
+                    }, {
+                        field: "Value",
+                    }
+                ]
+            });
 
-    input[type=checkbox] {
-        float: right;
-    }
-
-    .selectedCount {
-        float: right;
-    }
-
-    .accordion-header {
-        display: block;
-    }
-</style>
+        });
+    </script>
+}

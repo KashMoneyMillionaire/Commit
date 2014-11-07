@@ -25,9 +25,10 @@ using T4MVC;
 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
 public static partial class MVC
 {
+    public static Commit.Web.Controllers.Web.BackgroundController Background = new Commit.Web.Controllers.Web.T4MVC_BackgroundController();
     public static Commit.Web.Controllers.HomeController Home = new Commit.Web.Controllers.T4MVC_HomeController();
+    public static Commit.Web.Controllers.Web.SchoolController School = new Commit.Web.Controllers.Web.T4MVC_SchoolController();
     public static T4MVC.SharedController Shared = new T4MVC.SharedController();
-    public static T4MVC.StaarRequestController StaarRequest = new T4MVC.StaarRequestController();
 }
 
 namespace T4MVC
@@ -599,9 +600,16 @@ namespace Links
         private const string URLPATH = "~/Content";
         public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        public static readonly string bootstrap_multiselect_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap-multiselect.min.css") ? Url("bootstrap-multiselect.min.css") : Url("bootstrap-multiselect.css");
+             
+        public static readonly string bootstrap_theme_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap-theme.min.css") ? Url("bootstrap-theme.min.css") : Url("bootstrap-theme.css");
+             
         public static readonly string bootstrap_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/bootstrap.min.css") ? Url("bootstrap.min.css") : Url("bootstrap.css");
              
         public static readonly string bootstrap_min_css = Url("bootstrap.min.css");
+        public static readonly string font_awesome_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/font-awesome.min.css") ? Url("font-awesome.min.css") : Url("font-awesome.css");
+             
+        public static readonly string font_awesome_min_css = Url("font-awesome.min.css");
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public static class kendo {
             private const string URLPATH = "~/Content/kendo";

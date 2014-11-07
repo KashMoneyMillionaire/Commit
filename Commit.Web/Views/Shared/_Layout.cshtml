@@ -24,8 +24,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Home", MVC.Home.Index())</li>
                     <li>@Html.ActionLink("Click here for Demo", MVC.Home.Demo())</li>
+                    <li>@Html.ActionLink("Background", MVC.Background.Index())</li>
                 </ul>
                 <input id="searchInput" placeholder="Search by School" class="form-control schoolSearchInput" />
             </div>
@@ -33,12 +34,14 @@
     </div>
     <div class="container body-content">
         @RenderBody()
+    </div>
+
+    <div class="container footer">
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Commit!</p>
         </footer>
     </div>
-
     @RenderSection("scripts", required: false)
 </body>
 </html>
@@ -64,7 +67,12 @@
             dataTextField: "Text",
             filter: "contains",
             minLength: 3,
-            dataSource: dataSource
+            dataSource: dataSource,
+            select: function (e) {
+                var item = e.item;
+                var text = item.text();
+                window.location.href = "/School/" + text;
+            }
         });
     });
 </script>

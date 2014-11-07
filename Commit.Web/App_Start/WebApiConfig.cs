@@ -17,7 +17,7 @@ namespace Commit.Web
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                defaults: new { action = "read", id = RouteParameter.Optional }
             );
         }
     }
