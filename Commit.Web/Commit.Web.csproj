@@ -138,7 +138,9 @@
     <Compile Include="Controllers\Web\BackgroundController.cs" />
     <Compile Include="Controllers\Web\HomeController.cs" />
     <Compile Include="Controllers\Web\SchoolController.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
