@@ -72,18 +72,17 @@
                             
                             <!--GRADE-->
                             <DataGridTemplateColumn Header="Grade"
-                                                    x:Name="GradeColumn"  
+                                                    x:Name="GradeColumn"
                                                     Width="75">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding Grade}"
-                                                  ItemsSource="{Binding Source={StaticResource GradeEnumData}}" />
+                                        <TextBlock Text="{Binding Grade}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                                 
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding Grade}"
+                                        <ComboBox SelectedItem="{Binding Grade}"
                                                   ItemsSource="{Binding Source={StaticResource GradeEnumData}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
@@ -95,10 +94,10 @@
                                                     Width="75">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding FileLanguageEnum}"
-                                                  ItemsSource="{Binding Source={StaticResource LanguageEnumData}}" />
+                                        <TextBlock Text="{Binding FileLanguageEnum}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                                
                                 <DataGridTemplateColumn.CellEditingTemplate >
                                     <DataTemplate>
                                         <ComboBox SelectedValue="{Binding FileLanguageEnum}"

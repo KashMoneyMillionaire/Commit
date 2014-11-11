@@ -106,9 +106,8 @@ namespace ParserUtilities
                 //fill the first columns. These are the same for every campus
 
                 FillFirstX(dataRow, campus, x); //First 6 (Campus, year, region, district, dname, cname)
-                dataRow["Grade"] = grade;
-                dataRow["LanguageEnum"] = language;
-
+                dataRow["Grade"] = grade.ToString();
+                dataRow["LanguageEnum"] = language.ToString();
 
                 //for each complex header whose category matches the current category make a demo and value
 
