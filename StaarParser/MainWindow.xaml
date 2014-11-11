@@ -71,7 +71,7 @@
                                                 IsReadOnly="True"/>
                             
                             <!--GRADE-->
-                            <DataGridTemplateColumn Header="Grade"
+                            <!--DataGridTemplateColumn Header="Grade"
                                                     x:Name="GradeColumn"
                                                     Width="75">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -86,7 +86,7 @@
                                                   ItemsSource="{Binding Source={StaticResource GradeEnumData}}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
+                            </DataGridTemplateColumn-->
                             
                             <!--LANGUAGE-->
                             <DataGridTemplateColumn Header="Language"

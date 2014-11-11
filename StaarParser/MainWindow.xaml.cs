@@ -132,11 +132,11 @@ namespace Commit.Desktop
                     {
                         if (isNarrow)
                         {
-                            StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.Grade, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                            StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
                         }
                         else
                         {
-                            StaarTestUnpivotor.UnpivotWide(closureFile.FullFile, output, closureFile.Grade, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                            StaarTestUnpivotor.UnpivotWide(closureFile.FullFile, output, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
                         }
                     }
                     catch (Exception ex)
@@ -200,13 +200,13 @@ namespace Commit.Desktop
 
                     foreach (var inputFile in inputFiles)
                     {
-                        var grade = Grade.EOC;
-                        var gradeRegex = new Regex(@"Grade [0-9]{1,2}");
-                        if (gradeRegex.IsMatch(inputFile))
-                        {
-                            var gradeMatch = gradeRegex.Match(inputFile);
-                            grade = gradeMatch.Value.Split(new[] { "Grade " }, StringSplitOptions.None)[1].ParseGrade();
-                        }
+                        //var grade = Grade.EOC;
+                        //var gradeRegex = new Regex(@"Grade [0-9]{1,2}");
+                        //if (gradeRegex.IsMatch(inputFile))
+                        //{
+                        //    var gradeMatch = gradeRegex.Match(inputFile);
+                        //    grade = gradeMatch.Value.Split(new[] { "Grade " }, StringSplitOptions.None)[1].ParseGrade();
+                        //}
 
                         var languageRegex = new Regex(@"[S|s]panish");
                         var languageMatch = languageRegex.IsMatch(inputFile);
@@ -218,7 +218,7 @@ namespace Commit.Desktop
                         {
                             FileName = Path.GetFileName(inputFile),
                             NumberOfColumnsAtBeginning = 6,
-                            Grade = grade,
+                            //Grade = grade,
                             FileLanguageEnum = language,
                             FullFile = inputFile
                         });
@@ -280,7 +280,7 @@ namespace Commit.Desktop
         public string FullFile { get; set; }
         public string FileName { get; set; }
         public LanguageEnum FileLanguageEnum { get; set; }
-        public Grade Grade { get; set; }
+        //public Grade Grade { get; set; }
         public int NumberOfColumnsAtBeginning { get; set; }
     }
 }

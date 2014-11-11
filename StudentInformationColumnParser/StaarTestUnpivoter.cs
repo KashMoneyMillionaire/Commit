@@ -27,7 +27,7 @@ namespace ParserUtilities
         /// <param name="grade">The grade to be associated with the file(s).</param>
         /// <param name="language">The language the test was taken in.</param>
         /// <param name="x">The number of columns at the beginning.</param>
-        public static void UnpivotNarrow(string filePath, string outPath, Grade grade, LanguageEnum language, int x)
+        public static void UnpivotNarrow(string filePath, string outPath, LanguageEnum language, int x)
         {
             var dataTable = new DataTable(string.Format("Parsed {0}", filePath));
             int j;
@@ -52,6 +52,7 @@ namespace ParserUtilities
 
             var rows = File.ReadAllLines(filePath).ToList();
             var headers = rows[0].Trim().Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            int gradeIndex = headers.IndexOf("GRADE");
             rows.RemoveAt(0); //pop the top off
 
 
@@ -103,10 +104,16 @@ namespace ParserUtilities
             var writer = File.AppendText(outFile);
             foreach (var campus in rows.Select(row => row.Split(',')))
             {
+                string foundGrade;
+                if (gradeIndex != -1)
+                    foundGrade = campus[gradeIndex];
+                else
+                    foundGrade = "EOC";
+
                 //fill the first columns. These are the same for every campus
 
                 FillFirstX(dataRow, campus, x); //First 6 (Campus, year, region, district, dname, cname)
-                dataRow["Grade"] = grade.ToString();
+                dataRow["Grade"] = foundGrade;
                 dataRow["LanguageEnum"] = language.ToString();
 
                 //for each complex header whose category matches the current category make a demo and value
@@ -156,7 +163,7 @@ namespace ParserUtilities
         /// <param name="grade">The grade to be associated with the file(s).</param>
         /// <param name="language">The language the test was taken in.</param>
         /// <param name="x">The number of columns at the beginning.</param>
-        public static void UnpivotWide(string file, string outPath, Grade grade, LanguageEnum language, int x)
+        public static void UnpivotWide(string file, string outPath, LanguageEnum language, int x)
         {
             //Validation
             if (!file.Contains(".csv"))
@@ -170,6 +177,7 @@ namespace ParserUtilities
             var demographics = Enum.GetValues(typeof(StaarDemographic)).Cast<StaarDemographic>().Select(c => c.ToString()).ToList();
             var rows = File.ReadAllLines(file).ToList();
             var headers = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            int gradeIndex = headers.IndexOf("GRADE");
             rows.RemoveAt(0); //pop the top off
             var possibleHeader = rows[0].Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (!int.TryParse(possibleHeader[0], out j)) //check if second row of headers
@@ -243,9 +251,15 @@ namespace ParserUtilities
                 string lang;
                 lang = language == LanguageEnum.English ? "English" : "Spanish";
 
+                string foundGrade;
+                if (gradeIndex != -1)
+                    foundGrade = campus[gradeIndex];
+                else
+                    foundGrade = "EOC";
+
                 FillFirstX(dataRow, campus, x);
                 FillWeirdHeaders(dataRow, headers, campus);
-                FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], grade.ToString(), lang);
+                FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], foundGrade, lang);
 
                 foreach (var category in dynamicCategories)
                 {
