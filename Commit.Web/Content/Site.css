@@ -42,21 +42,37 @@ textarea {
 
 /* custom inclusion of right, left and below tabs */
 
-.tabs-below > .nav-tabs,
+
+.tab-pane.active {
+    padding: 25px;
+}
+
+.tab-content {
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+.grid > .k-grid-content {
+    height: 438px;
+}
+
+/*.tabs-below > .nav-tabs,
 .tabs-right > .nav-tabs,
 .tabs-left > .nav-tabs {
     border-bottom: 0;
 }
 
-.tab-content > .tab-pane,
-.pill-content > .pill-pane {
-    display: none;
-}
 
-.tab-content > .active,
-.pill-content > .active {
-    display: block;
-}
+    .tab-content > .tab-pane,
+    .pill-content > .pill-pane {
+        display: none;
+    }
+
+    .tab-content > .active,
+    .pill-content > .active {
+        display: block;
+    }
 
 .tabs-below > .nav-tabs {
     border-top: 1px solid #ddd;
@@ -145,7 +161,7 @@ textarea {
     .tabs-right > .nav-tabs .active > a:focus {
         border-color: #ddd #ddd #ddd transparent;
         *border-left-color: #ffffff;
-    }
+    }*/
 
 
 

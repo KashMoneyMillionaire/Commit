@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
-namespace Commit.Web.Models
+namespace Commit.Web.Models.BasicViewModels
 {
     public class DropDownViewModel
     {

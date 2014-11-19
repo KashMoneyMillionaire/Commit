@@ -72,6 +72,10 @@
     <Compile Include="Data\Migrations\201410310557049_Rearangement.Designer.cs">
       <DependentUpon>201410310557049_Rearangement.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\Migrations\201411180500590_CategoryDetailPercent.cs" />
+    <Compile Include="Data\Migrations\201411180500590_CategoryDetailPercent.Designer.cs">
+      <DependentUpon>201411180500590_CategoryDetailPercent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Domain\Campus.cs" />
     <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\CategoryDetail.cs" />
@@ -86,7 +90,6 @@
     <Compile Include="Data\Migrations\Configuration.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Data\AzureDataContext.cs" />
-    <Compile Include="Data\OperationalDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Migrations\201410310557049_Rearangement.resx">
       <DependentUpon>201410310557049_Rearangement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Migrations\201411180500590_CategoryDetailPercent.resx">
+      <DependentUpon>201411180500590_CategoryDetailPercent.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

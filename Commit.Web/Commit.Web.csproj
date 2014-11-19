@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationFactory.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -133,8 +134,8 @@
     <Compile Include="BackgroundController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\Api\DemographicsController.cs" />
-    <Compile Include="Controllers\Api\StaarRequestController.cs" />
+    <Compile Include="Controllers\Api\BackgroundServiceController.cs" />
+    <Compile Include="Controllers\Api\StaarServiceController.cs" />
     <Compile Include="Controllers\Web\BackgroundController.cs" />
     <Compile Include="Controllers\Web\HomeController.cs" />
     <Compile Include="Controllers\Web\SchoolController.cs" />
@@ -147,7 +148,8 @@
     <Compile Include="HomeController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ApiViewModels\BackgroundViewModels.cs" />
+    <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Models\WebViewModels\BackgroundViewModels.cs" />
     <Compile Include="Models\WebViewModels\SchoolModels.cs" />
     <Compile Include="Models\ApiViewModels\StaarGridViewModel.cs" />
     <Compile Include="Models\BasicViewModels\WebElements.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="SchoolController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="SessionFacade.cs" />
     <Compile Include="SharedController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
@@ -877,6 +880,10 @@
     <Content Include="Views\Home\Demo.cshtml" />
     <Content Include="Views\School\Info.cshtml" />
     <Content Include="Views\Background\Index.cshtml" />
+    <Content Include="Views\Background\Partials\_DemographicGrid.cshtml" />
+    <Content Include="Views\Background\Partials\_CategoryGrid.cshtml" />
+    <Content Include="Views\Background\Partials\_SubjectGrid.cshtml" />
+    <Content Include="Views\Background\Partials\_LanguageGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

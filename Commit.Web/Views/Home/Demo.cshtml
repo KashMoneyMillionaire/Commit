@@ -145,7 +145,7 @@
                 {
                     read:
                     {
-                        url: "/api/StaarRequest/ReadCampuses",
+                        url: "/api/StaarService/ReadCampuses",
                         type: "POST",
                         dataType: "json"
                     }
@@ -175,7 +175,7 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/api/StaarRequest/ReadTests",
+                            url: "/api/StaarService/ReadTests",
                             type: "POST",
                             dataType: "json",
                             data: function() {
@@ -201,18 +201,12 @@
                     buttonCount: 5
                 },
                 columns: [
-                    {
-                        field: "CampusName",
-                        title: "School Name",
-                    }, {
-                        field: "Subject",
-                    }, {
-                        field: "Demographic",
-                    }, {
-                        field: "Category",
-                    }, {
-                        field: "Value",
-                    }
+                    { field: "CampusName", title: "School Name" },
+                    { field: "Subject" },
+                    { field: "Demographic" },
+                    { field: "Category" },
+                    { field: "Count" },
+                    { field: "Percent" }
                 ]
             });
 

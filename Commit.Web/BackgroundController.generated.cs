@@ -96,6 +96,25 @@ namespace Commit.Web.Controllers.Web
                 public readonly string Index = "Index";
             }
             public readonly string Index = "~/Views/Background/Index.cshtml";
+            static readonly _PartialsClass s_Partials = new _PartialsClass();
+            public _PartialsClass Partials { get { return s_Partials; } }
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public partial class _PartialsClass
+            {
+                static readonly _ViewNamesClass s_ViewNames = new _ViewNamesClass();
+                public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
+                public class _ViewNamesClass
+                {
+                    public readonly string _CategoryGrid = "_CategoryGrid";
+                    public readonly string _DemographicGrid = "_DemographicGrid";
+                    public readonly string _LanguageGrid = "_LanguageGrid";
+                    public readonly string _SubjectGrid = "_SubjectGrid";
+                }
+                public readonly string _CategoryGrid = "~/Views/Background/Partials/_CategoryGrid.cshtml";
+                public readonly string _DemographicGrid = "~/Views/Background/Partials/_DemographicGrid.cshtml";
+                public readonly string _LanguageGrid = "~/Views/Background/Partials/_LanguageGrid.cshtml";
+                public readonly string _SubjectGrid = "~/Views/Background/Partials/_SubjectGrid.cshtml";
+            }
         }
     }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Commit.Web.Models;
+using Commit.Web.Models.BasicViewModels;
 using Infrastructure.Domain;
 
 namespace Commit.Web

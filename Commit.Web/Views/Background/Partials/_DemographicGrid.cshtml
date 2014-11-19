@@ -1,0 +1,89 @@
+﻿@model List<Commit.Web.Models.BasicViewModels.DropDownViewModel>
+
+<div class="grid" id="demographicGrid"></div>
+
+
+<script>
+    $(document).ready(function() {
+
+        var crudServiceBaseUrl = "/api/BackgroundService";
+        var dataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: crudServiceBaseUrl + "/ReadDemographicDetails",
+                    type: "GET",
+                    dataType: "json"
+                },
+                update: {
+                    url: crudServiceBaseUrl + "/UpdateDemographicDetails",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                },
+                create: {
+                    url: crudServiceBaseUrl + "/CreateDemographicDetails",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    //complete: function(e) {
+                    //    $("#demographicGrid").data("kendoGrid").dataSource.read();
+                    //},
+                },
+                parameterMap: function(options, operation) {
+                    if (operation === "read" && options) {
+                        return kendo.stringify(options);
+                    }
+                    return kendo.stringify(options.models);
+                },
+
+            },
+            sync: function() {
+                successfulSave();
+            },
+            batch: true,
+            pageSize: 20,
+            schema:
+            {
+                model: {
+                    id: "DemographicDetailId",
+                    fields:
+                    {
+                        Demographic: { defaultValue: { Text: "All", Value: 1 } },
+                        YearStarted: { type: "number", editable: true, nullable: false },
+                        Description: { type: "text", editable: true, nullable: false },
+                        Detail: { type: "text", editable: true, nullable: false },
+                    }
+                }
+            }
+
+        });
+
+        $("#demographicGrid").kendoGrid({
+            dataSource: dataSource,
+            pageable: true,
+            height: 550,
+            editable: true,
+            groupable: false,
+            navigatable: true,
+            toolbar: ["create", "save", "cancel"],
+            columns: [
+                { field: "DemographicDetailId", hidden: true },
+                { field: "Demographic", title: "Demographic Name", width: "180px", editor: demographicDropDownEditor, template: "#=data.Demographic.Text#" },
+                { field: "Detail", width: "120px" },
+                { field: "Description" },
+                { field: "YearStarted", title: "Year Started", type: "number", format: "{0}", width: "120px" },
+            ]
+        });
+
+        function demographicDropDownEditor(container, options) {
+            $('<input id="demoDdl" required data-text-field="Text" data-value-field="Value" data-bind="value:' + options.field + '" />')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: false,
+                dataSource: @Html.Raw(Json.Encode(Model)),
+            });
+
+            setTimeout(function() { $("#demoDdl").data("kendoDropDownList").open(); }, 10);
+        }
+    });
+</script>

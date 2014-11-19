@@ -49,7 +49,8 @@ namespace Infrastructure
     {
         Undefined = 0,
         Count = 1,
-        Percentage = 2
+        Percentage = 2,
+        Single = 3,
     }
 
     [Flags]

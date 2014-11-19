@@ -1,108 +1,58 @@
-﻿@{
+﻿@model Commit.Web.Models.WebViewModels.BackgroundViewModel
+@{
     ViewBag.Title = "Index";
 }
 
-<h2>Updating Information</h2>
+<div>
+    <h2>Updating Information</h2>
 
-<div class="tabbable tabs-left">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#a" data-toggle="tab">Demographics</a></li>
-        <li><a href="#b" data-toggle="tab">Categories</a></li>
-        <li><a href="#c" data-toggle="tab">Subjects</a></li>
-        <li><a href="#d" data-toggle="tab">Languages</a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="a">
-            <div id="demoGrid"></div>
-        </div>
-        <div class="tab-pane" id="b">
-            Secondo sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-            Aliquam in felis sit amet augue.
-        </div>
-        <div class="tab-pane" id="c">
-            Thirdamuno, ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-            Quisque mauris augue, molestie tincidunt condimentum vitae.
-        </div>
-        <div class="tab-pane" id="d">
-            Thirdamuno, ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-            Quisque mauris augue, molestie tincidunt condimentum vitae.
-        </div>
+    <div style="display: inline-block; padding-left: 25px;">
+
     </div>
 </div>
 
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" role="tab" data-toggle="tab">Demographics</a></li>
+    <li role="presentation"><a href="#profile" role="tab" data-toggle="tab">Categories</a></li>
+    <li role="presentation"><a href="#messages" role="tab" data-toggle="tab">Subjects</a></li>
+    <li role="presentation"><a href="#settings" role="tab" data-toggle="tab">Languages</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
+        @Html.Partial(MVC.Background.Views.Partials._DemographicGrid, Model.Demographics)
+    </div>
+    <div role="tabpanel" class="tab-pane" id="profile">
+        @Html.Partial(MVC.Background.Views.Partials._CategoryGrid, Model.Categories)
+    </div>
+    <div role="tabpanel" class="tab-pane" id="messages">
+        @Html.Partial(MVC.Background.Views.Partials._SubjectGrid)
+    </div>
+    <div role="tabpanel" class="tab-pane" id="settings">
+        @Html.Partial(MVC.Background.Views.Partials._LanguageGrid)
+    </div>
+</div>
+
+<!-- Alert Messages -->
+<div id="successAlert" style="display: none" class="alert alert-success alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Your changes have been saved succesfully.
+</div>
+<div id="unseccessfulAlert" style="display: none" class="alert alert-danger alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>Your changes were not saved successfully.
+</div>
+
+
 @section scripts{
-
     <script>
-        $(document).ready(function() {
-            var crudServiceBaseUrl = "api/Demographics",
-                dataSource = new kendo.data.DataSource({
-                        transport: {
-                            read: {
-                                url: crudServiceBaseUrl,
-                                dataType: "json"
-                            },
-                            update: {
-                                url: crudServiceBaseUrl + "/Update",
-                                type: "POST",
-                                dataType: "json"
-                            },
-                            destroy: {
-                                url: crudServiceBaseUrl + "/Delete",
-                                dataType: "jsonp"
-                            },
-                            create: {
-                                url: crudServiceBaseUrl + "/Create",
-                                dataType: "jsonp"
-                            },
-                            parameterMap: function(options, operation) {
-                                if (operation !== "read" && options.models) {
-                                    return {models: options.models};
-                            }
-                        }
-                    },
-                    batch:
-            true,
-                pageSize:
-            20,
-                schema:
-            {
-                model: {
-                    id: "DemographicDetailId",
-                        fields:
-                    {
-                        YearStarted: {
-                            type: "number", editable:
-                            true, nullable:
-                            false
-                        },
-                        Description: {
-                            type: "text", editable:
-                            true, nullable:
-                            false
-                        },
-                        Detail: {
-                            type: "text", editable:
-                            true, nullable:
-                            false
-                        },
-                    }
-                }
-            }
-        });
 
-        $("#demoGrid").kendoGrid({
-            dataSource: dataSource,
-            pageable: true,
-            height: 550,
-            columns: [
-                "DemographicDetailId",
-                { field: "YearStarted", title: "Year Started", format: "{0:c}", width: "120px" },
-                { field: "Description", width: "120px" },
-                { field: "Detail", width: "120px" },
-                { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }
-            ],
-            editable: "inline"
-        });
-    });
+        var successfulSave = function () {
+            $("#successAlert").show().fadeOut(2000);
+        }
+
+        var unsuccessfulSave = function () {
+            $("#unseccessfulAlert").show();
+        }
     </script>
 }

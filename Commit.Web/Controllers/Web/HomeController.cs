@@ -11,7 +11,7 @@ namespace Commit.Web.Controllers
 {
     public partial class HomeController : Controller
     {
-        private readonly OperationalDataContext _ctx = new OperationalDataContext();
+        private readonly AzureDataContext _ctx = ApplicationFactory.RetrieveContext();
 
         public virtual ActionResult Index()
         {
@@ -47,7 +47,7 @@ namespace Commit.Web.Controllers
                 Categories =
                     _ctx.Categories.Select(c => new CascadingDropDownListViewModel { DropDownId = c.Id, Text = c.Name, MyId = c.Id }).ToList(),
                 CategoryDetails =
-                    _ctx.CategoryDetails.Where(c => c.CategoryType == CategoryType.Count)
+                    _ctx.CategoryDetails.Where(c => c.CategoryType != CategoryType.Percentage)
                         .Select(c => new CascadingDropDownListViewModel { DropDownId = c.Category.Id, Text = c.Description, MyId = c.Id })
                         .ToList(),
                 Subjects = _ctx.Subjects.Select(s => new CascadingDropDownListViewModel { MyId = s.Id, DropDownId = s.Id, Text = s.Description }).ToList(),

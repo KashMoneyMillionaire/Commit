@@ -278,7 +278,7 @@ namespace ParserUtilities
 
         public static void UnpivotAndPopulateDatabase(string parsedFilePath)
         {
-            var ctx = new OperationalDataContext();
+            var ctx = new AzureDataContext();
             var dems = ctx.DemographicDetails.ToList();
             var cats = ctx.CategoryDetails.ToList();
             var subjs = ctx.Subjects.ToList();
@@ -291,7 +291,6 @@ namespace ParserUtilities
                 {
                     s.Year,
                     Subject = s.Subject.Name,
-                    s.Campus.Number,
                     s.Grade,
                     s.Language.Name
                 })
@@ -299,7 +298,6 @@ namespace ParserUtilities
                 {
                     s.Key.Year,
                     SubjectName = s.Key.Subject,
-                    CampusNumber = s.Key.Number,
                     s.Key.Grade,
                     Language = s.Key.Name
                 }).ToList();
@@ -312,7 +310,7 @@ namespace ParserUtilities
             var subject = new Subject();
             var dd = new DemographicDetail();
             var cd = new CategoryDetail();
-            var log = File.CreateText(@"C:\Users\kcummings\Desktop\Parse\log.txt");
+            var log = File.CreateText(@"\Parse\log.txt");
 
 
             //Validation
@@ -353,8 +351,7 @@ namespace ParserUtilities
                 {
                     var record = sortedRows[i];
 
-                    if (completed.Any(c => c.CampusNumber == Convert.ToInt32(record[0])
-                        && c.SubjectName == record[8]
+                    if (completed.Any(c => c.SubjectName == record[8]
                         && c.Grade == record[6]
                         && c.Year == year
                         && c.Language == language.Name))
