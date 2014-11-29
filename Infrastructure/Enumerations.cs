@@ -324,4 +324,12 @@ namespace Infrastructure
         pct_cat5
 
     }
+
+    public enum AeisType
+    {
+        Graduates = 1,
+        Retention = 2,
+        Student = 3,
+        Mobility = 4
+    }
 }

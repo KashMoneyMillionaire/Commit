@@ -33,7 +33,7 @@ namespace Infrastructure.Data.Mappings
             HasRequired(c => c.Category)
                 .WithMany();
 
-            HasOptional(c => c.CategoryPair);
+            HasOptional(c => c.PartnerDetail);
 
         }
     }

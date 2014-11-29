@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,9 +9,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Infrastructure;
 using Infrastructure.Data;
 using Infrastructure.Domain;
+using Infrastructure.Services;
 using ParserUtilities;
 using ParserUtilities.Helpers;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -71,6 +74,7 @@ namespace Commit.Desktop
             var currentIndex = 0;
             int total;
             IList<FileDataGrid> operatingFiles;
+            var unpivotorService = ApplicationFactory.RetrieveService<UnpivotorService>() as UnpivotorService ?? new UnpivotorService();
             if (onlySelected)
             {
                 total = FileGrid.SelectedItems.Count;
@@ -132,11 +136,11 @@ namespace Commit.Desktop
                     {
                         if (isNarrow)
                         {
-                            StaarTestUnpivotor.UnpivotNarrow(closureFile.FullFile, output, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                            unpivotorService.UnpivotStaarTestNarrow(closureFile.FullFile, output, closureFile.FileLanguageEnum);
                         }
                         else
                         {
-                            StaarTestUnpivotor.UnpivotWide(closureFile.FullFile, output, closureFile.FileLanguageEnum, closureFile.NumberOfColumnsAtBeginning);
+                            unpivotorService.UnpivotStaarTestWide(closureFile.FullFile, output, closureFile.FileLanguageEnum);
                         }
                     }
                     catch (Exception ex)
@@ -230,6 +234,30 @@ namespace Commit.Desktop
             }
         }
 
+
+        private void SelectInputZipFileButtonClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Multiselect = false,
+                Filter = "Zip File|*.zip"
+            };
+
+            try
+            {
+                var result = dlg.ShowDialog();
+                if (result.HasValue && result.Value)
+                {
+                    ZipBox.Text = dlg.FileName;
+                    
+                }
+            }
+            catch
+            {
+            }
+        }
+
+
         private void SelectOutputFolderButtonClick(object sender, RoutedEventArgs e)
         {
             var dlg = new FolderBrowserDialog();
@@ -267,9 +295,55 @@ namespace Commit.Desktop
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //StaarTestUnpivotor.UnpivotAndPopulateDatabase(
-            //    @"C:\Users\kcummings\Desktop\Parse\ParseNew\2014 Biology - Parsed.csv");
+            
+            UploadButton.IsEnabled = false;
+            if (!File.Exists(ZipBox.Text))
+            {
+                System.Windows.Forms.MessageBox.Show("The file does not exist");
+                return;
+            }
 
+
+            var backgroundService = ApplicationFactory.RetrieveService<BackgroundService>() as BackgroundService ?? new BackgroundService();
+            var unpivotorService = ApplicationFactory.RetrieveService<UnpivotorService>() as UnpivotorService ?? new UnpivotorService();
+            Directory.CreateDirectory("App_Data/uploadlogs");
+            var logPath = Path.Combine("App_Data/uploadlogs", "log.txt");
+            var guid = Guid.NewGuid();
+            
+            try
+            {
+
+                // save file to path for use later
+                var outPath = Directory.CreateDirectory(Path.Combine("App_Data/uploads", guid.ToString()));
+                var newPath = Path.Combine(outPath.FullName, Path.GetFileName(ZipBox.Text) ?? "sample.csv");
+                File.Copy(ZipBox.Text, newPath);
+
+                var outputPath = backgroundService.UnzipFile(newPath);
+
+                unpivotorService.PopulateDatabaseFromUnpivotedStaarTestDirectory(outputPath, logPath);
+            }
+            catch (Exception ex)
+            {
+                unpivotorService.WriteToLogPath(logPath, ex.Message);
+            }
+            finally
+            {
+                Directory.Delete(Path.Combine("App_Data/uploads", guid.ToString()), true);
+                UploadButton.IsEnabled = true;
+            }
+        }
+
+        private void ViewLogFiles_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            var logPath = Path.Combine("App_Data/uploadlogs", "log.txt");
+            if (File.Exists(logPath))
+            {
+                Process.Start(logPath);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("No logs exist yet");
+            }
         }
 
 

@@ -57,6 +57,12 @@ namespace Commit.Web.Controllers.Web
             return RedirectToActionPermanent(taskResult.Result);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult DownloadLogs()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DownloadLogs);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public BackgroundController Actions { get { return MVC.Background; } }
@@ -74,15 +80,37 @@ namespace Commit.Web.Controllers.Web
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string ImportStaarTests = "ImportStaarTests";
+            public readonly string DownloadLogs = "DownloadLogs";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string ImportStaarTests = "ImportStaarTests";
+            public const string DownloadLogs = "DownloadLogs";
         }
 
 
+        static readonly ActionParamsClass_ImportStaarTests s_params_ImportStaarTests = new ActionParamsClass_ImportStaarTests();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_ImportStaarTests ImportStaarTestsParams { get { return s_params_ImportStaarTests; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_ImportStaarTests
+        {
+            public readonly string message = "message";
+            public readonly string outputPath = "outputPath";
+            public readonly string file = "file";
+        }
+        static readonly ActionParamsClass_DownloadLogs s_params_DownloadLogs = new ActionParamsClass_DownloadLogs();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_DownloadLogs DownloadLogsParams { get { return s_params_DownloadLogs; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_DownloadLogs
+        {
+            public readonly string path = "path";
+        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -93,8 +121,10 @@ namespace Commit.Web.Controllers.Web
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string ImportStaarTests = "ImportStaarTests";
                 public readonly string Index = "Index";
             }
+            public readonly string ImportStaarTests = "~/Views/Background/ImportStaarTests.cshtml";
             public readonly string Index = "~/Views/Background/Index.cshtml";
             static readonly _PartialsClass s_Partials = new _PartialsClass();
             public _PartialsClass Partials { get { return s_Partials; } }
@@ -131,6 +161,43 @@ namespace Commit.Web.Controllers.Web
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             IndexOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void ImportStaarTestsOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string message, string outputPath);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult ImportStaarTests(string message, string outputPath)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ImportStaarTests);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "message", message);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "outputPath", outputPath);
+            ImportStaarTestsOverride(callInfo, message, outputPath);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void ImportStaarTestsOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, System.Web.HttpPostedFileBase file);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult ImportStaarTests(System.Web.HttpPostedFileBase file)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ImportStaarTests);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "file", file);
+            ImportStaarTestsOverride(callInfo, file);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void DownloadLogsOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string path);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult DownloadLogs(string path)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DownloadLogs);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "path", path);
+            DownloadLogsOverride(callInfo, path);
             return callInfo;
         }
 

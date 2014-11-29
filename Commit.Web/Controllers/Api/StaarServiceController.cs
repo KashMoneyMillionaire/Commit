@@ -51,7 +51,7 @@ namespace Commit.Web.Controllers.Api
                 var x = _ctx.StaarTests.Where(s =>
                     model.CampusIds.Contains(s.Campus_Id)
                     && model.SubjectIds.Contains(s.Subject_Id)
-                    && (model.CategoryDetailIds.Contains(s.CategoryDetail_Id) || model.CategoryDetailIds.Contains(s.CategoryDetail.CategoryPair.Id))
+                    && (model.CategoryDetailIds.Contains(s.CategoryDetail_Id) || model.CategoryDetailIds.Contains(s.CategoryDetail.PartnerDetail.Id))
                     && model.DemographicDetailIds.Contains(s.DemographicDetail_Id))
                     .Select(s => new
                     {
@@ -62,7 +62,7 @@ namespace Commit.Web.Controllers.Api
                         DemoDetailDescription = s.DemographicDetail.Description,
                         CatDetailDescription = s.CategoryDetail.Description,
                         CampusName = s.Campus.Name,
-                        CountId = s.CategoryDetail.CategoryPair == null ? 0 : s.CategoryDetail.CategoryPair.Id,
+                        CountId = s.CategoryDetail.PartnerDetail == null ? 0 : s.CategoryDetail.PartnerDetail.Id,
                         CategoryDetailId = s.CategoryDetail_Id,
                         s.CategoryDetail.CategoryType
                     })

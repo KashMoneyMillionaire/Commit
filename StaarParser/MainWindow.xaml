@@ -69,7 +69,7 @@
                                                 Binding="{Binding FileName}"
                                                 Width="*"
                                                 IsReadOnly="True"/>
-                            
+
                             <!--GRADE-->
                             <!--DataGridTemplateColumn Header="Grade"
                                                     x:Name="GradeColumn"
@@ -87,7 +87,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn-->
-                            
+
                             <!--LANGUAGE-->
                             <DataGridTemplateColumn Header="Language"
                                                     x:Name="LanguageColumn"  
@@ -97,7 +97,7 @@
                                         <TextBlock Text="{Binding FileLanguageEnum}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                                
+
                                 <DataGridTemplateColumn.CellEditingTemplate >
                                     <DataTemplate>
                                         <ComboBox SelectedValue="{Binding FileLanguageEnum}"
@@ -105,13 +105,13 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
-                            
+
                             <!--START COLUMNS-->
-                            <DataGridTextColumn Header="Start Columns"
+                            <!--<DataGridTextColumn Header="Start Columns"
                                                 x:Name="StartColumn"
                                                 Width="90"
                                                 ElementStyle="{StaticResource RightAlignment}"
-                                                Binding="{Binding NumberOfColumnsAtBeginning}"/>
+                                                Binding="{Binding NumberOfColumnsAtBeginning}"/>-->
 
                             <!--<DataGridTemplateColumn Header="New Language"
                                                     Width="*">
@@ -191,7 +191,7 @@
                             Margin="10,0,10,10">
                         <ScrollViewer Name="UnpivotScrollViewer"
                                       ScrollChanged="UnpivotScrollViewer_ScrollChanged">
-                        <TextBlock x:Name="MessageBox" 
+                            <TextBlock x:Name="MessageBox" 
                                    TextWrapping="Wrap" 
                                    Background="#FFF0F0F0"
                                    Text="Messages appear here."/>
@@ -231,11 +231,40 @@
                             Grid.Column="2"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="AEIS Parser"
+            <TabItem Header="Staar Test Uploader"
                      Height="35"
-                     Width="110">
+                     Width="150">
                 <Grid >
-                    <Button Content="Kash's Button - Do Not Remove" Height="40" Width="250" Click="Button_Click"/>
+                    <Button Content="Select Zip File"
+            	            Click="SelectInputZipFileButtonClick" 
+                            Height="26" 
+                            Width="120"
+                            Margin="200,0,0,100" />
+                    <Button Content="Upload files to Database" 
+                            Height="40" 
+                            Width="250"
+                            Name="UploadButton"
+                            Click="Button_Click"/>
+                    <TextBox Height="25" 
+                             Name="ZipBox"
+                             Margin="0,0,250,100" 
+                             TextWrapping="Wrap" 
+                             Text="" 
+                             Width="300"/>
+                    <Label Content="The zip file must contain parsed files as .csv" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,100,0,0" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+                    <Button Content="View Log Files" 
+                            Height="40" 
+                            Width="100"
+                            Margin="0,300,0,0" Click="ViewLogFiles_ButtonClick" />
+                    <Label Content="Errors logged here. File replaced for every upload." 
+                           HorizontalAlignment="Center" 
+                           Margin="0,400,0,0" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
         </TabControl>
