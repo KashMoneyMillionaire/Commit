@@ -1,0 +1,112 @@
+<div class="page page-dashboard">
+
+    <div class="panel panel-default">
+       
+        <!--<input style="width:400px" kendo-auto-complete ng-model="selectedSchool" k-data-source="schools" placeholder=" Search Campuses..." />-->
+        <!--<input style="width:100%" kendo-auto-complete ng-model="country" k-options="FruitAutoCompleteFromFactory" placeholder="  Search Campuses..." />-->
+        <select ng-change="campusChange()" style="width:100%" ng-model="selectedSchool" ng-options="c.CAMPNAME for c in schools"></select>
+    </div>  
+
+
+    <!-- Stats -->
+    <div class="row text-center">
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt" style="background-color:#c3151c; color:white">
+                    <span class="ti-car"></span>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPEMALLP"]}}<span class="size-h4">%</span></p>
+                    <p class="text-muted"><span>Mobility</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt" style="background-color:#003662; color:white">
+                    <i class="ti-user"></i>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPETALLC"]}}<span class="size-h4"></span></p>
+                    <p class="text-muted"><span>Enrollment</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt" style=" background-color:#91c63d; color:white">
+                    <i class="ti-money"></i>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPETECOP"]}}<span class="size-h4">%</span></p>
+                    <p class="text-muted"><span>Economically Disadvantaged</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt" style=" background-color:#ef5727; color:white">
+                    <i class="ti-microphone"></i>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPETLEPP"]}}<span class="size-h4">%</span></p>
+                    <p class="text-muted"><span>LEP</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end stats -->
+
+
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong><i class="ti-bar-chart"></i> Student Demographics</strong></div>
+                <div class="panel-body">
+
+                    <div id="charter" kendo-chart="myChart"
+                         k-legend="{ position: 'bottom' }"
+                         k-options="myOptions"
+                         k-series-defaults="{ type: 'column' }"
+                         k-series="[
+                                 { field: 'CPETBLAP', name: '% african american', color:'#c3151c' },
+                                 { field: 'CPETHISP', name: '% hispanic', color:'#003662' },
+                                 { field: 'CPETWHIP', name: '% white', color:'#ef5727' },
+                                 { field: 'CPETECOP', name: '% economically disadvantaged', color:'#91c63d' },
+                                 { field: 'CPETLEPP', name: '% LEP', color:'#fbb613' }
+                             ]"
+                         k-data-source="selectedSchoolData"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong><i class="ti-map-alt"></i>    Map</strong></div>
+                <div class="panel-body">
+                    <ui-gmap-google-map center="map.center" zoom="map.zoom" styles="map.styles"></ui-gmap-google-map>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong><i class="ti-list-ol"></i>    Spreadsheet</strong></div>
+                <div class="panel-body">
+                    <div id="schoolsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    </div>
+
+
+  

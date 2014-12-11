@@ -35,7 +35,7 @@ namespace Infrastructure.Services
             int j;
             var sb = new StringBuilder();
             var fileName = Path.GetFileNameWithoutExtension(filePath);
-            var outFile = string.Format("{0}/{1} - Parsed.csv", outPath, fileName);
+            var outFile = string.Format("{0}/{1} - Parsed Narrow.csv", outPath, fileName);
             var emptyList = new[] { "0", "", "." };
 
 
@@ -262,6 +262,15 @@ namespace Infrastructure.Services
             var dataRow = dataTable.NewRow();
             foreach (var campus in rows.Select(row => row.Split(',')))
             {
+                //find subjects
+
+                var subjs = sdc
+                    .Where(s => s.Count() == 3)
+                    .Select(s => s[0])
+                    .Distinct()
+                    .ToList();
+
+
                 //set up basic set
 
                 var lang = language == LanguageEnum.English ? "English" : "Spanish";
@@ -269,33 +278,37 @@ namespace Infrastructure.Services
 
                 FillFirstX(dataRow, campus, x);
                 FillWeirdHeaders(dataRow, headers, campus);
-                FillGenericData(dataRow, genericHeaders, headers[x + 1].Split('_')[0], foundGrade, lang);
+                FillGenericData(dataRow, genericHeaders, foundGrade, lang);
 
-                foreach (var category in dynamicCategories)
+                foreach (var subj in subjs)
                 {
-                    //for each complex header whose category matches the current category
-
-                    for (var i = 6; i < headers.Count; i++)
+                    foreach (var category in dynamicCategories)
                     {
-                        if (sdc[i].Length == 3 && sdc[i][2] == category)
+                        //for each complex header whose category matches the current category
+
+                        for (var i = 6; i < headers.Count; i++)
                         {
-                            //set the data column of the found demographic equal to the 
-                            dataRow[sdc[i][1]] = campus[i];
+                            if (sdc[i].Length == 3 && sdc[i][0] == subj && sdc[i][2] == category)
+                            {
+                                //set the data column of the found demographic equal to the 
+                                dataRow[sdc[i][1]] = campus[i];
+                            }
                         }
+
+
+                        //add the category, then write to sb
+
+                        dataRow["Category"] = category;
+                        dataRow["Subject"] = subj;
+                        sb.AppendLine(string.Join(",", dataRow.ItemArray));
+
+                        //dataTable.Rows.Add(dataRow);
                     }
-
-
-                    //add the category, then write to sb
-
-                    dataRow["Category"] = category;
-                    sb.AppendLine(string.Join(",", dataRow.ItemArray));
-
-                    //dataTable.Rows.Add(dataRow);
                 }
             }
 
             var fileName = Path.GetFileNameWithoutExtension(file);
-            File.WriteAllText(string.Format("{0}/{1} - Parsed.csv", outPath, fileName), sb.ToString());
+            File.WriteAllText(string.Format("{0}/{1} - Parsed Wide.csv", outPath, fileName), sb.ToString());
 
         }
 
@@ -377,7 +390,7 @@ namespace Infrastructure.Services
                         log.WriteLine("An error occured reading from {0}. The error is: {1}", unzippedFile, ex.Message);
                         continue;
                     }
-                    
+
 
 
                     //by this point, we know we have to know things
@@ -843,15 +856,12 @@ namespace Infrastructure.Services
             }
         }
 
-        private static void FillGenericData(DataRow dataRow, IEnumerable<string> genericHeaders, string sub, string grade, string language)
+        private static void FillGenericData(DataRow dataRow, IEnumerable<string> genericHeaders, string grade, string language)
         {
             foreach (var header in genericHeaders)
             {
                 switch (header)
                 {
-                    case "Subject":
-                        dataRow[header] = sub;
-                        break;
                     case "Grade":
                         dataRow[header] = grade;
                         break;
