@@ -85,13 +85,14 @@ namespace Infrastructure.Services
 
             for (var i = 0; i < x; i++)
             {
-                dataTable.Columns.Add(headers[i]);
+                if(!headers[i].Equals("GRADE"))
+                    dataTable.Columns.Add(headers[i]);
             }
 
 
             //set up remaining headers
 
-            dataTable.Columns.Add("Grade");
+            dataTable.Columns.Add("GRADE");
             dataTable.Columns.Add("LanguageEnum");
             dataTable.Columns.Add("Subject");
             dataTable.Columns.Add("Demographic");
@@ -107,7 +108,7 @@ namespace Infrastructure.Services
 
             //Begin adding data
 
-            var gradeIndex = headers.IndexOf("GRADE");
+            var gradeIndex = headers.IndexOf("Grade");
             var dataRow = dataTable.NewRow();
             var writer = File.AppendText(outFile);
 
@@ -220,7 +221,8 @@ namespace Infrastructure.Services
 
             for (var i = 0; i < x; i++)
             {
-                dataTable.Columns.Add(headers[i]);
+                if(!headers[i].Equals("GRADE"))
+                    dataTable.Columns.Add(headers[i]);
             }
 
 
