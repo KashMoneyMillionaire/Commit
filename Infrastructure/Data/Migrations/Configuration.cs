@@ -2,7 +2,7 @@ using System.Data.Entity.Migrations;
 
 namespace Infrastructure.Data.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<OperationalDataContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<AzureDataContext>
     {
         public Configuration()
         {
@@ -10,10 +10,9 @@ namespace Infrastructure.Data.Migrations
 
             MigrationsDirectory = @"Data\Migrations";
             MigrationsNamespace = typeof(Configuration).Namespace;
-
         }
 
-        protected override void Seed(OperationalDataContext context)
+        protected override void Seed(AzureDataContext context)
         {
             //  This method will be called after migrating to the latest version.
 

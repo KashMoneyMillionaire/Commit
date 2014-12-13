@@ -1,0 +1,101 @@
+﻿<!doctype html>
+<!--[if lt IE 8]>
+    <html class="no-js lt-ie8"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" data-ng-app="myApp" id="myApp" class="myApp">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Commit! Data</title>
+    <meta name="description" content="Responsive Admin Web App">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,600,300,700" rel="stylesheet" type="text/css">
+    <!-- Needs images, font... therefore can not be part of main.css -->
+
+    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="/content/fonts/themify-icons/themify-icons.min.css">
+    <link rel="stylesheet" href="/content/fonts/weather-icons/css/weather-icons.min.css">
+
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+    <script src="~/Scripts/angular-animate.js"></script>
+    <script src="~/app/app.js"></script>
+    <script src="~/app/directive/app_localization.js"></script>
+    <script src="~/Scripts/ui.js"></script>
+    <script src="~/app/directive/directive.js"></script>
+
+
+    <script src="~/Scripts/lodash.min.js"></script>
+    @*<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>*@
+    <script src="~/Scripts/angular-google-maps.js"></script>
+
+    <script src="~/app/controllers/schoolsController.js"></script>
+    <script src="~/app/controllers/districtsController.js"></script>
+
+
+    <script src="~/Scripts/lodash.min.js"></script>
+
+
+    <link href="~/_KendoThree/styles/kendo.default.min.css" rel="stylesheet" />
+    <link href="~/_KendoThree/styles/kendo.common.min.css" rel="stylesheet" />
+
+    <script src="~/_KendoThree/js/kendo.all.min.js"></script>
+
+    <!-- end Needs images -->
+
+    <link href="/Content/main.css" rel="stylesheet" />
+
+    <style>
+        .angular-google-map-container {
+            height: 400px;
+        }
+
+        .demo-section {
+            width: 400px;
+        }
+
+            .demo-section p {
+                padding: 5px 0;
+            }
+    </style>
+
+</head>
+<body data-custom-page data-off-canvas-nav data-ng-controller="slimParentController" data-ng-class="{'layout-boxed': admin.layout === 'boxed'} " class="app">
+    <section data-ng-include=" '/app/templates/header.html' " id="header" class="header-container" data-ng-controller="HeaderCtrl" data-ng-class="{ 'header-fixed': admin.fixedHeader,
+                                  'bg-white': ['11','12','13','14','15','16','21'].indexOf(admin.skin) >= 0,
+                                  'bg-dark': admin.skin === '31',
+                                  'bg-primary': ['22','32'].indexOf(admin.skin) >= 0,
+                                  'bg-success': ['23','33'].indexOf(admin.skin) >= 0,
+                                  'bg-info-alt': ['24','34'].indexOf(admin.skin) >= 0,
+                                  'bg-warning': ['25','35'].indexOf(admin.skin) >= 0,
+                                  'bg-danger': ['26','36'].indexOf(admin.skin) >= 0
+                 }"></section>
+    <div class="main-container">
+        <aside data-ng-include=" '/app/templates/nav.html' " id="nav-container" class="nav-container" data-ng-class="{ 'nav-fixed': admin.fixedSidebar,
+                                    'nav-horizontal': admin.menu === 'horizontal',
+                                    'nav-vertical': admin.menu === 'vertical',
+                                    'bg-white': ['31','32','33','34','35','36'].indexOf(admin.skin) >= 0,
+                                    'bg-dark': ['31','32','33','34','35','36'].indexOf(admin.skin) < 0
+                   }"></aside>
+
+     @RenderBody()
+
+    </div>
+
+
+
+
+
+
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    @*<script src="scripts/separate/app_localization.js"></script>
+    <script src="scripts/separate/app_controllers.js"></script>
+    <script src="scripts/separate/app_task.js"></script>
+    <script src="scripts/ui.js"></script>*@
+</body>
+</html>

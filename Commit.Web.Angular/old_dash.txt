@@ -1,0 +1,186 @@
+﻿<div class="page page-dashboard">
+
+    <!--<section data-ng-controller="jvectormapCtrl">
+        <section class="panel panel-default">
+            <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> World Map</strong></div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="ui-map" ui-jvectormap options="worldMap"></div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h3 class="text-thin">Statistics</h3>
+                        <div class="divider divider-dashed"></div>
+                        <p>Bounce Rate</p>
+                        <progressbar class="progressbar-xs progress-rounded" value="34" type="success"></progressbar>
+                        <p>New Visists</p>
+                        <progressbar class="progressbar-xs progress-rounded" value="68" type="info"></progressbar>
+                        <p>Search Traffic</p>
+                        <progressbar class="progressbar-xs progress-rounded" value="52" type="warning"></progressbar>
+                        <p>Modern Browsers</p>
+                        <progressbar class="progressbar-xs progress-rounded" value="77" type="danger"></progressbar>                        
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    </section>--> 
+
+    <div class="panel panel-default">
+       
+        <!--<input style="width:100%" kendo-auto-complete ng-model="country" k-options="FruitAutoCompleteFromFactory" placeholder="  Search Campuses..." />-->
+        <select ng-change="campusChange()" style="width:100%" ng-model="selectedSchool" ng-options="c.CAMPNAME for c in schools"></select>
+    </div>
+
+    
+
+
+    <!-- Stats -->
+    <div class="row text-center">
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt bg-success">
+                    <span class="ti-stats-up"></span>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPEMALLP"]}}<span class="size-h4">%</span></p>
+                    <p class="text-muted"><span>Mobility</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt bg-info">
+                    <i class="ti-user"></i>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPETALLC"]}}<span class="size-h4"></span></p>
+                    <p class="text-muted"><span>Enrollment</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt bg-warning">
+                    <i class="ti-money"></i>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPETECOP"]}}<span class="size-h4">%</span></p>
+                    <p class="text-muted"><span>Economically Disadvantaged</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xsm-6">
+            <div class="panel mini-box">
+                <span class="btn-icon btn-icon-round btn-icon-lg-alt bg-danger">
+                    <i class="ti-shopping-cart"></i>
+                </span>
+                <div class="box-info">
+                    <p class="size-h2">{{selectedSchool["CPETLEPP"]}}<span class="size-h4">%</span></p>
+                    <p class="text-muted"><span>LEP</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end stats -->
+
+    <!--<div class="row">
+        <div class="panel panel-default col-lg-4">
+            <div class="panel-body">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>-->
+
+    <!--<div class="row">
+        <section class="col-lg-4">
+        <div class="panel-heading">
+            <strong><span class="glyphicon glyphicon-th"></span> World Map</strong>
+            <div class="panel-body">
+
+                <div>
+                    <div class="ui-map" ui-jvectormap options="worldMap"></div>
+                </div>
+
+            </div>
+
+        </div>
+        </section>
+    </div>-->
+
+    <!--<div class="panel panel-default">
+        <div class="panel-heading col-lg-4"><span class="glyphicon glyphicon-th"></span> Icon Boxes</div>
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div>
+                    <div class="ui-map" ui-jvectormap options="worldMap"></div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>-->
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Blockquote</strong></div>
+                <div class="panel-body">
+           
+                    <div class="ui-map" ui-jvectormap options="worldMap"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <!--<div class="panel panel-default">
+            <div class="panel-body">
+                <div id="charter" kendo-chart
+                     k-legend="{ position: 'bottom' }"
+                     k-series-defaults="{ type: 'bar' }"
+                     k-series="[
+                                         { field: 'nuclear', name: 'Nuclear electricity' },
+                                         { field: 'hydro', name: 'Hydro electricity' },
+                                         { field: 'wind', name: 'Wind electricity' }
+                                     ]"
+                     k-data-source="electricity"></div>
+            </div>
+        </div>-->
+
+
+        <div class="row">
+
+            <!--<div kendo-grid
+                 k-data-source="gridData"
+                 k-columns="gridColumns"
+                 k-selectable="true"></div>-->
+
+            <div id="charter" kendo-chart="myChart"
+                 k-legend="{ position: 'bottom' }"
+                 k-options="myOptions"
+                 k-series-defaults="{ type: 'bar' }"
+                 k-series="[
+                                 { field: 'CPEMALLP', name: 'Nuclear electricity' },
+                                 { field: 'CPETHISP', name: 'Hydro electricity' },
+                                 { field: 'CPST01FP', name: 'Wind electricity' }
+                             ]"
+                 k-data-source="selectedSchoolData"></div>
+
+
+            <!--<div class="demo-section k-content">
+                <div id="charter"></div>
+            </div>-->
+
+        </div>
+
+
+
+    </div>
+
+
+  

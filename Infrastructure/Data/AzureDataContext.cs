@@ -13,10 +13,7 @@ namespace Infrastructure.Data
 
         public AzureDataContext() : base("Name=AzureDataContext") { }
         public AzureDataContext(string nameOrConnectionString)
-            : base(nameOrConnectionString)
-        {
-            // base.Configuration.AutoDetectChangesEnabled = false;
-        }
+            : base(nameOrConnectionString) { }
 
         public DbSet<Campus> Campuses { get; set; }
         public DbSet<CategoryDetail> CategoryDetails { get; set; }
@@ -28,9 +25,6 @@ namespace Infrastructure.Data
         public DbSet<Region> Regions { get; set; }
         public DbSet<StaarTest> StaarTests { get; set; }
         public DbSet<Subject> Subjects { get; set; }
-        //public DbSet<CompletedFile> CompletedFiles { get; set; }
-        //public DbSet<SubCatField> SubCatFields { get; set; }
-        //public DbSet<YearGradeLang> YearGradeLangs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -44,11 +38,7 @@ namespace Infrastructure.Data
             modelBuilder.Configurations.Add(new RegionMapping());
             modelBuilder.Configurations.Add(new StaarTestMapping());
             modelBuilder.Configurations.Add(new SubjectMapping());
-            //modelBuilder.Configurations.Add(new CompletedFileMapping());
-            //modelBuilder.Configurations.Add(new SubCatFieldMapping());
-            //modelBuilder.Configurations.Add(new YearGradeLangMapping());
         }
 
-        
     }
 }

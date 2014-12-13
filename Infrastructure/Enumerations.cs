@@ -49,7 +49,8 @@ namespace Infrastructure
     {
         Undefined = 0,
         Count = 1,
-        Percentage = 2
+        Percentage = 2,
+        Single = 3,
     }
 
     [Flags]
@@ -322,5 +323,13 @@ namespace Infrastructure
         [Description("% Avg Items Correct--Reporting Category 5 ")]
         pct_cat5
 
+    }
+
+    public enum AeisType
+    {
+        Graduates = 1,
+        Retention = 2,
+        Student = 3,
+        Mobility = 4
     }
 }

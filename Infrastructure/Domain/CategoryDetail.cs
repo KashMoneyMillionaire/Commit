@@ -13,6 +13,7 @@ namespace Infrastructure.Domain
         public string Description { get; set; }
         public int YearStarted { get; set; }
         public CategoryType CategoryType { get; set; }
+        public CategoryDetail PartnerDetail { get; set; }
     }
 
 }
